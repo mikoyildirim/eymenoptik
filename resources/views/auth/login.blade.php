@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,11 +17,11 @@
             --muted: #707b8d;
             --white: #ffffff;
             --soft: #eef2f8;
-            --line: rgba(7,17,31,.09);
+            --line: rgba(7, 17, 31, .09);
             --gold: #c79a3a;
             --blue: #2854d9;
             --green: #16a36b;
-            --shadow: 0 28px 90px rgba(7,17,31,.13);
+            --shadow: 0 28px 90px rgba(7, 17, 31, .13);
         }
 
         * {
@@ -34,8 +35,8 @@
             font-family: "Inter", sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at 0% 0%, rgba(40,84,217,.16), transparent 34%),
-                radial-gradient(circle at 100% 10%, rgba(199,154,58,.22), transparent 30%),
+                radial-gradient(circle at 0% 0%, rgba(40, 84, 217, .16), transparent 34%),
+                radial-gradient(circle at 100% 10%, rgba(199, 154, 58, .22), transparent 30%),
                 linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
         }
 
@@ -45,8 +46,8 @@
             inset: 0;
             pointer-events: none;
             background-image:
-                linear-gradient(rgba(7,17,31,.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(7,17,31,.025) 1px, transparent 1px);
+                linear-gradient(rgba(7, 17, 31, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(7, 17, 31, .025) 1px, transparent 1px);
             background-size: 46px 46px;
             mask-image: linear-gradient(to bottom, black, transparent 80%);
         }
@@ -76,7 +77,7 @@
             overflow: hidden;
             border-radius: 42px;
             background:
-                radial-gradient(circle at 80% 10%, rgba(199,154,58,.32), transparent 32%),
+                radial-gradient(circle at 80% 10%, rgba(199, 154, 58, .32), transparent 32%),
                 linear-gradient(135deg, var(--dark), #17375f);
             color: white;
             min-height: calc(100vh - 48px);
@@ -88,7 +89,7 @@
             position: absolute;
             width: 720px;
             height: 720px;
-            border: 1px solid rgba(255,255,255,.09);
+            border: 1px solid rgba(255, 255, 255, .09);
             border-radius: 50%;
             left: -260px;
             top: -150px;
@@ -102,7 +103,7 @@
             border-radius: 50%;
             right: -140px;
             bottom: -120px;
-            background: rgba(199,154,58,.2);
+            background: rgba(199, 154, 58, .2);
             filter: blur(4px);
         }
 
@@ -131,8 +132,8 @@
             border-radius: 18px;
             display: grid;
             place-items: center;
-            background: rgba(255,255,255,.12);
-            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .18);
             backdrop-filter: blur(12px);
         }
 
@@ -141,7 +142,7 @@
             margin-top: 5px;
             font-size: 10px;
             letter-spacing: 2.6px;
-            color: rgba(255,255,255,.62);
+            color: rgba(255, 255, 255, .62);
         }
 
         .visual-main {
@@ -154,9 +155,9 @@
             gap: 9px;
             padding: 9px 13px;
             border-radius: 999px;
-            background: rgba(255,255,255,.12);
-            border: 1px solid rgba(255,255,255,.18);
-            color: rgba(255,255,255,.88);
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .18);
+            color: rgba(255, 255, 255, .88);
             font-size: 13px;
             font-weight: 900;
             margin-bottom: 18px;
@@ -167,7 +168,7 @@
             height: 9px;
             border-radius: 50%;
             background: var(--green);
-            box-shadow: 0 0 0 7px rgba(22,163,107,.15);
+            box-shadow: 0 0 0 7px rgba(22, 163, 107, .15);
         }
 
         .visual-main h1 {
@@ -182,7 +183,7 @@
         }
 
         .visual-main p {
-            color: rgba(255,255,255,.72);
+            color: rgba(255, 255, 255, .72);
             line-height: 1.8;
             font-size: 16px;
             max-width: 500px;
@@ -192,8 +193,8 @@
             margin-top: 28px;
             max-width: 520px;
             border-radius: 30px;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .16);
             backdrop-filter: blur(18px);
             padding: 18px;
             display: grid;
@@ -206,7 +207,7 @@
             height: 78px;
             border-radius: 22px;
             overflow: hidden;
-            background: rgba(255,255,255,.16);
+            background: rgba(255, 255, 255, .16);
         }
 
         .product-img img {
@@ -223,7 +224,7 @@
         }
 
         .visual-card span {
-            color: rgba(255,255,255,.65);
+            color: rgba(255, 255, 255, .65);
             font-size: 13px;
             font-weight: 800;
         }
@@ -243,8 +244,8 @@
         .visual-stat {
             border-radius: 24px;
             padding: 16px;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .14);
         }
 
         .visual-stat b {
@@ -254,7 +255,7 @@
         }
 
         .visual-stat span {
-            color: rgba(255,255,255,.62);
+            color: rgba(255, 255, 255, .62);
             font-size: 12px;
             font-weight: 800;
         }
@@ -264,7 +265,7 @@
             justify-content: space-between;
             gap: 14px;
             flex-wrap: wrap;
-            color: rgba(255,255,255,.62);
+            color: rgba(255, 255, 255, .62);
             font-size: 13px;
             font-weight: 700;
         }
@@ -278,11 +279,11 @@
 
         .auth-box {
             width: min(500px, 100%);
-            background: rgba(255,255,255,.84);
+            background: rgba(255, 255, 255, .84);
             border: 1px solid var(--line);
             border-radius: 38px;
             padding: 26px;
-            box-shadow: 0 24px 70px rgba(7,17,31,.1);
+            box-shadow: 0 24px 70px rgba(7, 17, 31, .1);
             backdrop-filter: blur(24px);
         }
 
@@ -310,7 +311,7 @@
         .tab-btn.active {
             background: white;
             color: var(--dark);
-            box-shadow: 0 12px 28px rgba(7,17,31,.08);
+            box-shadow: 0 12px 28px rgba(7, 17, 31, .08);
         }
 
         .form-head {
@@ -340,8 +341,15 @@
         }
 
         @keyframes formFade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-grid {
@@ -381,8 +389,8 @@
         }
 
         .input-wrap input:focus {
-            border-color: rgba(40,84,217,.36);
-            box-shadow: 0 0 0 5px rgba(40,84,217,.08);
+            border-color: rgba(40, 84, 217, .36);
+            box-shadow: 0 0 0 5px rgba(40, 84, 217, .08);
         }
 
         .input-icon {
@@ -433,52 +441,22 @@
         .btn-primary {
             background: var(--dark);
             color: white;
-            box-shadow: 0 20px 44px rgba(7,17,31,.22);
+            box-shadow: 0 20px 44px rgba(7, 17, 31, .22);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 26px 58px rgba(7,17,31,.27);
+            box-shadow: 0 26px 58px rgba(7, 17, 31, .27);
         }
 
-        .divider {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            gap: 12px;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 900;
-            margin: 20px 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            height: 1px;
-            background: var(--line);
-        }
-
-        .social-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .social-btn {
-            height: 50px;
-            border: 1px solid var(--line);
-            border-radius: 17px;
-            background: white;
-            cursor: pointer;
-            font-weight: 900;
-            color: var(--dark);
-            transition: .25s ease;
-        }
-
-        .social-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(7,17,31,.08);
+        .status-box {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: #eef7ff;
+            color: #2854d9;
+            margin-bottom: 14px;
+            font-weight: 800;
+            font-size: 13px;
         }
 
         .switch-text {
@@ -574,6 +552,7 @@
         }
     </style>
 </head>
+
 <body>
     <main class="auth-page">
         <section class="auth-visual">
@@ -622,6 +601,7 @@
                     <button class="tab-btn" data-tab="register">Kayıt Ol</button>
                 </div>
 
+                @if (session('status'))<div class="status-box">{{ session('status') }}</div>@endif
                 @if ($errors->any())<div style="padding:12px;border-radius:14px;background:#fff0f0;color:#e33b3b;margin-bottom:14px;font-weight:800;">{{ $errors->first() }}</div>@endif
                 <form class="form active" id="loginForm" method="POST" action="{{ route('login.post') }}">
                     @csrf
@@ -648,17 +628,10 @@
 
                     <div class="form-options">
                         <label><input type="checkbox" name="remember"> Beni hatırla</label>
-                        <a href="#">Şifremi unuttum</a>
+                        <a href="{{ route('password.request') }}">Şifremi unuttum</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Giriş Yap →</button>
-
-                    <div class="divider">veya</div>
-
-                    <div class="social-grid">
-                        <button type="button" class="social-btn">Google ile Giriş</button>
-                        <button type="button" class="social-btn">Apple ile Giriş</button>
-                    </div>
 
                     <p class="switch-text">
                         Hesabınız yok mu?
@@ -729,13 +702,6 @@
 
                     <button type="submit" class="btn btn-primary">Hesap Oluştur →</button>
 
-                    <div class="divider">veya</div>
-
-                    <div class="social-grid">
-                        <button type="button" class="social-btn">Google ile Kayıt</button>
-                        <button type="button" class="social-btn">Apple ile Kayıt</button>
-                    </div>
-
                     <p class="switch-text">
                         Zaten hesabınız var mı?
                         <button type="button" data-switch="login">Giriş yapın</button>
@@ -767,10 +733,7 @@
         switchButtons.forEach(button => {
             button.addEventListener('click', () => setActiveForm(button.dataset.switch));
         });
-
-        
-
-        
     </script>
 </body>
+
 </html>
