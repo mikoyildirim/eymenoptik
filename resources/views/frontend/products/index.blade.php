@@ -1594,146 +1594,7 @@
         </div>
     </header>
 
-    <nav class="category-nav">
-        <div class="container category-nav-inner">
-            <a href="#categories">Güneş Gözlüğü</a>
-            <a href="#categories">Optik Çerçeve</a>
-            <a href="#categories">Kadın</a>
-            <a href="#categories">Erkek</a>
-            <a href="#categories">Çocuk</a>
-            <a href="#categories">Spor</a>
-            <a href="#categories">Luxury</a>
-            <a href="#products">Çok Satanlar</a>
-        </div>
-    </nav>
-
     <main>
-        <section class="hero" id="home">
-            <div class="container hero-grid">
-                <div class="hero-content reveal">
-                    <div class="eyebrow"><span class="dot"></span> Premium Optik E-Ticaret Deneyimi</div>
-                    <h1>Gözlüğü sadece satma, <span>marka deneyimi</span> olarak sun.</h1>
-                    <p>
-                        Eymen Optik için modern, güven veren, kategori ve ürün odaklı e-ticaret arayüzü. Güneş gözlüğü,
-                        optik çerçeve, luxury seri ve spor modeller için şık vitrin yapısı hazır.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="{{ route('products.index') }}" class="btn btn-primary">Alışverişe Başla →</a>
-                        <a href="#categories" class="btn btn-light">Kategorileri Gör</a>
-                    </div>
-                    <div class="trust-row">
-                        <div class="trust-item"><b>350+</b><span>Ürün seçeneği</span></div>
-                        <div class="trust-item"><b>%100</b><span>Orijinal ürün</span></div>
-                        <div class="trust-item"><b>4.9</b><span>Müşteri memnuniyeti</span></div>
-                    </div>
-                </div>
-
-                <div class="hero-visual reveal">
-                    <div class="hero-card">
-                        <img class="hero-product"
-                            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=1100&q=85"
-                            alt="Premium gözlük modeli">
-                        <div class="mini-product-card">
-                            <div class="mini-img"><img
-                                    src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=300&q=80"
-                                    alt="Ürün"></div>
-                            <div>
-                                <h3>Eymen Royal Smoke</h3>
-                                <span>UV400 • Polarize • Luxury</span>
-                            </div>
-                            <b>₺2.899</b>
-                        </div>
-                    </div>
-                    <div class="floating-pill pill-1">✨ Yeni sezon</div>
-                    <div class="floating-pill pill-2">🚚 Hızlı kargo</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="categories">
-            <div class="container">
-                <div class="section-head reveal">
-                    <div>
-                        <div class="eyebrow"><span class="dot"></span> Detaylı Kategori Vitrini</div>
-                        <h2>Müşteriyi doğru ürüne hızlı götür</h2>
-                    </div>
-                    <p>Kategoriler artık sadece kutu değil; kampanya, kullanım amacı, hedef kitle ve ürün tipiyle daha
-                        detaylı bir alışveriş akışı sunuyor.</p>
-                </div>
-
-                <div class="category-showcase">
-                    <a class="cat-feature reveal" href="#products" data-filter-link="sun">
-                        <div class="cat-bg"
-                            style="background-image:url('https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1100&q=85')">
-                        </div>
-                        <div class="cat-content">
-                            <span class="badge">En Çok İncelenen</span>
-                            <h3>Güneş Gözlüğü</h3>
-                            <p>UV400 korumalı, polarize ve yeni sezon güneş gözlüğü modelleri.</p>
-                            <span class="btn btn-light">Ürünleri Gör</span>
-                        </div>
-                    </a>
-
-                    <a class="cat-mini reveal" href="#products" data-filter-link="optic">
-                        <div class="cat-bg"
-                            style="background-image:url('https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=900&q=85')">
-                        </div>
-                        <div class="cat-content">
-                            <span class="badge">Günlük Kullanım</span>
-                            <h3>Optik Çerçeve</h3>
-                            <p>Hafif, rahat ve modern optik çerçeveler.</p>
-                        </div>
-                    </a>
-
-                    <a class="cat-mini reveal" href="#products" data-filter-link="luxury">
-                        <div class="cat-bg"
-                            style="background-image:url('https://images.unsplash.com/photo-1556306535-38febf6782e7?auto=format&fit=crop&w=900&q=85')">
-                        </div>
-                        <div class="cat-content">
-                            <span class="badge">Premium Seri</span>
-                            <h3>Luxury</h3>
-                            <p>Özel tasarım ve iddialı premium koleksiyon.</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="category-list">
-                    <a href="#products" class="category-chip reveal"
-                        data-filter-link="women"><span>👩</span><b>Kadın</b><small>64 ürün</small></a>
-                    <a href="#products" class="category-chip reveal"
-                        data-filter-link="men"><span>👨</span><b>Erkek</b><small>72 ürün</small></a>
-                    <a href="#products" class="category-chip reveal"
-                        data-filter-link="kids"><span>🧒</span><b>Çocuk</b><small>28 ürün</small></a>
-                    <a href="#products" class="category-chip reveal"
-                        data-filter-link="sport"><span>🏃</span><b>Spor</b><small>36 ürün</small></a>
-                    <a href="#products" class="category-chip reveal"
-                        data-filter-link="polarized"><span>🛡️</span><b>Polarize</b><small>48 ürün</small></a>
-                    <a href="#products" class="category-chip reveal" data-filter-link="new"><span>✨</span><b>Yeni
-                            Sezon</b><small>42 ürün</small></a>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="campaign">
-            <div class="container">
-                <div class="campaign reveal">
-                    <div class="campaign-grid">
-                        <div>
-                            <h2>Yeni sezon optik koleksiyonunda özel fırsatlar</h2>
-                            <p>Bu alanı kampanya duyuruları, marka lansmanı, ücretsiz kargo, taksit seçenekleri veya
-                                mağazaya özel indirimler için kullanabilirsiniz.</p>
-                            <div class="campaign-cards">
-                                <div class="campaign-card"><b>UV400</b><span>Koruma özellikli modeller</span></div>
-                                <div class="campaign-card"><b>Polarize</b><span>Seçili ürünlerde</span></div>
-                                <div class="campaign-card"><b>2. Ürüne</b><span>Ek indirim alanı</span></div>
-                            </div>
-                        </div>
-                        <div class="discount-circle"><span><b>%35</b> Sezon indirimi</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="section" id="products">
             <div class="container">
                 <div class="section-head reveal">
@@ -1913,97 +1774,59 @@
                                     </div>
                                 </div>
                             </article>
-                            <article class="product-card reveal" data-category="sun" data-name="Eymen Retro Brown"
-                                data-price="1349">
-                                <span class="product-label">Trend</span>
+                            <article class="product-card reveal" data-category="sun" data-name="Eymen Milano Black"
+                                data-price="1249">
+                                <span class="product-label">Yeni</span>
                                 <div class="product-top-actions"><button class="small-action">♡</button><button
                                         class="small-action">↗</button></div>
                                 <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Retro Brown"></div>
+                                        src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80"
+                                        alt="Eymen Milano Black"></div>
                                 <div class="product-body">
                                     <div class="product-meta"><span>Güneş Gözlüğü</span><span
                                             class="rating">★★★★★</span></div>
-                                    <h3>Eymen Retro Brown</h3>
-                                    <p class="product-desc">Kahverengi tonlarda retro form, şehir stiline uygun premium
-                                        model.</p>
-                                    <div class="specs"><span>Retro</span><span>UV400</span><span>Kahve</span></div>
+                                    <h3>Eymen Milano Black</h3>
+                                    <p class="product-desc">Siyah premium çerçeve, UV400 koruma ve günlük kullanıma
+                                        uygun modern form.</p>
+                                    <div class="specs"><span>UV400</span><span>Polarize</span><span>Unisex</span></div>
                                     <div class="price-row">
-                                        <div><span class="price">₺1.349</span><span class="old-price">₺1.749</span>
+                                        <div><span class="price">₺1.249</span><span class="old-price">₺1.649</span>
                                         </div>
-                                        <button class="add-cart" data-name="Eymen Retro Brown" data-price="1349"
-                                            data-img="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?auto=format&fit=crop&w=700&q=80">+</button>
+                                        <button class="add-cart" data-name="Eymen Milano Black" data-price="1249"
+                                            data-img="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80">+</button>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="product-card reveal" data-category="optic" data-name="Eymen Classic Frame"
+                                data-price="899">
+                                <span class="product-label">Popüler</span>
+                                <div class="product-top-actions"><button class="small-action">♡</button><button
+                                        class="small-action">↗</button></div>
+                                <div class="product-media"><img
+                                        src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80"
+                                        alt="Eymen Classic Frame"></div>
+                                <div class="product-body">
+                                    <div class="product-meta"><span>Optik Çerçeve</span><span
+                                            class="rating">★★★★★</span></div>
+                                    <h3>Eymen Classic Frame</h3>
+                                    <p class="product-desc">Hafif çerçeve yapısı ve sade çizgisiyle günlük kullanıma
+                                        uygun optik model.</p>
+                                    <div class="specs"><span>Hafif</span><span>Mat</span><span>Günlük</span></div>
+                                    <div class="price-row">
+                                        <div><span class="price">₺899</span><span class="old-price">₺1.199</span></div>
+                                        <button class="add-cart" data-name="Eymen Classic Frame" data-price="899"
+                                            data-img="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80">+</button>
                                     </div>
                                 </div>
                             </article>
                         </div>
-                        <div style="text-align:center; margin-top:18px;">
-                            <a href="{{ route('products.index') }}" class="btn btn-primary">Tümünü Gör</a>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
-            <div class="container lookbook">
-                <div class="lookbook-card reveal">
-                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=85"
-                        alt="Lookbook">
-                    <div class="lookbook-content">
-                        <h3>Sezon Lookbook</h3>
-                        <p>Markaya daha premium hava katmak için editorial görsel alanı.</p>
-                        <a href="#products" class="btn btn-primary">Koleksiyonu İncele</a>
-                    </div>
-                </div>
-                <div class="lookbook-card reveal">
-                    <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1100&q=85"
-                        alt="Optik moda">
-                    <div class="lookbook-content">
-                        <h3>Tarzına Uygun Modeli Bul</h3>
-                        <p>Yüz şekli, kullanım amacı ve stil tercihine göre doğru gözlük yönlendirmesi yapılabilir.</p>
-                        <a href="#categories" class="btn btn-light">Kategori Seç</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="container features">
-                <div class="feature reveal">
-                    <div class="feature-icon">🚚</div><b>Hızlı Kargo</b><span>Siparişlerinizi güvenli paketleme ve hızlı
-                        teslimat mesajıyla sunun.</span>
-                </div>
-                <div class="feature reveal">
-                    <div class="feature-icon">✅</div><b>Orijinal Ürün</b><span>Garanti, kalite ve güven algısını ürün
-                        sayfasında destekleyin.</span>
-                </div>
-                <div class="feature reveal">
-                    <div class="feature-icon">💬</div><b>WhatsApp Destek</b><span>Müşteri sorularını satışa dönüştürecek
-                        hızlı iletişim alanı.</span>
-                </div>
-                <div class="feature reveal">
-                    <div class="feature-icon">🔒</div><b>Güvenli Alışveriş</b><span>Ödeme, iade ve sipariş süreçlerinde
-                        güven veren yapı.</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="container newsletter reveal">
-                <div>
-                    <h2>Yeni koleksiyon ve kampanyalardan haberdar olun</h2>
-                    <p>E-posta kayıt alanı ile müşterileri tekrar alışverişe yönlendirecek kampanya iletişimi
-                        oluşturabilirsiniz.</p>
-                </div>
-                <form class="newsletter-form" id="newsletterForm">
-                    <input type="email" placeholder="E-posta adresiniz" required>
-                    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
-                </form>
-            </div>
-        </section>
     </main>
-
     <footer class="footer" id="contact">
         <div class="container">
             <div class="footer-grid">
@@ -2042,7 +1865,6 @@
             </div>
         </div>
     </footer>
-
     <div class="overlay" id="overlay"></div>
 
     <aside class="cart-drawer" id="cartDrawer">
