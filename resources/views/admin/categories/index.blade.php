@@ -1,0 +1,5 @@
+@extends('adminlte::page')
+@section('title','Kategoriler')
+@section('content_header')<div class="d-flex justify-content-between"><h1>Kategoriler</h1><a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Yeni Ekle</a></div>@endsection
+@section('content')@if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+<div class="card"><div class="card-body table-responsive"><table class="table table-bordered"><tr><th>ID</th><th>Ad</th><th>Durum</th><th></th></tr>@foreach($categories as $category)<tr><td>{{ $category->id }}</td><td>{{ $category->name }}</td><td>{{ $category->is_active ? 'Aktif':'Pasif' }}</td><td><a href="{{ route('admin.categories.edit',$category) }}" class="btn btn-sm btn-warning">Düzenle</a><form action="{{ route('admin.categories.destroy',$category) }}" method="POST" class="d-inline">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Sil</button></form></td></tr>@endforeach</table>{{ $categories->links() }}</div></div>@endsection
