@@ -28,6 +28,14 @@ class Product extends Model
     }
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80';
+        if (!$this->image) {
+            return 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80';
+        }
+
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+
+        return asset('storage/' . $this->image);
     }
 }

@@ -7,7 +7,8 @@
     <title>Eymen Optik | Hesabım</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -830,10 +831,6 @@
             margin-bottom: 8px;
         }
 
-        .rating {
-            color: var(--gold);
-        }
-
         .product-body h3 {
             color: var(--dark);
             font-size: 17px;
@@ -1143,8 +1140,10 @@
 
             <div class="nav-actions">
                 <button class="icon-btn" aria-label="Favoriler">♡<span class="count" id="favCount">3</span></button>
-                <button class="icon-btn" id="cartOpen" aria-label="Sepet">🛒<span class="count" id="cartCount">0</span></button>
-                <button class="user-chip" type="button"><span class="avatar">{{ mb_substr(auth()->user()->name,0,1) }}</span><span>{{ auth()->user()->name }}</span></button>
+                <button class="icon-btn" id="cartOpen" aria-label="Sepet">🛒<span class="count"
+                        id="cartCount">0</span></button>
+                <button class="user-chip" type="button"><span
+                        class="avatar">{{ mb_substr(auth()->user()->name,0,1) }}</span><span>{{ auth()->user()->name }}</span></button>
             </div>
         </div>
     </header>
@@ -1172,7 +1171,8 @@
                     <a href="#settings">Hesap Ayarları <span>→</span></a>
                 </nav>
 
-                <form method="POST" action="{{ route('logout') }}">@csrf<button class="logout" type="submit">Çıkış Yap</button></form>
+                <form method="POST" action="{{ route('logout') }}">@csrf<button class="logout" type="submit">Çıkış
+                        Yap</button></form>
             </aside>
 
             <section>
@@ -1180,7 +1180,8 @@
                     <div>
                         <div class="eyebrow"><span class="dot"></span> Giriş Başarılı</div>
                         <h1>Hoş geldin {{ auth()->user()->name }}, <span>alışverişe devam edelim.</span></h1>
-                        <p>Senin için seçilen yeni sezon gözlükleri, favorilerini ve devam eden siparişlerini tek ekranda topladık.</p>
+                        <p>Senin için seçilen yeni sezon gözlükleri, favorilerini ve devam eden siparişlerini tek
+                            ekranda topladık.</p>
                         <div class="hero-actions">
                             <a href="#products" class="btn btn-primary">Ürünleri İncele →</a>
                             <a href="#orders" class="btn btn-light">Siparişlerime Git</a>
@@ -1188,7 +1189,8 @@
                     </div>
 
                     <div class="welcome-product">
-                        <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=900&q=85" alt="Yeni sezon gözlük">
+                        <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=900&q=85"
+                            alt="Yeni sezon gözlük">
                         <div class="floating-badge">
                             <b>Yeni sezon önerisi</b>
                             <span>Royal Smoke • ₺2.899</span>
@@ -1272,22 +1274,23 @@
                     </div>
                 </div>
 
+                @php
+                $categoryIcons = [
+                'gunes-gozlugu' => '🕶️',
+                'optik-cerceve' => '👓',
+                'polarize-gozluk' => '😎',
+                'luxury-seri' => '✨',
+                'spor-gozluk' => '🏃',
+                'cocuk-gozluk' => '🧒',
+                ];
+                @endphp
+
                 <div class="category-row reveal">
+                    @foreach($categories as $category)
                     <a href="#products" class="category-card">
-                        <div class="cat-icon">🕶️</div><b>Güneş Gözlüğü</b><span>64 ürün</span>
+                        <div class="cat-icon">{{ $categoryIcons[$category->slug] ?? '◦' }}</div><b>{{ $category->name }}</b><span>{{ $category->products_count }} ürün</span>
                     </a>
-                    <a href="#products" class="category-card">
-                        <div class="cat-icon">👓</div><b>Optik Çerçeve</b><span>48 ürün</span>
-                    </a>
-                    <a href="#products" class="category-card">
-                        <div class="cat-icon">✨</div><b>Luxury Seri</b><span>22 ürün</span>
-                    </a>
-                    <a href="#products" class="category-card">
-                        <div class="cat-icon">🏃</div><b>Spor</b><span>36 ürün</span>
-                    </a>
-                    <a href="#products" class="category-card">
-                        <div class="cat-icon">🧒</div><b>Çocuk</b><span>18 ürün</span>
-                    </a>
+                    @endforeach
                 </div>
 
                 <div class="section-title reveal" id="products">
@@ -1298,55 +1301,24 @@
                 </div>
 
                 <div class="product-grid" id="productGrid">
-                    <article class="product-card reveal" data-name="Eymen Royal Smoke">
-                        <span class="product-label">Önerilen</span>
-                        <button class="heart active">♡</button>
-                        <div class="product-img"><img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=700&q=80" alt="Eymen Royal Smoke"></div>
+                    @foreach($products as $product)
+                    <article class="product-card reveal" data-name="{{ $product->name }}" data-category="{{ $product->category?->slug }}">
+                        <span class="product-label">{{ $product->is_featured ? 'Önerilen' : 'Yeni' }}</span>
+                        <button class="heart {{ $loop->first ? 'active' : '' }}">♡</button>
+                        <div class="product-img"><img src="{{ $product->image_url }}" alt="{{ $product->name }}"></div>
                         <div class="product-body">
-                            <div class="product-meta"><span>Luxury Seri</span><span class="rating">★★★★★</span></div>
-                            <h3>Eymen Royal Smoke</h3>
-                            <div class="specs"><span>UV400</span><span>Luxury</span><span>Unisex</span></div>
-                            <div class="price-row"><span class="price">₺2.899</span><button class="add-cart" data-name="Eymen Royal Smoke" data-price="2899" data-img="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=700&q=80">+</button></div>
+                            <div class="product-meta"><span>{{ $product->category?->name ?? 'Ürün' }}</span></div>
+                            <h3>{{ $product->name }}</h3>
+                            <div class="specs"><span>{{ $product->brand?->name ?? 'Eymen' }}</span><span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span><span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span></div>
+                            <div class="price-row"><span class="price">₺{{ number_format($product->final_price, 0, ',', '.') }}</span><button class="add-cart" data-name="{{ $product->name }}" data-price="{{ $product->final_price }}" data-img="{{ $product->image_url }}">+</button></div>
                         </div>
                     </article>
-
-                    <article class="product-card reveal" data-name="Eymen Milano Black">
-                        <span class="product-label">Yeni</span>
-                        <button class="heart active">♡</button>
-                        <div class="product-img"><img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80" alt="Eymen Milano Black"></div>
-                        <div class="product-body">
-                            <div class="product-meta"><span>Güneş Gözlüğü</span><span class="rating">★★★★★</span></div>
-                            <h3>Eymen Milano Black</h3>
-                            <div class="specs"><span>Polarize</span><span>UV400</span><span>Siyah</span></div>
-                            <div class="price-row"><span class="price">₺1.249</span><button class="add-cart" data-name="Eymen Milano Black" data-price="1249" data-img="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80">+</button></div>
-                        </div>
-                    </article>
-
-                    <article class="product-card reveal" data-name="Eymen Classic Frame">
-                        <span class="product-label">Popüler</span>
-                        <button class="heart">♡</button>
-                        <div class="product-img"><img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80" alt="Eymen Classic Frame"></div>
-                        <div class="product-body">
-                            <div class="product-meta"><span>Optik Çerçeve</span><span class="rating">★★★★☆</span></div>
-                            <h3>Eymen Classic Frame</h3>
-                            <div class="specs"><span>Hafif</span><span>Mat</span><span>Günlük</span></div>
-                            <div class="price-row"><span class="price">₺899</span><button class="add-cart" data-name="Eymen Classic Frame" data-price="899" data-img="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80">+</button></div>
-                        </div>
-                    </article>
-
-                    <article class="product-card reveal" data-name="Eymen Active Sport">
-                        <span class="product-label">Spor</span>
-                        <button class="heart">♡</button>
-                        <div class="product-img"><img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=700&q=80" alt="Eymen Active Sport"></div>
-                        <div class="product-body">
-                            <div class="product-meta"><span>Spor Gözlük</span><span class="rating">★★★★☆</span></div>
-                            <h3>Eymen Active Sport</h3>
-                            <div class="specs"><span>Spor</span><span>Dayanıklı</span><span>Konfor</span></div>
-                            <div class="price-row"><span class="price">₺1.599</span><button class="add-cart" data-name="Eymen Active Sport" data-price="1599" data-img="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=700&q=80">+</button></div>
-                        </div>
-                    </article>
+                    @endforeach
                 </div>
-            </section>
+        </div>
+        </article>
+        </div>
+        </section>
         </div>
     </main>
 
@@ -1420,7 +1392,8 @@
             miniCartCount.textContent = cart.length;
 
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p class="cart-empty">Sepetiniz şu an boş. Ürünlerden birini sepete ekleyebilirsiniz.</p>';
+                cartItems.innerHTML =
+                    '<p class="cart-empty">Sepetiniz şu an boş. Ürünlerden birini sepete ekleyebilirsiniz.</p>';
                 cartTotal.textContent = '₺0';
                 return;
             }
@@ -1459,7 +1432,8 @@
             const value = searchInput.value.trim().toLocaleLowerCase('tr-TR');
 
             productCards.forEach(card => {
-                const match = card.dataset.name.toLocaleLowerCase('tr-TR').includes(value) || card.innerText.toLocaleLowerCase('tr-TR').includes(value);
+                const match = card.dataset.name.toLocaleLowerCase('tr-TR').includes(value) || card.innerText
+                    .toLocaleLowerCase('tr-TR').includes(value);
                 card.style.display = match ? 'block' : 'none';
             });
         });

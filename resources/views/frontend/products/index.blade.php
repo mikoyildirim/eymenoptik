@@ -807,6 +807,22 @@
             gap: 9px;
         }
 
+        .brand-filter-list {
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 6px;
+            overscroll-behavior: contain;
+        }
+
+        .brand-filter-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .brand-filter-list::-webkit-scrollbar-thumb {
+            background: rgba(7, 17, 31, .18);
+            border-radius: 999px;
+        }
+
         .filter-btn {
             border: 1px solid var(--line);
             background: white;
@@ -992,11 +1008,6 @@
             font-size: 12px;
             font-weight: 850;
             margin-bottom: 9px;
-        }
-
-        .rating {
-            color: var(--gold);
-            letter-spacing: 1px;
         }
 
         .product-body h3 {
@@ -1610,32 +1621,28 @@
                     <aside class="sidebar reveal">
                         <div class="sidebar-block">
                             <h3>Kategoriler</h3>
+                            @php($allProductsCount = count($products))
                             <div class="filter-list">
-                                <button class="filter-btn active" data-filter="all">Tüm Ürünler <span>12</span></button>
-                                <button class="filter-btn" data-filter="sun">Güneş Gözlüğü <span>4</span></button>
-                                <button class="filter-btn" data-filter="optic">Optik Çerçeve <span>3</span></button>
-                                <button class="filter-btn" data-filter="luxury">Luxury Seri <span>2</span></button>
-                                <button class="filter-btn" data-filter="sport">Spor Gözlük <span>2</span></button>
-                                <button class="filter-btn" data-filter="kids">Çocuk Gözlük <span>1</span></button>
+                                <button class="filter-btn active" data-filter-group="category" data-filter="all">Tüm
+                                    Ürünler <span>{{ $allProductsCount }}</span></button>
+                                @foreach($categories as $category)
+                                <button class="filter-btn" data-filter-group="category"
+                                    data-filter="{{ $category->slug }}">{{ $category->name }}
+                                    <span>{{ $category->products_count }}</span></button>
+                                @endforeach
                             </div>
                         </div>
 
                         <div class="sidebar-block">
-                            <h3>Özellikler</h3>
-                            <label class="check-row"><input type="checkbox"> UV400 koruma</label>
-                            <label class="check-row"><input type="checkbox"> Polarize cam</label>
-                            <label class="check-row"><input type="checkbox"> Hafif çerçeve</label>
-                            <label class="check-row"><input type="checkbox"> Yeni sezon</label>
-                        </div>
-
-                        <div class="sidebar-block">
-                            <h3>Renkler</h3>
-                            <div class="color-row">
-                                <span class="color-dot" style="background:#111827"></span>
-                                <span class="color-dot" style="background:#8b5a2b"></span>
-                                <span class="color-dot" style="background:#d1b067"></span>
-                                <span class="color-dot" style="background:#cbd5e1"></span>
-                                <span class="color-dot" style="background:#234b8c"></span>
+                            <h3>Markalar</h3>
+                            <div class="filter-list brand-filter-list">
+                                <button class="filter-btn active" data-filter-group="brand" data-filter="all">Tüm
+                                    Markalar <span>{{ $allProductsCount }}</span></button>
+                                @foreach($brands as $brand)
+                                <button class="filter-btn" data-filter-group="brand"
+                                    data-filter="{{ $brand->slug }}">{{ $brand->name }}
+                                    <span>{{ $brand->products_count }}</span></button>
+                                @endforeach
                             </div>
                         </div>
                     </aside>
@@ -1643,7 +1650,7 @@
                     <div>
                         <div class="toolbar reveal">
                             <div>
-                                <b id="productResult">12 ürün listeleniyor</b><br>
+                                <b id="productResult">{{ $allProductsCount }} ürün listeleniyor</b><br>
                                 <span>Arama ve kategori filtresine göre ürünler güncellenir.</span>
                             </div>
                             <select id="sortSelect">
@@ -1655,171 +1662,43 @@
                         </div>
 
                         <div class="product-grid" id="productGrid">
-                            <!-- Statik örnek ürün kartları (homepage için, veritabanından çekilmiyor) -->
-                            <article class="product-card reveal" data-category="sun" data-name="Eymen Milano Black"
-                                data-price="1249">
-                                <span class="product-label">Yeni</span>
+                            @forelse($products as $product)
+                            <article class="product-card reveal" data-category="{{ $product->category?->slug }}"
+                                data-brand="{{ $product->brand?->slug }}" data-name="{{ $product->name }}"
+                                data-price="{{ $product->final_price }}">
+                                <span class="product-label">{{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}</span>
                                 <div class="product-top-actions"><button class="small-action">♡</button><button
                                         class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Milano Black"></div>
+                                <div class="product-media"><img src="{{ $product->image_url }}"
+                                        alt="{{ $product->name }}"></div>
                                 <div class="product-body">
-                                    <div class="product-meta"><span>Güneş Gözlüğü</span><span
-                                            class="rating">★★★★★</span></div>
-                                    <h3>Eymen Milano Black</h3>
-                                    <p class="product-desc">Siyah premium çerçeve, UV400 koruma ve günlük kullanıma
-                                        uygun modern form.</p>
-                                    <div class="specs"><span>UV400</span><span>Polarize</span><span>Unisex</span></div>
+                                    <div class="product-meta"><span>{{ $product->category?->name ?? 'Ürün' }}</span>
+                                    </div>
+                                    <h3>{{ $product->name }}</h3>
+                                    <p class="product-desc">{{ $product->short_description }}</p>
+                                    <div class="specs">
+                                        <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
+                                        <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
+                                        <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
+                                    </div>
                                     <div class="price-row">
-                                        <div><span class="price">₺1.249</span><span class="old-price">₺1.649</span>
+                                        <div>
+                                            <span
+                                                class="price">₺{{ number_format($product->final_price, 0, ',', '.') }}</span>
+                                            @if($product->discount_price)
+                                            <span
+                                                class="old-price">₺{{ number_format($product->price, 0, ',', '.') }}</span>
+                                            @endif
                                         </div>
-                                        <button class="add-cart" data-name="Eymen Milano Black" data-price="1249"
-                                            data-img="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80">+</button>
+                                        <button class="add-cart" data-name="{{ $product->name }}"
+                                            data-price="{{ $product->final_price }}"
+                                            data-img="{{ $product->image_url }}">+</button>
                                     </div>
                                 </div>
                             </article>
-
-                            <article class="product-card reveal" data-category="optic" data-name="Eymen Classic Frame"
-                                data-price="899">
-                                <span class="product-label">Popüler</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Classic Frame"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Optik Çerçeve</span><span
-                                            class="rating">★★★★★</span></div>
-                                    <h3>Eymen Classic Frame</h3>
-                                    <p class="product-desc">Hafif çerçeve yapısı ve sade çizgisiyle günlük kullanıma
-                                        uygun optik model.</p>
-                                    <div class="specs"><span>Hafif</span><span>Mat</span><span>Günlük</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺899</span><span class="old-price">₺1.199</span></div>
-                                        <button class="add-cart" data-name="Eymen Classic Frame" data-price="899"
-                                            data-img="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="product-card reveal" data-category="luxury" data-name="Eymen Gold Edition"
-                                data-price="2499">
-                                <span class="product-label">Luxury</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1556306535-38febf6782e7?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Gold Edition"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Luxury Seri</span><span class="rating">★★★★★</span>
-                                    </div>
-                                    <h3>Eymen Gold Edition</h3>
-                                    <p class="product-desc">Gold detaylı özel seri, şık kutu sunumu ve premium tasarım
-                                        hissi.</p>
-                                    <div class="specs"><span>Gold</span><span>Premium</span><span>Özel seri</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺2.499</span><span class="old-price">₺3.199</span>
-                                        </div>
-                                        <button class="add-cart" data-name="Eymen Gold Edition" data-price="2499"
-                                            data-img="https://images.unsplash.com/photo-1556306535-38febf6782e7?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="product-card reveal" data-category="sport" data-name="Eymen Active Sport"
-                                data-price="1599">
-                                <span class="product-label">Spor</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Active Sport"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Spor Gözlük</span><span class="rating">★★★★☆</span>
-                                    </div>
-                                    <h3>Eymen Active Sport</h3>
-                                    <p class="product-desc">Aktif kullanım için dayanıklı, konforlu ve hafif spor gözlük
-                                        modeli.</p>
-                                    <div class="specs"><span>Spor</span><span>Dayanıklı</span><span>Hafif</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺1.599</span><span class="old-price">₺1.999</span>
-                                        </div>
-                                        <button class="add-cart" data-name="Eymen Active Sport" data-price="1599"
-                                            data-img="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="product-card reveal" data-category="sun" data-name="Eymen Retro Brown"
-                                data-price="1349">
-                                <span class="product-label">Trend</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Retro Brown"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Güneş Gözlüğü</span><span
-                                            class="rating">★★★★★</span></div>
-                                    <h3>Eymen Retro Brown</h3>
-                                    <p class="product-desc">Kahverengi tonlarda retro form, şehir stiline uygun premium
-                                        model.</p>
-                                    <div class="specs"><span>Retro</span><span>UV400</span><span>Kahve</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺1.349</span><span class="old-price">₺1.749</span>
-                                        </div>
-                                        <button class="add-cart" data-name="Eymen Retro Brown" data-price="1349"
-                                            data-img="https://images.unsplash.com/photo-1582142407894-ec85a1260a46?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
-                            <article class="product-card reveal" data-category="sun" data-name="Eymen Milano Black"
-                                data-price="1249">
-                                <span class="product-label">Yeni</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Milano Black"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Güneş Gözlüğü</span><span
-                                            class="rating">★★★★★</span></div>
-                                    <h3>Eymen Milano Black</h3>
-                                    <p class="product-desc">Siyah premium çerçeve, UV400 koruma ve günlük kullanıma
-                                        uygun modern form.</p>
-                                    <div class="specs"><span>UV400</span><span>Polarize</span><span>Unisex</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺1.249</span><span class="old-price">₺1.649</span>
-                                        </div>
-                                        <button class="add-cart" data-name="Eymen Milano Black" data-price="1249"
-                                            data-img="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="product-card reveal" data-category="optic" data-name="Eymen Classic Frame"
-                                data-price="899">
-                                <span class="product-label">Popüler</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button
-                                        class="small-action">↗</button></div>
-                                <div class="product-media"><img
-                                        src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80"
-                                        alt="Eymen Classic Frame"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>Optik Çerçeve</span><span
-                                            class="rating">★★★★★</span></div>
-                                    <h3>Eymen Classic Frame</h3>
-                                    <p class="product-desc">Hafif çerçeve yapısı ve sade çizgisiyle günlük kullanıma
-                                        uygun optik model.</p>
-                                    <div class="specs"><span>Hafif</span><span>Mat</span><span>Günlük</span></div>
-                                    <div class="price-row">
-                                        <div><span class="price">₺899</span><span class="old-price">₺1.199</span></div>
-                                        <button class="add-cart" data-name="Eymen Classic Frame" data-price="899"
-                                            data-img="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80">+</button>
-                                    </div>
-                                </div>
-                            </article>
+                            @empty
+                            <div class="cart-empty" style="grid-column:1 / -1;">Aktif ürün bulunamadı.</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -1894,7 +1773,8 @@
         const cartItems = document.getElementById('cartItems');
         const cartTotal = document.getElementById('cartTotal');
         const addCartButtons = document.querySelectorAll('.add-cart');
-        const filterButtons = document.querySelectorAll('.filter-btn');
+        const categoryButtons = document.querySelectorAll('[data-filter-group="category"]');
+        const brandButtons = document.querySelectorAll('[data-filter-group="brand"]');
         const productGrid = document.getElementById('productGrid');
         const productCards = Array.from(document.querySelectorAll('.product-card'));
         const productResult = document.getElementById('productResult');
@@ -1905,7 +1785,8 @@
         const reveals = document.querySelectorAll('.reveal');
 
         let cart = [];
-        let activeFilter = 'all';
+        let activeCategoryFilter = 'all';
+        let activeBrandFilter = 'all';
         let activeSearch = '';
 
         mobileBtn.addEventListener('click', () => {
@@ -1969,20 +1850,29 @@
             updateCart();
         };
 
-        filterButtons.forEach(button => {
+        categoryButtons.forEach(button => {
             button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                activeFilter = button.dataset.filter;
+                activeCategoryFilter = button.dataset.filter;
+                applyProducts();
+            });
+        });
+
+        brandButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                brandButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                activeBrandFilter = button.dataset.filter;
                 applyProducts();
             });
         });
 
         document.querySelectorAll('[data-filter-link]').forEach(link => {
             link.addEventListener('click', () => {
-                activeFilter = link.dataset.filterLink;
-                filterButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.filter === activeFilter);
+                activeCategoryFilter = link.dataset.filterLink;
+                categoryButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === activeCategoryFilter);
                 });
                 setTimeout(applyProducts, 150);
             });
@@ -2006,10 +1896,12 @@
 
         function applyProducts() {
             let visibleCards = productCards.filter(card => {
-                const categoryMatch = activeFilter === 'all' || card.dataset.category === activeFilter;
+                const categoryMatch = activeCategoryFilter === 'all' || card.dataset.category ===
+                    activeCategoryFilter;
+                const brandMatch = activeBrandFilter === 'all' || card.dataset.brand === activeBrandFilter;
                 const searchMatch = !activeSearch || card.dataset.name.toLocaleLowerCase('tr-TR').includes(
                     activeSearch) || card.innerText.toLocaleLowerCase('tr-TR').includes(activeSearch);
-                return categoryMatch && searchMatch;
+                return categoryMatch && brandMatch && searchMatch;
             });
 
             const sort = sortSelect.value;

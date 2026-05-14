@@ -31,7 +31,7 @@
     <strong>Formda eksik veya hatalı alanlar var.</strong>
     <ul class="mb-0 mt-2">
         @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+        <li>{{ $error }}</li>
         @endforeach
     </ul>
 </div>
@@ -40,12 +40,11 @@
 <form
     method="POST"
     enctype="multipart/form-data"
-    action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}"
->
+    action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}">
     @csrf
 
     @if($product->exists)
-        @method('PUT')
+    @method('PUT')
     @endif
 
     <div class="row">
@@ -76,8 +75,7 @@
                                 value="{{ old('name', $product->name) }}"
                                 class="form-control eo-input"
                                 placeholder="Örn: Eymen Milano Black"
-                                required
-                            >
+                                required>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -86,12 +84,12 @@
                                 <option value="">Kategori seçiniz</option>
 
                                 @foreach($categories as $category)
-                                    <option
-                                        value="{{ $category->id }}"
-                                        @selected(old('category_id', $product->category_id) == $category->id)
+                                <option
+                                    value="{{ $category->id }}"
+                                    @selected(old('category_id', $product->category_id) == $category->id)
                                     >
-                                        {{ $category->name }}
-                                    </option>
+                                    {{ $category->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -102,50 +100,50 @@
                                 <option value="">Marka seçiniz</option>
 
                                 @foreach($brands as $brand)
-                                    <option
-                                        value="{{ $brand->id }}"
-                                        @selected(old('brand_id', $product->brand_id) == $brand->id)
+                                <option
+                                    value="{{ $brand->id }}"
+                                    @selected(old('brand_id', $product->brand_id) == $brand->id)
                                     >
-                                        {{ $brand->name }}
-                                    </option>
+                                    {{ $brand->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-md-6 form-group">
                             <label>Ürün Tipi</label>
-                            <select name="type" class="form-control eo-input">
+                            <select name="type" class="form-control eo-input" required>
                                 @foreach([
-                                    'gunes_gozlugu' => 'Güneş Gözlüğü',
-                                    'optik_gozluk' => 'Optik Gözlük',
-                                    'spor' => 'Spor',
-                                    'luxury' => 'Luxury'
+                                'gunes_gozlugu' => 'Güneş Gözlüğü',
+                                'optik_gozluk' => 'Optik Gözlük',
+                                'spor' => 'Spor',
+                                'luxury' => 'Luxury'
                                 ] as $key => $label)
-                                    <option
-                                        value="{{ $key }}"
-                                        @selected(old('type', $product->type) == $key)
+                                <option
+                                    value="{{ $key }}"
+                                    @selected(old('type', $product->type) == $key)
                                     >
-                                        {{ $label }}
-                                    </option>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-md-6 form-group">
                             <label>Cinsiyet</label>
-                            <select name="gender" class="form-control eo-input">
+                            <select name="gender" class="form-control eo-input" required>
                                 @foreach([
-                                    'unisex' => 'Unisex',
-                                    'erkek' => 'Erkek',
-                                    'kadin' => 'Kadın',
-                                    'cocuk' => 'Çocuk'
+                                'unisex' => 'Unisex',
+                                'erkek' => 'Erkek',
+                                'kadin' => 'Kadın',
+                                'cocuk' => 'Çocuk'
                                 ] as $key => $label)
-                                    <option
-                                        value="{{ $key }}"
-                                        @selected(old('gender', $product->gender) == $key)
+                                <option
+                                    value="{{ $key }}"
+                                    @selected(old('gender', $product->gender) == $key)
                                     >
-                                        {{ $label }}
-                                    </option>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -156,8 +154,7 @@
                                 name="short_description"
                                 class="form-control eo-input"
                                 rows="3"
-                                placeholder="Ürün kartlarında gösterilecek kısa açıklama"
-                            >{{ old('short_description', $product->short_description) }}</textarea>
+                                placeholder="Ürün kartlarında gösterilecek kısa açıklama">{{ old('short_description', $product->short_description) }}</textarea>
                         </div>
 
                         <div class="col-md-12 form-group">
@@ -166,8 +163,7 @@
                                 name="description"
                                 class="form-control eo-input"
                                 rows="6"
-                                placeholder="Ürün detay sayfasında gösterilecek açıklama"
-                            >{{ old('description', $product->description) }}</textarea>
+                                placeholder="Ürün detay sayfasında gösterilecek açıklama">{{ old('description', $product->description) }}</textarea>
                         </div>
 
                     </div>
@@ -203,8 +199,7 @@
                             value="{{ old('price', $product->price) }}"
                             class="form-control eo-input"
                             placeholder="0.00"
-                            required
-                        >
+                            required>
                     </div>
 
                     <div class="form-group">
@@ -215,8 +210,7 @@
                             name="discount_price"
                             value="{{ old('discount_price', $product->discount_price) }}"
                             class="form-control eo-input"
-                            placeholder="Opsiyonel"
-                        >
+                            placeholder="Opsiyonel">
                     </div>
 
                     <div class="form-group">
@@ -227,8 +221,7 @@
                             value="{{ old('stock', $product->stock ?? 0) }}"
                             class="form-control eo-input"
                             min="0"
-                            required
-                        >
+                            required>
                     </div>
 
                 </div>
@@ -250,9 +243,9 @@
                 <div class="card-body">
 
                     @if($product->exists && !empty($product->image_url))
-                        <div class="eo-preview">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                        </div>
+                    <div class="eo-preview">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                    </div>
                     @endif
 
                     <div class="form-group mb-0">
@@ -261,8 +254,7 @@
                             type="file"
                             name="image"
                             class="form-control eo-input"
-                            accept="image/*"
-                        >
+                            accept="image/*">
                     </div>
 
                 </div>
@@ -337,10 +329,10 @@
         border-radius: 28px;
         margin-bottom: 20px;
         background:
-            radial-gradient(circle at top right, rgba(199,154,58,.18), transparent 30%),
-            linear-gradient(135deg,#07111f,#17375f);
+            radial-gradient(circle at top right, rgba(199, 154, 58, .18), transparent 30%),
+            linear-gradient(135deg, #07111f, #17375f);
         color: #fff;
-        box-shadow: 0 24px 60px rgba(7,17,31,.18);
+        box-shadow: 0 24px 60px rgba(7, 17, 31, .18);
     }
 
     .eo-page-badge {
@@ -349,7 +341,7 @@
         gap: 8px;
         padding: 8px 14px;
         border-radius: 999px;
-        background: rgba(255,255,255,.12);
+        background: rgba(255, 255, 255, .12);
         font-size: 12px;
         font-weight: 800;
         margin-bottom: 14px;
@@ -364,7 +356,7 @@
 
     .eo-page-header p {
         margin: 0;
-        color: rgba(255,255,255,.68);
+        color: rgba(255, 255, 255, .68);
     }
 
     .eo-btn-primary {
@@ -372,14 +364,14 @@
         padding: 0 22px;
         border: none;
         border-radius: 16px;
-        background: linear-gradient(135deg,#2854d9,#17375f);
+        background: linear-gradient(135deg, #2854d9, #17375f);
         color: #fff !important;
         font-weight: 800;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
-        box-shadow: 0 16px 34px rgba(40,84,217,.24);
+        box-shadow: 0 16px 34px rgba(40, 84, 217, .24);
     }
 
     .eo-btn-light {
@@ -398,14 +390,14 @@
         border: none;
         border-radius: 26px;
         overflow: hidden;
-        box-shadow: 0 18px 44px rgba(7,17,31,.07);
+        box-shadow: 0 18px 44px rgba(7, 17, 31, .07);
         margin-bottom: 20px;
     }
 
     .eo-card-header {
         background: #fff;
         padding: 22px 24px;
-        border-bottom: 1px solid rgba(7,17,31,.06);
+        border-bottom: 1px solid rgba(7, 17, 31, .06);
     }
 
     .eo-card-header h3 {
@@ -428,7 +420,7 @@
     .eo-input {
         height: 48px;
         border-radius: 15px;
-        border: 1px solid rgba(7,17,31,.09);
+        border: 1px solid rgba(7, 17, 31, .09);
         font-weight: 650;
     }
 
@@ -438,8 +430,8 @@
     }
 
     .eo-input:focus {
-        border-color: rgba(40,84,217,.38);
-        box-shadow: 0 0 0 4px rgba(40,84,217,.08);
+        border-color: rgba(40, 84, 217, .38);
+        box-shadow: 0 0 0 4px rgba(40, 84, 217, .08);
     }
 
     .eo-preview {
