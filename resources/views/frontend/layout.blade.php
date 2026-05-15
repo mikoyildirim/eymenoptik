@@ -676,9 +676,19 @@
             <strong id="cartTotal">₺0</strong>
         </div>
 
-        <button type="button" class="checkout-btn" id="checkoutBtn">
-            Ödemeye Geç
-        </button>
+     @auth
+
+<a href="{{ route('checkout.index') }}" class="btn-checkout">
+    Ödemeye Geç
+</a>
+
+@else
+
+<a href="{{ route('login') }}" class="btn-checkout">
+    Giriş Yap ve Devam Et
+</a>
+
+@endauth
     </div>
 </aside>
 
