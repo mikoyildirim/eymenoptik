@@ -1,2093 +1,781 @@
-<!DOCTYPE html>
-<html lang="tr">
+@extends('frontend.layout')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eymen Optik | Premium Gözlük E-Ticaret</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+@section('title', 'Eymen Optik | Ana Sayfa')
 
-    <style>
-        :root {
-            --bg: #f4f6fb;
-            --dark: #07111f;
-            --dark-2: #111c2f;
-            --text: #1a2435;
-            --muted: #717b8d;
-            --white: #ffffff;
-            --soft: #eef2f8;
-            --line: rgba(7, 17, 31, .09);
-            --gold: #c79a3a;
-            --gold-soft: rgba(199, 154, 58, .16);
-            --blue: #2854d9;
-            --cyan: #50c9ef;
-            --green: #16a36b;
-            --red: #e23b3b;
-            --shadow: 0 28px 90px rgba(7, 17, 31, .13);
-            --radius: 30px;
-        }
+@section('content')
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<section class="hero-banner reveal">
+    <div class="container">
 
-        html {
-            scroll-behavior: smooth;
-        }
+        <div class="hero-full">
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: "Inter", sans-serif;
-            color: var(--text);
-            background:
-                radial-gradient(circle at 5% 0%, rgba(40, 84, 217, .16), transparent 34%),
-                radial-gradient(circle at 94% 8%, rgba(199, 154, 58, .22), transparent 30%),
-                linear-gradient(180deg, #f9fbff 0%, var(--bg) 48%, #f8fafc 100%);
-            overflow-x: hidden;
-        }
+            <img
+                src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90"
+                alt="Eymen Optik Banner"
+            >
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(7, 17, 31, .025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(7, 17, 31, .025) 1px, transparent 1px);
-            background-size: 46px 46px;
-            mask-image: linear-gradient(to bottom, black, transparent 78%);
-            z-index: -1;
-        }
+            <div class="hero-overlay"></div>
 
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+            <div class="hero-content-full">
 
-        img {
-            width: 100%;
-            display: block;
-        }
+                <div class="discount-badge">
+                    %25<br>İNDİRİM
+                </div>
 
-        button,
-        input,
-        select {
-            font-family: inherit;
-        }
+                <span class="hero-small-title">
+                    Yeni Sezon Koleksiyonu
+                </span>
 
-        .container {
-            width: min(1240px, calc(100% - 40px));
-            margin: auto;
-        }
+                <h1>
+                    Tarzın Gözlerinden<br>
+                    Okunsun
+                </h1>
 
-        .top-bar {
-            background: var(--dark);
-            color: rgba(255, 255, 255, .78);
-            font-size: 13px;
-        }
+                <p>
+                    Eymen Optik’te güneş gözlükleri, optik çerçeveler ve seçili premium modellerde özel fırsatlar.
+                </p>
 
-        .top-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 10px 0;
-        }
+                <a href="{{ route('products.index') }}">
+                    ALIŞVERİŞE BAŞLA
+                </a>
 
-        .top-inner div {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .top-inner b {
-            color: white;
-        }
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 60;
-            background: rgba(255, 255, 255, .78);
-            backdrop-filter: blur(28px);
-            border-bottom: 1px solid var(--line);
-        }
-
-        .nav-inner {
-            height: 82px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-mark {
-            width: 48px;
-            height: 48px;
-            border-radius: 18px;
-            background:
-                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .22), transparent 35%),
-                linear-gradient(135deg, var(--dark), #223f67);
-            color: white;
-            display: grid;
-            place-items: center;
-            font-weight: 950;
-            box-shadow: 0 18px 34px rgba(7, 17, 31, .2);
-        }
-
-        .brand-title {
-            font-weight: 950;
-            color: var(--dark);
-            font-size: 22px;
-            letter-spacing: -.8px;
-            line-height: 1;
-        }
-
-        .brand-title small {
-            display: block;
-            margin-top: 5px;
-            color: var(--muted);
-            font-size: 10px;
-            letter-spacing: 2.5px;
-            font-weight: 900;
-        }
-
-        .search-box {
-            width: min(480px, 100%);
-            justify-self: center;
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            padding: 9px 12px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 14px 35px rgba(7, 17, 31, .05);
-        }
-
-        .search-box input {
-            border: 0;
-            outline: 0;
-            font-size: 14px;
-            color: var(--dark);
-            min-width: 0;
-        }
-
-        .search-box span,
-        .search-box button {
-            width: 34px;
-            height: 34px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-        }
-
-        .search-box button {
-            border: 0;
-            background: var(--dark);
-            color: white;
-            cursor: pointer;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon-btn,
-        .mobile-btn {
-            width: 46px;
-            height: 46px;
-            border: 1px solid var(--line);
-            background: white;
-            border-radius: 17px;
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-            transition: .28s ease;
-            position: relative;
-            color: var(--dark);
-            font-weight: 900;
-        }
-
-        .icon-btn:hover,
-        .mobile-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 34px rgba(7, 17, 31, .1);
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -7px;
-            right: -7px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            background: var(--gold);
-            color: white;
-            font-size: 11px;
-            border: 2px solid white;
-        }
-
-        .mobile-btn {
-            display: none;
-        }
-
-        .category-nav {
-            border-bottom: 1px solid var(--line);
-            background: rgba(255, 255, 255, .58);
-            backdrop-filter: blur(20px);
-        }
-
-        .category-nav-inner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 12px 0;
-        }
-
-        .category-nav a {
-            flex: 0 0 auto;
-            padding: 10px 14px;
-            border-radius: 999px;
-            color: #394456;
-            font-size: 13px;
-            font-weight: 850;
-            transition: .25s ease;
-        }
-
-        .category-nav a:hover {
-            background: var(--dark);
-            color: white;
-        }
-
-        .hero {
-            padding: 54px 0 42px;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.05fr .95fr;
-            gap: 38px;
-            align-items: center;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            background: rgba(255, 255, 255, .76);
-            border: 1px solid var(--line);
-            color: var(--dark);
-            border-radius: 999px;
-            padding: 9px 14px;
-            font-size: 13px;
-            font-weight: 900;
-            box-shadow: 0 14px 34px rgba(7, 17, 31, .06);
-            margin-bottom: 18px;
-        }
-
-        .dot {
-            width: 9px;
-            height: 9px;
-            background: var(--green);
-            border-radius: 999px;
-            box-shadow: 0 0 0 7px rgba(22, 163, 107, .12);
-        }
-
-        .hero h1 {
-            color: var(--dark);
-            font-size: clamp(44px, 6vw, 82px);
-            line-height: .96;
-            letter-spacing: -4.4px;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--blue), var(--gold));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            max-width: 610px;
-            color: var(--muted);
-            font-size: 17px;
-            line-height: 1.82;
-            margin-bottom: 26px;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 13px;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-        }
-
-        .btn {
-            border: 0;
-            cursor: pointer;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 22px;
-            border-radius: 18px;
-            font-size: 14px;
-            font-weight: 950;
-            transition: .32s ease;
-        }
-
-        .btn-primary {
-            background: var(--dark);
-            color: white;
-            box-shadow: 0 20px 48px rgba(7, 17, 31, .24);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 26px 60px rgba(7, 17, 31, .28);
-        }
-
-        .btn-light {
-            background: white;
-            color: var(--dark);
-            border: 1px solid var(--line);
-        }
-
-        .btn-gold {
-            background: var(--gold);
-            color: white;
-        }
-
-        .trust-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 13px;
-            max-width: 610px;
-        }
-
-        .trust-item {
-            background: rgba(255, 255, 255, .76);
-            border: 1px solid var(--line);
-            border-radius: 22px;
-            padding: 16px;
-        }
-
-        .trust-item b {
-            display: block;
-            color: var(--dark);
-            font-size: 22px;
-            letter-spacing: -1px;
-        }
-
-        .trust-item span {
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .hero-visual {
-            min-height: 610px;
-            position: relative;
-        }
-
-        .hero-card {
-            position: absolute;
-            inset: 0;
-            border-radius: 48px;
-            border: 1px solid rgba(255, 255, 255, .8);
-            background:
-                radial-gradient(circle at 80% 15%, rgba(199, 154, 58, .32), transparent 30%),
-                radial-gradient(circle at 15% 80%, rgba(40, 84, 217, .16), transparent 34%),
-                linear-gradient(150deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .45));
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .hero-card::before {
-            content: "";
-            position: absolute;
-            width: 680px;
-            height: 680px;
-            border: 1px solid rgba(7, 17, 31, .06);
-            border-radius: 50%;
-            left: -190px;
-            top: -90px;
-        }
-
-        .hero-product {
-            position: absolute;
-            width: 86%;
-            left: 7%;
-            top: 18%;
-            border-radius: 34px;
-            filter: drop-shadow(0 42px 40px rgba(7, 17, 31, .2));
-            animation: float 5.6s ease-in-out infinite;
-        }
-
-        .mini-product-card {
-            position: absolute;
-            left: 30px;
-            bottom: 30px;
-            right: 30px;
-            z-index: 2;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, .78);
-            border: 1px solid var(--line);
-            backdrop-filter: blur(18px);
-            padding: 16px;
-            display: grid;
-            grid-template-columns: 76px 1fr auto;
-            gap: 13px;
-            align-items: center;
-            box-shadow: 0 20px 52px rgba(7, 17, 31, .1);
-        }
-
-        .mini-img {
-            height: 70px;
-            border-radius: 20px;
-            background: var(--soft);
-            overflow: hidden;
-        }
-
-        .mini-product-card h3 {
-            font-size: 16px;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-
-        .mini-product-card span {
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .mini-product-card b {
-            color: var(--dark);
-            font-size: 22px;
-        }
-
-        .floating-pill {
-            position: absolute;
-            z-index: 3;
-            background: rgba(255, 255, 255, .82);
-            border: 1px solid var(--line);
-            backdrop-filter: blur(18px);
-            border-radius: 999px;
-            padding: 13px 17px;
-            box-shadow: 0 18px 44px rgba(7, 17, 31, .12);
-            font-weight: 900;
-            color: var(--dark);
-            display: flex;
-            gap: 9px;
-            align-items: center;
-        }
-
-        .pill-1 {
-            top: 52px;
-            left: -10px;
-        }
-
-        .pill-2 {
-            top: 106px;
-            right: -8px;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(-1.8deg);
-            }
-
-            50% {
-                transform: translateY(-18px) rotate(1.6deg);
-            }
-        }
-
-        .section {
-            padding: 58px 0;
-        }
-
-        .section-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 24px;
-            margin-bottom: 28px;
-        }
-
-        .section-head h2 {
-            color: var(--dark);
-            font-size: clamp(31px, 4.4vw, 54px);
-            letter-spacing: -2.5px;
-            line-height: 1.02;
-        }
-
-        .section-head p {
-            color: var(--muted);
-            max-width: 560px;
-            line-height: 1.75;
-            font-weight: 550;
-        }
-
-        .category-showcase {
-            display: grid;
-            grid-template-columns: 1.2fr .8fr .8fr;
-            gap: 18px;
-        }
-
-        .cat-feature,
-        .cat-mini {
-            position: relative;
-            overflow: hidden;
-            border-radius: 34px;
-            border: 1px solid var(--line);
-            background: white;
-            min-height: 300px;
-            box-shadow: 0 16px 44px rgba(7, 17, 31, .06);
-            transition: .32s ease;
-        }
-
-        .cat-feature:hover,
-        .cat-mini:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 28px 70px rgba(7, 17, 31, .12);
-        }
-
-        .cat-bg {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1.02);
-            transition: .45s ease;
-        }
-
-        .cat-feature:hover .cat-bg,
-        .cat-mini:hover .cat-bg {
-            transform: scale(1.08);
-        }
-
-        .cat-bg::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(7, 17, 31, .08), rgba(7, 17, 31, .72));
-        }
-
-        .cat-content {
-            position: absolute;
-            inset: auto 22px 22px 22px;
-            color: white;
-            z-index: 2;
-        }
-
-        .cat-content .badge {
-            display: inline-flex;
-            padding: 8px 11px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .17);
-            border: 1px solid rgba(255, 255, 255, .24);
-            backdrop-filter: blur(10px);
-            font-size: 12px;
-            font-weight: 900;
-            margin-bottom: 12px;
-        }
-
-        .cat-content h3 {
-            font-size: 30px;
-            letter-spacing: -1.3px;
-            margin-bottom: 8px;
-        }
-
-        .cat-content p {
-            color: rgba(255, 255, 255, .76);
-            line-height: 1.6;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .cat-feature {
-            min-height: 420px;
-        }
-
-        .cat-feature .cat-content h3 {
-            font-size: 42px;
-        }
-
-        .category-list {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 14px;
-            margin-top: 18px;
-        }
-
-        .category-chip {
-            background: rgba(255, 255, 255, .78);
-            border: 1px solid var(--line);
-            border-radius: 24px;
-            padding: 17px;
-            transition: .28s ease;
-        }
-
-        .category-chip:hover {
-            transform: translateY(-5px);
-            background: var(--dark);
-            color: white;
-        }
-
-        .category-chip span {
-            width: 44px;
-            height: 44px;
-            display: grid;
-            place-items: center;
-            border-radius: 16px;
-            background: var(--soft);
-            margin-bottom: 14px;
-            font-size: 21px;
-        }
-
-        .category-chip:hover span {
-            background: rgba(255, 255, 255, .12);
-        }
-
-        .category-chip b {
-            display: block;
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-
-        .category-chip small {
-            color: var(--muted);
-            font-weight: 800;
-        }
-
-        .category-chip:hover small {
-            color: rgba(255, 255, 255, .68);
-        }
-
-        .campaign {
-            position: relative;
-            overflow: hidden;
-            border-radius: 42px;
-            padding: 44px;
-            background:
-                radial-gradient(circle at 85% 0%, rgba(199, 154, 58, .38), transparent 30%),
-                linear-gradient(135deg, var(--dark), #17375f);
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .campaign-grid {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .campaign h2 {
-            font-size: clamp(32px, 4.4vw, 58px);
-            letter-spacing: -2.5px;
-            line-height: 1;
-            margin-bottom: 14px;
-        }
-
-        .campaign p {
-            color: rgba(255, 255, 255, .75);
-            line-height: 1.75;
-            max-width: 680px;
-        }
-
-        .campaign-cards {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 22px;
-        }
-
-        .campaign-card {
-            background: rgba(255, 255, 255, .12);
-            border: 1px solid rgba(255, 255, 255, .16);
-            border-radius: 20px;
-            padding: 14px 16px;
-            min-width: 150px;
-        }
-
-        .campaign-card b {
-            display: block;
-            font-size: 20px;
-        }
-
-        .campaign-card span {
-            color: rgba(255, 255, 255, .67);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .discount-circle {
-            width: 174px;
-            height: 174px;
-            border-radius: 50%;
-            background: white;
-            color: var(--dark);
-            display: grid;
-            place-items: center;
-            text-align: center;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, .22);
-            transform: rotate(5deg);
-        }
-
-        .discount-circle b {
-            display: block;
-            font-size: 46px;
-            letter-spacing: -2px;
-        }
-
-        .discount-circle span {
-            color: var(--muted);
-            font-weight: 900;
-        }
-
-        .shop-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 22px;
-            align-items: start;
-        }
-
-        .sidebar {
-            position: sticky;
-            top: 116px;
-            background: rgba(255, 255, 255, .82);
-            border: 1px solid var(--line);
-            border-radius: 30px;
-            padding: 20px;
-            box-shadow: 0 18px 44px rgba(7, 17, 31, .06);
-        }
-
-        .sidebar-block+.sidebar-block {
-            margin-top: 24px;
-            padding-top: 22px;
-            border-top: 1px solid var(--line);
-        }
-
-        .sidebar h3 {
-            color: var(--dark);
-            font-size: 16px;
-            margin-bottom: 14px;
-        }
-
-        .filter-list {
-            display: grid;
-            gap: 9px;
-        }
-
-        .brand-filter-list {
-            max-height: 320px;
-            overflow-y: auto;
-            padding-right: 6px;
-            overscroll-behavior: contain;
-        }
-
-        .brand-filter-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .brand-filter-list::-webkit-scrollbar-thumb {
-            background: rgba(7, 17, 31, .18);
-            border-radius: 999px;
-        }
-
-        .filter-btn {
-            border: 1px solid var(--line);
-            background: white;
-            border-radius: 16px;
-            padding: 12px 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 850;
-            color: #3d4859;
-            transition: .25s ease;
-            text-align: left;
-        }
-
-        .filter-btn span {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: var(--dark);
-            color: white;
-            border-color: var(--dark);
-        }
-
-        .filter-btn.active span,
-        .filter-btn:hover span {
-            color: rgba(255, 255, 255, .68);
-        }
-
-        .check-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            padding: 8px 0;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 750;
-        }
-
-        .color-row {
-            display: flex;
-            gap: 9px;
-            flex-wrap: wrap;
-        }
-
-        .color-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 1px var(--line), 0 8px 16px rgba(7, 17, 31, .1);
-        }
-
-        .toolbar {
-            background: rgba(255, 255, 255, .82);
-            border: 1px solid var(--line);
-            border-radius: 26px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 18px;
-            box-shadow: 0 16px 42px rgba(7, 17, 31, .05);
-        }
-
-        .toolbar b {
-            color: var(--dark);
-        }
-
-        .toolbar span {
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 750;
-        }
-
-        .toolbar select {
-            border: 1px solid var(--line);
-            background: white;
-            border-radius: 15px;
-            padding: 11px 13px;
-            font-weight: 800;
-            color: var(--dark);
-            outline: 0;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .product-card {
-            background: rgba(255, 255, 255, .86);
-            border: 1px solid var(--line);
-            border-radius: 32px;
-            overflow: hidden;
-            position: relative;
-            transition: .35s ease;
-            box-shadow: 0 16px 42px rgba(7, 17, 31, .05);
-        }
-
-        .product-card:hover {
-            transform: translateY(-9px);
-            box-shadow: 0 30px 76px rgba(7, 17, 31, .13);
-        }
-
-        .product-top-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 3;
-            display: grid;
-            gap: 8px;
-        }
-
-        .small-action {
-            width: 37px;
-            height: 37px;
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            background: rgba(255, 255, 255, .85);
-            cursor: pointer;
-            backdrop-filter: blur(12px);
-            transition: .25s ease;
-        }
-
-        .small-action:hover {
-            background: var(--dark);
-            color: white;
-        }
-
-        .product-label {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 3;
-            background: var(--dark);
-            color: white;
-            border-radius: 999px;
-            padding: 8px 12px;
-            font-size: 11px;
-            font-weight: 950;
-        }
-
-        .product-media {
-            height: 245px;
-            display: grid;
-            place-items: center;
-            padding: 28px;
-            background:
-                radial-gradient(circle at 50% 45%, rgba(40, 84, 217, .1), transparent 50%),
-                linear-gradient(180deg, #f8fafc, #edf2f8);
-            overflow: hidden;
-        }
-
-        .product-media img {
-            height: 100%;
-            max-width: 100%;
-            object-fit: cover;
-            object-position: center;
-            border-radius: 24px;
-            filter: drop-shadow(0 20px 24px rgba(7, 17, 31, .15));
-            transition: .35s ease;
-        }
-
-        .product-card:hover .product-media img {
-            transform: scale(1.045) rotate(-1.5deg);
-        }
-
-        .product-body {
-            padding: 19px;
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 850;
-            margin-bottom: 9px;
-        }
-
-        .product-body h3 {
-            color: var(--dark);
-            font-size: 18px;
-            letter-spacing: -.6px;
-            margin-bottom: 10px;
-            line-height: 1.25;
-        }
-
-        .product-desc {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.55;
-            margin-bottom: 14px;
-        }
-
-        .specs {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-            margin-bottom: 14px;
-        }
-
-        .specs span {
-            background: var(--soft);
-            color: #425066;
-            border-radius: 999px;
-            padding: 7px 9px;
-            font-size: 11px;
-            font-weight: 900;
-        }
-
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .price {
-            color: var(--dark);
-            font-size: 22px;
-            font-weight: 950;
-            letter-spacing: -1px;
-        }
-
-        .old-price {
-            color: #a4adbb;
-            text-decoration: line-through;
-            font-size: 13px;
-            font-weight: 800;
-            margin-left: 6px;
-        }
-
-        .add-cart {
-            width: 48px;
-            height: 48px;
-            border: 0;
-            border-radius: 17px;
-            color: white;
-            background: var(--dark);
-            cursor: pointer;
-            font-size: 21px;
-            transition: .28s ease;
-        }
-
-        .add-cart:hover {
-            background: var(--gold);
-            transform: rotate(8deg) scale(1.07);
-        }
-
-        .lookbook {
-            display: grid;
-            grid-template-columns: .9fr 1.1fr;
-            gap: 20px;
-        }
-
-        .lookbook-card {
-            border-radius: 38px;
-            border: 1px solid var(--line);
-            background: white;
-            overflow: hidden;
-            position: relative;
-            min-height: 500px;
-            box-shadow: var(--shadow);
-        }
-
-        .lookbook-card img {
-            height: 100%;
-            max-width: 100%;
-            object-fit: cover;
-        }
-
-        .lookbook-content {
-            position: absolute;
-            inset: auto 28px 28px 28px;
-            background: rgba(255, 255, 255, .82);
-            border: 1px solid rgba(255, 255, 255, .7);
-            border-radius: 28px;
-            padding: 22px;
-            backdrop-filter: blur(18px);
-        }
-
-        .lookbook-content h3 {
-            font-size: 30px;
-            color: var(--dark);
-            letter-spacing: -1.5px;
-            margin-bottom: 8px;
-        }
-
-        .lookbook-content p {
-            color: var(--muted);
-            line-height: 1.65;
-            margin-bottom: 16px;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, .84);
-            border: 1px solid var(--line);
-            border-radius: 28px;
-            padding: 22px;
-            box-shadow: 0 16px 42px rgba(7, 17, 31, .05);
-        }
-
-        .feature-icon {
-            width: 54px;
-            height: 54px;
-            background: var(--soft);
-            border-radius: 19px;
-            display: grid;
-            place-items: center;
-            font-size: 24px;
-            margin-bottom: 14px;
-        }
-
-        .feature b {
-            display: block;
-            color: var(--dark);
-            font-size: 17px;
-            margin-bottom: 7px;
-        }
-
-        .feature span {
-            color: var(--muted);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .newsletter {
-            background:
-                radial-gradient(circle at 8% 10%, rgba(199, 154, 58, .18), transparent 30%),
-                rgba(255, 255, 255, .86);
-            border: 1px solid var(--line);
-            border-radius: 40px;
-            padding: 36px;
-            display: grid;
-            grid-template-columns: 1fr .92fr;
-            align-items: center;
-            gap: 26px;
-            box-shadow: 0 20px 60px rgba(7, 17, 31, .07);
-        }
-
-        .newsletter h2 {
-            color: var(--dark);
-            font-size: clamp(30px, 4vw, 48px);
-            line-height: 1.05;
-            letter-spacing: -2.3px;
-            margin-bottom: 10px;
-        }
-
-        .newsletter p {
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 10px;
-            background: white;
-            border: 1px solid var(--line);
-            padding: 8px;
-            border-radius: 24px;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            border: 0;
-            outline: 0;
-            padding: 0 12px;
-            min-width: 0;
-            color: var(--dark);
-        }
-
-        .footer {
-            margin-top: 58px;
-            padding: 56px 0 26px;
-            background: var(--dark);
-            color: white;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.3fr repeat(4, 1fr);
-            gap: 32px;
-            padding-bottom: 34px;
-            border-bottom: 1px solid rgba(255, 255, 255, .1);
-        }
-
-        .footer h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        .footer p,
-        .footer a {
-            display: block;
-            color: rgba(255, 255, 255, .68);
-            line-height: 1.9;
-            font-size: 14px;
-        }
-
-        .copyright {
-            padding-top: 22px;
-            display: flex;
-            justify-content: space-between;
-            gap: 14px;
-            flex-wrap: wrap;
-            color: rgba(255, 255, 255, .55);
-            font-size: 13px;
-        }
-
-        .cart-drawer {
-            position: fixed;
-            top: 0;
-            right: -430px;
-            width: min(410px, 100%);
-            height: 100vh;
-            z-index: 120;
-            background: white;
-            box-shadow: -30px 0 90px rgba(0, 0, 0, .18);
-            transition: .38s ease;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-drawer.active {
-            right: 0;
-        }
-
-        .cart-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .cart-head h3 {
-            color: var(--dark);
-            font-size: 25px;
-            letter-spacing: -1px;
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .cart-empty {
-            color: var(--muted);
-            line-height: 1.7;
-            background: var(--soft);
-            border-radius: 22px;
-            padding: 18px;
-        }
-
-        .cart-item {
-            display: grid;
-            grid-template-columns: 74px 1fr auto;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .cart-thumb {
-            height: 66px;
-            border-radius: 18px;
-            background: var(--soft);
-            overflow: hidden;
-        }
-
-        .cart-thumb img {
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cart-item b {
-            display: block;
-            color: var(--dark);
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .cart-item span {
-            color: var(--muted);
-            font-weight: 850;
-            font-size: 13px;
-        }
-
-        .remove-item {
-            width: 34px;
-            height: 34px;
-            border: 0;
-            border-radius: 12px;
-            cursor: pointer;
-            background: #fff0f0;
-            color: var(--red);
-            font-weight: 950;
-        }
-
-        .cart-total {
-            border-top: 1px solid var(--line);
-            padding-top: 18px;
-        }
-
-        .cart-total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            color: var(--dark);
-            font-weight: 950;
-            font-size: 20px;
-        }
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 110;
-            background: rgba(7, 17, 31, .42);
-            backdrop-filter: blur(6px);
-            opacity: 0;
-            visibility: hidden;
-            transition: .32s ease;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        main {
-            flex: 1
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(26px);
-            transition: .72s ease;
-        }
-
-        .reveal.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 1080px) {
-            .search-box {
-                display: none;
-            }
-
-            .nav-inner {
-                grid-template-columns: auto auto;
-                justify-content: space-between;
-            }
-
-            .mobile-btn {
-                display: grid;
-            }
-
-            .category-nav {
-                display: none;
-            }
-
-            .hero-grid,
-            .shop-layout,
-            .lookbook,
-            .newsletter,
-            .campaign-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-visual {
-                min-height: 520px;
-            }
-
-            .sidebar {
-                position: relative;
-                top: 0;
-            }
-
-            .filter-list {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .category-showcase {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .cat-feature {
-                grid-column: 1 / -1;
-            }
-
-            .category-list,
-            .features,
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 680px) {
-            .top-bar {
-                display: none;
-            }
-
-            .container {
-                width: min(100% - 26px, 1240px);
-            }
-
-            .nav-inner {
-                height: 70px;
-            }
-
-            .brand-mark {
-                width: 42px;
-                height: 42px;
-                border-radius: 15px;
-            }
-
-            .brand-title {
-                font-size: 18px;
-            }
-
-            .brand-title small {
-                font-size: 9px;
-                letter-spacing: 1.7px;
-            }
-
-            .hero {
-                padding-top: 36px;
-            }
-
-            .hero h1 {
-                letter-spacing: -2.5px;
-            }
-
-            .trust-row,
-            .filter-list,
-            .product-grid,
-            .category-showcase,
-            .category-list,
-            .features,
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-visual {
-                min-height: 400px;
-            }
-
-            .floating-pill {
-                display: none;
-            }
-
-            .mini-product-card {
-                left: 14px;
-                right: 14px;
-                bottom: 14px;
-                grid-template-columns: 60px 1fr;
-            }
-
-            .mini-product-card b {
-                display: none;
-            }
-
-            .hero-card {
-                border-radius: 34px;
-            }
-
-            .section {
-                padding: 42px 0;
-            }
-
-            .section-head {
-                display: block;
-            }
-
-            .section-head p {
-                margin-top: 10px;
-            }
-
-            .cat-feature,
-            .cat-mini {
-                min-height: 310px;
-            }
-
-            .cat-feature .cat-content h3,
-            .cat-content h3 {
-                font-size: 30px;
-            }
-
-            .campaign,
-            .newsletter {
-                padding: 25px;
-                border-radius: 30px;
-            }
-
-            .discount-circle {
-                width: 132px;
-                height: 132px;
-            }
-
-            .toolbar {
-                display: block;
-            }
-
-            .toolbar select {
-                width: 100%;
-                margin-top: 12px;
-            }
-
-            .newsletter-form {
-                display: block;
-            }
-
-            .newsletter-form input {
-                width: 100%;
-                padding: 14px 10px;
-            }
-
-            .newsletter-form .btn {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="top-bar">
-        <div class="container top-inner">
-            <div>
-                <span><b>Yeni Sezon:</b> Seçili ürünlerde %35 indirim</span>
-                <span>Ücretsiz kargo fırsatı</span>
             </div>
-            <div>
-                <span>WhatsApp: 0555 000 00 00</span>
-                <span>Sivas / Merkez</span>
+
+        </div>
+
+        <div class="marquee">
+            <span>
+                %25 İNDİRİME EK YENİ ÜYELERE ÖZEL %10 İNDİRİM • ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ •
+                %25 İNDİRİME EK YENİ ÜYELERE ÖZEL %10 İNDİRİM • ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ •
+            </span>
+        </div>
+
+    </div>
+</section>
+
+<section class="mini-feature-section">
+    <div class="container">
+        <div class="mini-feature-grid">
+            <div class="mini-feature reveal">
+                <strong>🚚 Ücretsiz Kargo</strong>
+                <span>Belirli tutar üzeri siparişlerde.</span>
+            </div>
+
+            <div class="mini-feature reveal">
+                <strong>🕶️ Orijinal Ürün</strong>
+                <span>Tüm ürünlerde güvenilir alışveriş.</span>
+            </div>
+
+            <div class="mini-feature reveal">
+                <strong>💳 Taksit İmkanı</strong>
+                <span>Ödeme adımında taksit seçenekleri.</span>
+            </div>
+
+            <div class="mini-feature reveal">
+                <strong>📞 Destek</strong>
+                <span>Sipariş ve ürün danışmanlığı.</span>
             </div>
         </div>
     </div>
+</section>
 
-    <header class="navbar">
-        <div class="container nav-inner">
-            <a href="{{ route('home') }}" class="brand">
-                <span class="brand-mark">EO</span>
-                <span class="brand-title">Eymen Optik<small>PREMIUM EYEWEAR</small></span>
+<section class="product-section" id="featured-products">
+    <div class="container">
+
+        <div class="section-title reveal">
+            <div>
+                <span>FIRSAT ÜRÜNLERİ</span>
+                <h2>İndirimdeki Ürünler</h2>
+                <p>İndirimdeki ürünler arasından ihtiyacınız olan ürünü satın alabilirsiniz.</p>
+            </div>
+
+            <a href="{{ route('products.index') }}">
+                Tümünü Gör →
             </a>
-
-            <form class="search-box" id="searchForm">
-                <span>⌕</span>
-                <input type="search" id="searchInput" placeholder="Güneş gözlüğü, optik çerçeve, spor gözlük ara...">
-                <button type="submit">→</button>
-            </form>
-
-            <div class="nav-actions">
-                @auth <a class="icon-btn" href="{{ route('account') }}" aria-label="Hesabım">👤</a> @else <a
-                    class="icon-btn" href="{{ route('login') }}" aria-label="Giriş">👤</a> @endauth
-                <button class="icon-btn" id="cartOpen" aria-label="Sepet">
-                    🛒
-                    <span class="cart-count" id="cartCount">0</span>
-                </button>
-                <button class="mobile-btn" id="mobileBtn" aria-label="Menü">☰</button>
-            </div>
         </div>
-    </header>
 
-    <nav class="category-nav">
-        <div class="container category-nav-inner">
-            <a href="#categories">Güneş Gözlüğü</a>
-            <a href="#categories">Optik Çerçeve</a>
-            <a href="#categories">Polarize Gözlük</a>
-            <a href="#categories">Kadın</a>
-            <a href="#categories">Erkek</a>
-            <a href="#categories">Çocuk</a>
-            <a href="#categories">Spor</a>
-            <a href="#categories">Luxury</a>
-            <a href="#products">Çok Satanlar</a>
-        </div>
-    </nav>
+        <div class="product-grid">
 
-    <main>
-        <section class="hero" id="home">
-            <div class="container hero-grid">
-                <div class="hero-content reveal">
-                    <div class="eyebrow"><span class="dot"></span> Premium Optik E-Ticaret Deneyimi</div>
-                    <h1>Gözlüğü sadece satma, <span>marka deneyimi</span> olarak sun.</h1>
-                    <p>
-                        Eymen Optik için modern, güven veren, kategori ve ürün odaklı e-ticaret arayüzü. Güneş gözlüğü,
-                        optik çerçeve, luxury seri ve spor modeller için şık vitrin yapısı hazır.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="{{ route('products.index') }}" class="btn btn-primary">Alışverişe Başla →</a>
-                        <a href="#categories" class="btn btn-light">Kategorileri Gör</a>
-                    </div>
-                    <div class="trust-row">
-                        <div class="trust-item"><b>350+</b><span>Ürün seçeneği</span></div>
-                        <div class="trust-item"><b>%100</b><span>Orijinal ürün</span></div>
-                        <div class="trust-item"><b>4.9</b><span>Müşteri memnuniyeti</span></div>
-                    </div>
-                </div>
+            @forelse($discountProducts as $product)
 
-                <div class="hero-visual reveal">
-                    <div class="hero-card">
-                        <img class="hero-product"
-                            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=1100&q=85"
-                            alt="Premium gözlük modeli">
-                        <div class="mini-product-card">
-                            <div class="mini-img"><img
-                                    src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=300&q=80"
-                                    alt="Ürün"></div>
-                            <div>
-                                <h3>Eymen Royal Smoke</h3>
-                                <span>UV400 • Polarize • Luxury</span>
-                            </div>
-                            <b>₺2.899</b>
+                <div class="product-card reveal">
+
+                    @if($product->discount_price && $product->price > 0)
+                        <div class="product-badge">
+                            %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
                         </div>
-                    </div>
-                    <div class="floating-pill pill-1">✨ Yeni sezon</div>
-                    <div class="floating-pill pill-2">🚚 Hızlı kargo</div>
-                </div>
-            </div>
-        </section>
+                    @else
+                        <div class="product-badge">
+                            Yeni
+                        </div>
+                    @endif
 
-        <section class="section" id="categories">
-            <div class="container">
-                <div class="section-head reveal">
-                    <div>
-                        <div class="eyebrow"><span class="dot"></span> Detaylı Kategori Vitrini</div>
-                        <h2>Müşteriyi doğru ürüne hızlı götür</h2>
-                    </div>
-                    <p>Kategoriler artık sadece kutu değil; kampanya, kullanım amacı, hedef kitle ve ürün tipiyle daha
-                        detaylı bir alışveriş akışı sunuyor.</p>
-                </div>
+                    <button class="wishlist-btn" type="button">
+                        ♡
+                    </button>
 
-                @php
-                $categoryShowcaseMeta = [
-                'gunes-gozlugu' => [
-                'badge' => 'En Çok İncelenen',
-                'description' => 'UV400 korumalı, polarize ve yeni sezon güneş gözlüğü modelleri.',
-                'image' => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1100&q=85',
-                ],
-                'optik-cerceve' => [
-                'badge' => 'Günlük Kullanım',
-                'description' => 'Hafif, rahat ve modern optik çerçeveler.',
-                'image' => 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=900&q=85',
-                ],
-                'polarize-gozluk' => [
-                'badge' => 'Net Görüş',
-                'description' => 'Yansıma azaltan polarize camlı gözlükler.',
-                'image' => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85',
-                ],
-                'luxury-seri' => [
-                'badge' => 'Premium Seri',
-                'description' => 'Özel tasarım ve iddialı premium koleksiyon.',
-                'image' => 'https://images.unsplash.com/photo-1556306535-38febf6782e7?auto=format&fit=crop&w=900&q=85',
-                ],
-                'spor-gozluk' => [
-                'badge' => 'Performans',
-                'description' => 'Aktif kullanım için dayanıklı ve hafif spor gözlük seçenekleri.',
-                'image' => 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=900&q=85',
-                ],
-                'cocuk-gozluk' => [
-                'badge' => 'Çocuk Koleksiyonu',
-                'description' => 'Çocuklar için hafif, dayanıklı ve konforlu modeller.',
-                'image' => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85',
-                ],
-                ];
-                @endphp
-
-                <div class="category-showcase">
-                    @foreach($categories->take(3) as $category)
-                    @php
-                    $meta = $categoryShowcaseMeta[$category->slug] ?? [
-                    'badge' => 'Kategori',
-                    'description' => 'Kategoriye ait ürünleri inceleyin.',
-                    'image' => 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=900&q=85',
-                    ];
-                    $metaImage = $meta['image'];
-                    @endphp
-                    <a class="{{ $loop->first ? 'cat-feature' : 'cat-mini' }} reveal" href="#products" data-filter-link="{{ $category->slug }}">
-                        <div class="cat-bg" style="background-image:url('{{ $metaImage }}')"></div>
-                        <div class="cat-content">
-                            <span class="badge">{{ $meta['badge'] }}</span>
-                            <h3>{{ $category->name }}</h3>
-                            <p>{{ $meta['description'] }}</p>
-                            @if($loop->first)
-                            <span class="btn btn-light">Ürünleri Gör</span>
-                            @endif
+                    <a href="{{ route('products.show', $product->slug) }}">
+                        <div class="product-image">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
                         </div>
                     </a>
-                    @endforeach
-                </div>
 
-                @php
-                $categoryIcons = [
-                'gunes-gozlugu' => '🕶️',
-                'optik-cerceve' => '👓',
-                'polarize-gozluk' => '😎',
-                'luxury-seri' => '✨',
-                'spor-gozluk' => '🏃',
-                'cocuk-gozluk' => '🧒',
-                ];
-                @endphp
+                    <div class="product-content">
+                        <span class="product-category">
+                            {{ $product->category?->name ?? 'Ürün' }}
+                        </span>
 
-                <div class="category-list">
-                    @foreach($categories as $category)
-                    <a href="#products" class="category-chip reveal" data-filter-link="{{ $category->slug }}"><span>{{ $categoryIcons[$category->slug] ?? '◦' }}</span><b>{{ $category->name }}</b><small>{{ $category->products_count }} ürün</small></a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
+                        <h3>{{ $product->name }}</h3>
 
-        <section class="section" id="campaign">
-            <div class="container">
-                <div class="campaign reveal">
-                    <div class="campaign-grid">
-                        <div>
-                            <h2>Yeni sezon optik koleksiyonunda özel fırsatlar</h2>
-                            <p>Bu alanı kampanya duyuruları, marka lansmanı, ücretsiz kargo, taksit seçenekleri veya
-                                mağazaya özel indirimler için kullanabilirsiniz.</p>
-                            <div class="campaign-cards">
-                                <div class="campaign-card"><b>UV400</b><span>Koruma özellikli modeller</span></div>
-                                <div class="campaign-card"><b>Polarize</b><span>Seçili ürünlerde</span></div>
-                                <div class="campaign-card"><b>2. Ürüne</b><span>Ek indirim alanı</span></div>
-                            </div>
+                        <div class="product-prices">
+                            <strong>
+                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                            </strong>
+
+                            @if($product->discount_price)
+                                <span>
+                                    ₺{{ number_format($product->price, 0, ',', '.') }}
+                                </span>
+                            @endif
                         </div>
-                        <div class="discount-circle"><span><b>%35</b> Sezon indirimi</span></div>
+
+                        <button
+                            class="cart-btn js-add-cart"
+                            type="button"
+                            data-id="{{ $product->id }}"
+                            data-name="{{ $product->name }}"
+                            data-price="{{ $product->final_price }}"
+                            data-img="{{ $product->image_url }}"
+                        >
+                            Sepete Ekle
+                        </button>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <section class="section" id="products">
-            <div class="container">
-                <div class="section-head reveal">
-                    <div>
-                        <div class="eyebrow"><span class="dot"></span> Ürün Kataloğu</div>
-                        <h2>Detaylı ürün listesi</h2>
+                </div>
+
+            @empty
+
+                <div class="empty-products">
+                    Henüz ürün bulunmuyor.
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</section>
+
+<section class="double-banner">
+    <div class="container">
+        <div class="double-banner-grid">
+
+            <a href="{{ route('products.index') }}" class="image-banner reveal">
+                <img
+                    src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90"
+                    alt="Erkek Gözlükleri"
+                >
+
+                <div>
+                    <span>Yeni Sezon</span>
+                    <h3>Erkek Güneş Gözlükleri</h3>
+                </div>
+            </a>
+
+            <a href="{{ route('products.index') }}" class="image-banner reveal">
+                <img
+                    src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90"
+                    alt="Kadın Gözlükleri"
+                >
+
+                <div>
+                    <span>Yeni Ürün</span>
+                    <h3>Kadın Güneş Gözlükleri</h3>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<section class="product-section bg-soft">
+    <div class="container">
+
+        <div class="section-title reveal">
+            <div>
+                <span>TREND KOLEKSİYON</span>
+                <h2>Çok Satanlar</h2>
+                <p>Çok satan ürünlerimizi inceleyebilirsiniz.</p>
+            </div>
+
+            <a href="{{ route('products.index') }}">
+                Tümünü Gör →
+            </a>
+        </div>
+
+        <div class="product-grid">
+
+            @forelse($bestSellerProducts as $product)
+
+                <div class="product-card reveal">
+
+                    <button class="wishlist-btn" type="button">
+                        ♡
+                    </button>
+
+                    <a href="{{ route('products.show', $product->slug) }}">
+                        <div class="product-image">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                        </div>
+                    </a>
+
+                    <div class="product-content">
+                        <span class="product-category">
+                            {{ $product->category?->name ?? 'Ürün' }}
+                        </span>
+
+                        <h3>{{ $product->name }}</h3>
+
+                        <div class="product-prices">
+                            <strong>
+                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                            </strong>
+
+                            @if($product->discount_price)
+                                <span>
+                                    ₺{{ number_format($product->price, 0, ',', '.') }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <button
+                            class="cart-btn js-add-cart"
+                            type="button"
+                            data-id="{{ $product->id }}"
+                            data-name="{{ $product->name }}"
+                            data-price="{{ $product->final_price }}"
+                            data-img="{{ $product->image_url }}"
+                        >
+                            Sepete Ekle
+                        </button>
                     </div>
-                    <p>Sol filtre paneli, kategori kırılımları, ürün özellikleri, fiyat ve sepete ekleme sistemi örnek
-                        olarak hazırlandı.</p>
+
                 </div>
 
-                <div class="shop-layout">
-                    <aside class="sidebar reveal">
-                        <div class="sidebar-block">
-                            <h3>Kategoriler</h3>
-                            <div class="filter-list">
-                                <button class="filter-btn active" data-filter="all">Tüm Ürünler <span>{{ $products->count() }}</span></button>
-                                @foreach($categories as $category)
-                                <button class="filter-btn" data-filter-group="category" data-filter="{{ $category->slug }}">{{ $category->name }} <span>{{ $category->products_count }}</span></button>
-                                @endforeach
-                            </div>
-                        </div>
+            @empty
 
-                        <div class="sidebar-block">
-                            <h3>Markalar</h3>
-                            <div class="filter-list brand-filter-list">
-                                <button class="filter-btn active" data-filter-group="brand" data-filter="all">Tüm Markalar <span>{{ $products->count() }}</span></button>
-                                @foreach($brands as $brand)
-                                <button class="filter-btn" data-filter-group="brand" data-filter="{{ $brand->slug }}">{{ $brand->name }} <span>{{ $brand->products_count }}</span></button>
-                                @endforeach
-                            </div>
-                        </div>
-                    </aside>
+                <div class="empty-products">
+                    Henüz ürün bulunmuyor.
+                </div>
 
-                    <div>
-                        <div class="toolbar reveal">
-                            <div>
-                                <b id="productResult">{{ count($products) }} ürün listeleniyor</b><br>
-                                <span>Arama ve kategori filtresine göre ürünler güncellenir.</span>
-                            </div>
-                            <select id="sortSelect">
-                                <option value="default">Varsayılan sıralama</option>
-                                <option value="priceAsc">Fiyat: Artan</option>
-                                <option value="priceDesc">Fiyat: Azalan</option>
-                                <option value="nameAsc">İsim: A-Z</option>
-                            </select>
-                        </div>
+            @endforelse
 
-                        <div class="product-grid" id="productGrid">
-                            @foreach($products as $product)
-                            <article class="product-card reveal" data-category="{{ $product->category?->slug }}" data-brand="{{ $product->brand?->slug }}" data-name="{{ $product->name }}" data-price="{{ $product->final_price }}">
-                                <span class="product-label">{{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}</span>
-                                <div class="product-top-actions"><button class="small-action">♡</button><button class="small-action">↗</button></div>
-                                <div class="product-media"><img src="{{ $product->image_url }}" alt="{{ $product->name }}"></div>
-                                <div class="product-body">
-                                    <div class="product-meta"><span>{{ $product->category?->name ?? 'Ürün' }}</span></div>
-                                    <h3>{{ $product->name }}</h3>
-                                    <p class="product-desc">{{ $product->short_description }}</p>
-                                    <div class="specs">
-                                        <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
-                                        <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
-                                        <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
-                                    </div>
-                                    <div class="price-row">
-                                        <div>
-                                            <span class="price">₺{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                            @if($product->discount_price)
-                                            <span class="old-price">₺{{ number_format($product->price, 0, ',', '.') }}</span>
-                                            @endif
-                                        </div>
-                                        <button class="add-cart" data-name="{{ $product->name }}" data-price="{{ $product->final_price }}" data-img="{{ $product->image_url }}">+</button>
-                                    </div>
-                                </div>
-                            </article>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <h3>Eymen Optik</h3>
-                    <p>Premium gözlük satışı için modern, kategori odaklı ve dönüşüm hedefli e-ticaret arayüzü.</p>
-                </div>
-                <div>
-                    <h3>Kategoriler</h3>
-                    <a href="#products">Güneş Gözlüğü</a>
-                    <a href="#products">Optik Çerçeve</a>
-                    <a href="#products">Luxury Seri</a>
-                </div>
-                <div>
-                    <h3>Mağaza</h3>
-                    <a href="#campaign">Kampanyalar</a>
-                    <a href="#products">Çok Satanlar</a>
-                    <a href="#categories">Yeni Sezon</a>
-                </div>
-                <div>
-                    <h3>Destek</h3>
-                    <a href="#">Sipariş Takibi</a>
-                    <a href="#">İade Politikası</a>
-                    <a href="#">Sık Sorulanlar</a>
-                </div>
-                <div>
-                    <h3>İletişim</h3>
-                    <p>0555 000 00 00</p>
-                    <p>info@eymenoptik.com</p>
-                    <p>Sivas / Merkez</p>
-                </div>
-            </div>
-            <div class="copyright">
-                <span>© 2026 Eymen Optik. Tüm hakları saklıdır.</span>
-                <span>Website Template by MK Digital</span>
-            </div>
         </div>
-    </footer>
 
-    <div class="overlay" id="overlay"></div>
+    </div>
+</section>
 
-    <aside class="cart-drawer" id="cartDrawer">
-        <div class="cart-head">
-            <h3>Sepetim</h3>
-            <button class="icon-btn" id="cartClose">×</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <p class="cart-empty">Sepetiniz şu an boş. Ürünlerden birini sepete ekleyebilirsiniz.</p>
-        </div>
-        <div class="cart-total">
-            <div class="cart-total-row">
-                <span>Toplam</span>
-                <span id="cartTotal">₺0</span>
-            </div>
-            <button class="btn btn-primary" style="width:100%;">Ödemeye Geç</button>
-        </div>
-    </aside>
+@endsection
 
-    <script>
-        const mobileBtn = document.getElementById('mobileBtn');
-        const cartOpen = document.getElementById('cartOpen');
-        const cartClose = document.getElementById('cartClose');
-        const cartDrawer = document.getElementById('cartDrawer');
-        const overlay = document.getElementById('overlay');
-        const cartCount = document.getElementById('cartCount');
-        const cartItems = document.getElementById('cartItems');
-        const cartTotal = document.getElementById('cartTotal');
-        const addCartButtons = document.querySelectorAll('.add-cart');
-        const categoryButtons = document.querySelectorAll('[data-filter-group="category"]');
-        const brandButtons = document.querySelectorAll('[data-filter-group="brand"]');
-        const productGrid = document.getElementById('productGrid');
-        const productCards = Array.from(document.querySelectorAll('.product-card'));
-        const productResult = document.getElementById('productResult');
-        const sortSelect = document.getElementById('sortSelect');
-        const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput');
-        const newsletterForm = document.getElementById('newsletterForm');
-        const reveals = document.querySelectorAll('.reveal');
+@section('page_css')
 
-        let cart = [];
-        let activeCategoryFilter = 'all';
-        let activeBrandFilter = 'all';
-        let activeSearch = '';
+<style>
+    .hero-banner {
+        padding: 25px 0 35px;
+    }
 
-        mobileBtn.addEventListener('click', () => {
-            const nav = document.querySelector('.category-nav');
-            nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
-        });
+    .hero-full {
+        height: 640px;
+        position: relative;
+        overflow: hidden;
+        background: #f5f5f5;
+        box-shadow: 0 26px 70px rgba(0,0,0,.08);
+    }
 
-        function openCart() {
-            cartDrawer.classList.add('active');
-            overlay.classList.add('active');
+    .hero-full::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background:
+            linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.75)),
+            radial-gradient(circle at 70% 40%,rgba(255,255,255,.35),transparent 35%);
+    }
+
+    .hero-full img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transform: scale(1.04);
+        animation: heroZoom 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom {
+        from {
+            transform: scale(1.04);
         }
 
-        function closeCart() {
-            cartDrawer.classList.remove('active');
-            overlay.classList.remove('active');
+        to {
+            transform: scale(1.11);
+        }
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        background: linear-gradient(
+            90deg,
+            rgba(255,255,255,.08) 0%,
+            rgba(255,255,255,.52) 52%,
+            rgba(255,255,255,.82) 100%
+        );
+    }
+
+    .hero-content-full {
+        position: absolute;
+        right: 110px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 5;
+        text-align: center;
+        animation: heroText .9s ease both;
+        max-width: 620px;
+    }
+
+    .hero-small-title {
+        display: inline-block;
+        background: #fff;
+        color: #111;
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 900;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+
+    .discount-badge {
+        position: absolute;
+        left: -290px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: #000;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        font-size: 39px;
+        font-weight: 900;
+        line-height: 1.1;
+        border: 5px dotted #fff;
+        animation: badgePulse 2.4s infinite ease-in-out;
+    }
+
+    .hero-content-full h1 {
+        font-family: Georgia,'Times New Roman',serif;
+        font-size: 78px;
+        line-height: 1.02;
+        font-weight: 500;
+        color: #111;
+        letter-spacing: -2px;
+        margin-bottom: 18px;
+    }
+
+    .hero-content-full p {
+        color: #535353;
+        line-height: 1.8;
+        font-size: 16px;
+        margin-bottom: 28px;
+    }
+
+    .hero-content-full a {
+        background: #111;
+        color: #fff;
+        padding: 18px 54px;
+        font-size: 23px;
+        font-weight: 800;
+        display: inline-block;
+        transition: .25s ease;
+    }
+
+    .hero-content-full a:hover {
+        background: #c79a3a;
+        transform: translateY(-4px);
+    }
+
+    .marquee {
+        height: 42px;
+        background: #000;
+        color: #fff;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        font-size: 24px;
+        font-weight: 900;
+    }
+
+    .marquee span {
+        display: inline-block;
+        animation: marqueeMove 18s linear infinite;
+    }
+
+    @keyframes marqueeMove {
+        from {
+            transform: translateX(0);
         }
 
-        cartOpen.addEventListener('click', openCart);
-        cartClose.addEventListener('click', closeCart);
-        overlay.addEventListener('click', closeCart);
+        to {
+            transform: translateX(-50%);
+        }
+    }
 
-        addCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                cart.push({
-                    name: button.dataset.name,
-                    price: Number(button.dataset.price),
-                    img: button.dataset.img
-                });
-                updateCart();
-                openCart();
-            });
-        });
-
-        function updateCart() {
-            cartCount.textContent = cart.length;
-
-            if (cart.length === 0) {
-                cartItems.innerHTML =
-                    '<p class="cart-empty">Sepetiniz şu an boş. Ürünlerden birini sepete ekleyebilirsiniz.</p>';
-                cartTotal.textContent = '₺0';
-                return;
-            }
-
-            cartItems.innerHTML = cart.map((item, index) => `
-                <div class="cart-item">
-                    <div class="cart-thumb"><img src="${item.img}" alt="${item.name}"></div>
-                    <div>
-                        <b>${item.name}</b>
-                        <span>₺${item.price.toLocaleString('tr-TR')}</span>
-                    </div>
-                    <button class="remove-item" onclick="removeCartItem(${index})">×</button>
-                </div>
-            `).join('');
-
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            cartTotal.textContent = '₺' + total.toLocaleString('tr-TR');
+    @keyframes badgePulse {
+        0%,100% {
+            scale: 1;
         }
 
-        window.removeCartItem = function(index) {
-            cart.splice(index, 1);
-            updateCart();
-        };
+        50% {
+            scale: 1.06;
+        }
+    }
 
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                activeCategoryFilter = button.dataset.filter;
-                applyProducts();
-            });
-        });
-
-        brandButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                brandButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                activeBrandFilter = button.dataset.filter;
-                applyProducts();
-            });
-        });
-
-        document.querySelectorAll('[data-filter-link]').forEach(link => {
-            link.addEventListener('click', () => {
-                activeCategoryFilter = link.dataset.filterLink;
-                categoryButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.filter === activeCategoryFilter);
-                });
-                setTimeout(applyProducts, 150);
-            });
-        });
-
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
-            applyProducts();
-            document.getElementById('products').scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-
-        searchInput.addEventListener('input', () => {
-            activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
-            applyProducts();
-        });
-
-        sortSelect.addEventListener('change', applyProducts);
-
-        function applyProducts() {
-            let visibleCards = productCards.filter(card => {
-                const categoryMatch = activeCategoryFilter === 'all' || card.dataset.category === activeCategoryFilter;
-                const brandMatch = activeBrandFilter === 'all' || card.dataset.brand === activeBrandFilter;
-                const searchMatch = !activeSearch || card.dataset.name.toLocaleLowerCase('tr-TR').includes(
-                    activeSearch) || card.innerText.toLocaleLowerCase('tr-TR').includes(activeSearch);
-                return categoryMatch && brandMatch && searchMatch;
-            });
-
-            const sort = sortSelect.value;
-            visibleCards.sort((a, b) => {
-                const priceA = Number(a.dataset.price);
-                const priceB = Number(b.dataset.price);
-                const nameA = a.dataset.name;
-                const nameB = b.dataset.name;
-                if (sort === 'priceAsc') return priceA - priceB;
-                if (sort === 'priceDesc') return priceB - priceA;
-                if (sort === 'nameAsc') return nameA.localeCompare(nameB, 'tr');
-                return 0;
-            });
-
-            productCards.forEach(card => card.style.display = 'none');
-            visibleCards.forEach(card => {
-                card.style.display = 'block';
-                productGrid.appendChild(card);
-            });
-
-            productResult.textContent = `${visibleCards.length} ürün listeleniyor`;
+    @keyframes heroText {
+        from {
+            opacity: 0;
+            transform: translateY(-42%);
         }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('show');
-            });
-        }, {
-            threshold: 0.12
-        });
+        to {
+            opacity: 1;
+            transform: translateY(-50%);
+        }
+    }
 
-        reveals.forEach(item => observer.observe(item));
+    .mini-feature-section {
+        padding: 10px 0 35px;
+    }
 
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Kayıt başarılı!');
-            this.reset();
-        });
-    </script>
-</body>
+    .mini-feature-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
 
-</html>
+    .mini-feature {
+        background: #fff;
+        border: 1px solid #eee;
+        padding: 22px;
+        box-shadow: 0 14px 35px rgba(0,0,0,.04);
+    }
+
+    .mini-feature strong {
+        display: block;
+        font-size: 17px;
+        margin-bottom: 8px;
+    }
+
+    .mini-feature span {
+        color: #777;
+        font-size: 13px;
+    }
+
+    .product-section {
+        padding: 42px 0 60px;
+    }
+
+    .bg-soft {
+        background: #f6f6f6;
+        padding: 55px 0 70px;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .section-title span {
+        display: inline-block;
+        color: #c79a3a;
+        font-weight: 900;
+        font-size: 12px;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+        font-size: 36px;
+        font-weight: 900;
+        color: #000;
+        margin: 0;
+    }
+
+    .section-title p {
+        margin-top: 5px;
+        color: #a1a1aa;
+        font-size: 15px;
+    }
+
+    .section-title a {
+        font-size: 14px;
+        font-weight: 800;
+        color: #000;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+    }
+
+    .product-card {
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #eee;
+        transition: .28s ease;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 18px 50px rgba(0,0,0,.08);
+        transform: translateY(-6px);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 3;
+        background: #000;
+        color: #fff;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+    }
+
+    .wishlist-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 50%;
+        background: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 3;
+        box-shadow: 0 8px 22px rgba(0,0,0,.08);
+        transition: .22s ease;
+    }
+
+    .wishlist-btn:hover {
+        background: #000;
+        color: #fff;
+    }
+
+    .product-image {
+        height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        height: 100%;
+        object-fit: contain;
+        transition: .32s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.06);
+    }
+
+    .product-content {
+        padding: 16px;
+        text-align: center;
+    }
+
+    .product-category {
+        display: block;
+        color: #8b8b8b;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .product-content h3 {
+        color: #111;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.45;
+        min-height: 44px;
+        margin-bottom: 12px;
+    }
+
+    .product-prices {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .product-prices strong {
+        color: #000;
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    .product-prices span {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .cart-btn {
+        width: 100%;
+        height: 43px;
+        border: 0;
+        background: #000;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: .25s ease;
+    }
+
+    .cart-btn:hover {
+        background: #c79a3a;
+    }
+
+    .double-banner {
+        padding: 0 0 55px;
+    }
+
+    .double-banner-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .image-banner {
+        position: relative;
+        height: 320px;
+        overflow: hidden;
+        background: #eee;
+    }
+
+    .image-banner img {
+        height: 100%;
+        object-fit: cover;
+        transition: .4s ease;
+    }
+
+    .image-banner:hover img {
+        transform: scale(1.06);
+    }
+
+    .image-banner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(0,0,0,.48));
+    }
+
+    .image-banner div {
+        position: absolute;
+        left: 28px;
+        bottom: 25px;
+        z-index: 2;
+        color: #fff;
+    }
+
+    .image-banner span {
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .image-banner h3 {
+        font-size: 32px;
+        margin-top: 6px;
+    }
+
+    .empty-products {
+        grid-column: 1 / -1;
+        background: #fff;
+        padding: 35px;
+        text-align: center;
+        color: #777;
+    }
+
+    @media(max-width: 1200px) {
+        .product-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .mini-feature-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .hero-content-full {
+            right: 70px;
+        }
+
+        .discount-badge {
+            display: none;
+        }
+    }
+
+    @media(max-width: 768px) {
+        .hero-full {
+            height: 480px;
+        }
+
+        .hero-content-full {
+            left: 24px;
+            right: 24px;
+            text-align: left;
+        }
+
+        .hero-content-full h1 {
+            font-size: 42px;
+        }
+
+        .hero-content-full p {
+            font-size: 14px;
+        }
+
+        .hero-content-full a {
+            font-size: 16px;
+            padding: 14px 28px;
+        }
+
+        .section-title {
+            display: block;
+        }
+
+        .product-grid,
+        .double-banner-grid,
+        .mini-feature-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .image-banner {
+            height: 260px;
+        }
+    }
+</style>
+
+@endsection

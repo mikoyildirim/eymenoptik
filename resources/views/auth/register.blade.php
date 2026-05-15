@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eymen Optik | Giriş Yap</title>
+    <title>Eymen Optik | Kayıt Ol</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -18,8 +18,8 @@
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             background:
-                linear-gradient(90deg, rgba(255,255,255,.86), rgba(255,255,255,.58)),
-                url('https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90');
+                linear-gradient(90deg, rgba(255,255,255,.88), rgba(255,255,255,.62)),
+                url('https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1800&q=90');
             background-size: cover;
             background-position: center;
             display: grid;
@@ -33,7 +33,7 @@
         }
 
         .auth-card {
-            width: min(460px, 100%);
+            width: min(500px, 100%);
             background: #fff;
             padding: 42px;
             box-shadow: 0 30px 90px rgba(0,0,0,.12);
@@ -110,15 +110,6 @@
             border-color: #000;
         }
 
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-
         .btn {
             width: 100%;
             height: 54px;
@@ -129,6 +120,7 @@
             cursor: pointer;
             font-size: 15px;
             transition: .25s ease;
+            margin-top: 5px;
         }
 
         .btn:hover {
@@ -166,8 +158,8 @@
     </a>
 
     <div class="auth-title">
-        <h1>Giriş Yap</h1>
-        <p>Hesabınıza giriş yaparak alışverişe devam edin.</p>
+        <h1>Kayıt Ol</h1>
+        <p>Eymen Optik hesabınızı oluşturun.</p>
     </div>
 
     @if ($errors->any())
@@ -176,8 +168,20 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('login.post') }}">
+    <form method="POST" action="{{ route('register.post') }}">
         @csrf
+
+        <div class="form-group">
+            <label>Ad Soyad</label>
+            <input
+                type="text"
+                name="name"
+                value="{{ old('name') }}"
+                class="form-control"
+                placeholder="Adınız Soyadınız"
+                required
+            >
+        </div>
 
         <div class="form-group">
             <label>E-posta</label>
@@ -188,7 +192,6 @@
                 class="form-control"
                 placeholder="ornek@mail.com"
                 required
-                autofocus
             >
         </div>
 
@@ -198,30 +201,30 @@
                 type="password"
                 name="password"
                 class="form-control"
-                placeholder="Şifreniz"
+                placeholder="En az 8 karakter"
                 required
             >
         </div>
 
-        <div class="form-row">
-            <label>
-                <input type="checkbox" name="remember">
-                Beni hatırla
-            </label>
-
-            <a href="{{ route('password.request') }}">
-                Şifremi unuttum
-            </a>
+        <div class="form-group">
+            <label>Şifre Tekrar</label>
+            <input
+                type="password"
+                name="password_confirmation"
+                class="form-control"
+                placeholder="Şifrenizi tekrar girin"
+                required
+            >
         </div>
 
         <button class="btn" type="submit">
-            GİRİŞ YAP
+            KAYIT OL
         </button>
     </form>
 
     <div class="auth-footer">
-        Hesabınız yok mu?
-        <a href="{{ route('register') }}">Kayıt Ol</a>
+        Zaten hesabınız var mı?
+        <a href="{{ route('login') }}">Giriş Yap</a>
     </div>
 </div>
 

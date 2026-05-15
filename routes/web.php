@@ -12,7 +12,16 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\MemberBrandController;
 
+
+
+Route::get('/iletisim', [ContactController::class, 'index'])->name('contact');
+Route::get('/markalar', [MemberBrandController::class, 'index'])->name('brands.index');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/urunler', [ProductController::class, 'index'])->name('products.index');
 Route::get('/urunler/{product:slug}', [ProductController::class, 'show'])->name('products.show');

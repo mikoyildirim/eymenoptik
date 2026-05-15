@@ -11,14 +11,44 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $products = Product::with(['category', 'brand'])
+            ->where('is_active', 1)
+            ->latest()
+            ->take(20)
+            ->get();
+
+        $discountProducts = Product::with(['category', 'brand'])
+            ->where('is_active', 1)
+            ->whereNotNull('discount_price')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $bestSellerProducts = Product::with(['category', 'brand'])
+            ->where('is_active', 1)
+            ->where('is_featured', 1)
+            ->latest()
+            ->take(10)
+            ->get();
+
         return view('frontend.home', [
-            'products' => Product::with('category', 'brand')->where('is_active', 1)->latest()->get(),
-            'categories' => Category::withCount(['products' => function ($query) {
-                $query->where('is_active', 1);
-            }])->where('is_active', 1)->get(),
-            'brands' => Brand::withCount(['products' => function ($query) {
-                $query->where('is_active', 1);
-            }])->where('is_active', 1)->orderBy('name')->get(),
+            'categories' => Category::withCount('products')
+                ->where('is_active', 1)
+                ->get(),
+
+            'brands' => Brand::withCount('products')
+                ->where('is_active', 1)
+                ->get(),
+
+            'products' => $products,
+
+            'discountProducts' => $discountProducts->isNotEmpty()
+                ? $discountProducts
+                : $products,
+
+            'bestSellerProducts' => $bestSellerProducts->isNotEmpty()
+                ? $bestSellerProducts
+                : $products,
         ]);
     }
 }
