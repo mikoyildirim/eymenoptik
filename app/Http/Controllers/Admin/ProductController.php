@@ -57,6 +57,22 @@ class ProductController extends Controller
     }
     private function valid(Request $r)
     {
-        return $r->validate(['category_id' => 'required|exists:categories,id', 'brand_id' => 'nullable|exists:brands,id', 'name' => 'required|max:255', 'gender' => 'required|in:erkek,kadin,unisex,cocuk', 'type' => 'required|in:gunes_gozlugu,optik_gozluk,spor,luxury', 'price' => 'required|numeric|min:0', 'discount_price' => 'nullable|numeric|min:0', 'stock' => 'required|integer|min:0', 'image' => 'nullable|image', 'short_description' => 'nullable', 'description' => 'nullable', 'model_code' => 'nullable', 'frame_color' => 'nullable', 'glass_color' => 'nullable', 'frame_material' => 'nullable', 'glass_type' => 'nullable']);
+        return $r->validate([
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'name' => 'required|max:255',
+            'gender' => 'required|in:erkek,kadin,unisex,cocuk',
+            'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image',
+            'short_description' => 'nullable',
+            'description' => 'nullable',
+            'model_code' => 'nullable',
+            'frame_color' => 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+            'glass_color' => 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+            'frame_material' => 'nullable',
+            'glass_type' => 'nullable',
+        ]);
     }
 }

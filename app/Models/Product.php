@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id', 'brand_id', 'name', 'slug', 'gender', 'type', 'model_code', 'frame_color', 'glass_color', 'frame_material', 'glass_type', 'price', 'discount_price', 'stock', 'image', 'short_description', 'description', 'is_featured', 'is_active'];
+    protected $fillable = ['category_id', 'brand_id', 'name', 'slug', 'gender', 'model_code', 'frame_color', 'glass_color', 'frame_material', 'glass_type', 'price', 'discount_price', 'stock', 'image', 'short_description', 'description', 'is_featured', 'is_active'];
 
     public function getRouteKeyName(): string
     {

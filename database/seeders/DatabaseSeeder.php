@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Milano Black',
                 'category' => 'Güneş Gözlüğü',
                 'brand' => 'Eymen',
-                'type' => 'gunes_gozlugu',
+                // 'type' removed
                 'price' => 1649,
                 'discount_price' => 1249,
                 'stock' => 20,
@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Classic Frame',
                 'category' => 'Optik Çerçeve',
                 'brand' => 'Eymen',
-                'type' => 'optik_gozluk',
+                // 'type' removed
                 'price' => 1199,
                 'discount_price' => 899,
                 'stock' => 18,
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Polar Vision',
                 'category' => 'Polarize Gözlük',
                 'brand' => 'RayLux',
-                'type' => 'gunes_gozlugu',
+                // 'type' removed
                 'price' => 1899,
                 'discount_price' => 1499,
                 'stock' => 15,
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Gold Edition',
                 'category' => 'Luxury Seri',
                 'brand' => 'VisionPro',
-                'type' => 'luxury',
+                // 'type' removed
                 'price' => 3199,
                 'discount_price' => 2499,
                 'stock' => 12,
@@ -98,7 +98,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Active Sport',
                 'category' => 'Spor Gözlük',
                 'brand' => 'RayLux',
-                'type' => 'spor',
+                // 'type' removed
                 'price' => 1999,
                 'discount_price' => 1599,
                 'stock' => 16,
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Eymen Mini Sun',
                 'category' => 'Çocuk Gözlük',
                 'brand' => 'VisionPro',
-                'type' => 'gunes_gozlugu',
+                // 'type' removed
                 'price' => 799,
                 'discount_price' => null,
                 'stock' => 14,
@@ -128,7 +128,6 @@ class DatabaseSeeder extends Seeder
                     'brand_id' => Brand::where('slug', Str::slug($product['brand']))->value('id') ?? $brand?->id,
                     'name' => $product['name'],
                     'gender' => 'unisex',
-                    'type' => $product['type'],
                     'price' => $product['price'],
                     'discount_price' => $product['discount_price'],
                     'stock' => $product['stock'],
