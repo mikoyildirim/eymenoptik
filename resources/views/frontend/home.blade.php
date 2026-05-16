@@ -32,11 +32,11 @@
                 </h1>
 
                 <p>
-                    Eymen Optik’te güneş gözlükleri, optik çerçeveler ve seçili premium modellerde özel fırsatlar.
+                    Güneş gözlükleri, optik çerçeveler ve premium modelleri tek ekranda keşfet.
                 </p>
 
-                <a href="{{ route('products.index') }}">
-                    ALIŞVERİŞE BAŞLA
+                <a href="#products">
+                    ÜRÜNLERİ İNCELE
                 </a>
 
             </div>
@@ -55,7 +55,9 @@
 
 <section class="mini-feature-section">
     <div class="container">
+
         <div class="mini-feature-grid">
+
             <div class="mini-feature reveal">
                 <strong>🚚 Ücretsiz Kargo</strong>
                 <span>Belirli tutar üzeri siparişlerde.</span>
@@ -75,34 +77,93 @@
                 <strong>📞 Destek</strong>
                 <span>Sipariş ve ürün danışmanlığı.</span>
             </div>
+
         </div>
+
     </div>
 </section>
 
-<section class="product-section" id="featured-products">
+<section class="home-category-filter">
+    <div class="container">
+
+        <div class="category-filter-top reveal">
+            <div>
+                <span>KATEGORİLER</span>
+                <h2>Koleksiyona Göre Filtrele</h2>
+            </div>
+
+            <a href="{{ route('products.index') }}">
+                Tüm Ürünler →
+            </a>
+        </div>
+
+        <div class="category-filter-scroll reveal">
+
+            <button class="category-filter-btn active" type="button" data-filter="all">
+                Tümü
+            </button>
+
+            @foreach($categories as $category)
+
+                <button
+                    class="category-filter-btn"
+                    type="button"
+                    data-filter="{{ $category->slug }}"
+                >
+                    {{ $category->name }}
+                </button>
+
+            @endforeach
+
+        </div>
+
+    </div>
+</section>
+
+<section class="product-section" id="products">
     <div class="container">
 
         <div class="section-title reveal">
             <div>
-                <span>FIRSAT ÜRÜNLERİ</span>
-                <h2>İndirimdeki Ürünler</h2>
-                <p>İndirimdeki ürünler arasından ihtiyacınız olan ürünü satın alabilirsiniz.</p>
+                <span>TÜM ÜRÜNLER</span>
+                <h2>Öne Çıkan Ürünler</h2>
+                <p>Mağazadaki aktif ürünleri kategoriye göre filtreleyerek inceleyebilirsiniz.</p>
             </div>
 
-            <a href="{{ route('products.index') }}">
-                Tümünü Gör →
-            </a>
+            <div class="home-search-sort">
+                <input type="search" id="homeProductSearch" placeholder="Ürün ara...">
+
+                <select id="homeSortSelect">
+                    <option value="default">Varsayılan</option>
+                    <option value="priceAsc">Fiyat: Artan</option>
+                    <option value="priceDesc">Fiyat: Azalan</option>
+                    <option value="nameAsc">İsim: A-Z</option>
+                </select>
+            </div>
         </div>
 
-        <div class="product-grid">
+        <div class="product-result-text reveal">
+            <b id="homeProductResult">{{ $products->count() }} ürün listeleniyor</b>
+        </div>
 
-            @forelse($discountProducts as $product)
+        <div class="product-grid" id="homeProductGrid">
 
-                <div class="product-card reveal">
+            @forelse($products as $product)
+
+                <article
+                    class="product-card reveal js-product-card"
+                    data-category="{{ $product->category?->slug }}"
+                    data-name="{{ mb_strtolower($product->name) }}"
+                    data-price="{{ $product->final_price }}"
+                >
 
                     @if($product->discount_price && $product->price > 0)
                         <div class="product-badge">
                             %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
+                        </div>
+                    @elseif($product->is_featured)
+                        <div class="product-badge">
+                            Öne Çıkan
                         </div>
                     @else
                         <div class="product-badge">
@@ -121,11 +182,19 @@
                     </a>
 
                     <div class="product-content">
+
                         <span class="product-category">
                             {{ $product->category?->name ?? 'Ürün' }}
                         </span>
 
-                        <h3>{{ $product->name }}</h3>
+                        <h3>
+                            {{ $product->name }}
+                        </h3>
+
+                        <div class="product-meta">
+                            <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
+                            <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
+                        </div>
 
                         <div class="product-prices">
                             <strong>
@@ -146,12 +215,14 @@
                             data-name="{{ $product->name }}"
                             data-price="{{ $product->final_price }}"
                             data-img="{{ $product->image_url }}"
+                            {{ $product->stock <= 0 ? 'disabled' : '' }}
                         >
-                            Sepete Ekle
+                            {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
                         </button>
+
                     </div>
 
-                </div>
+                </article>
 
             @empty
 
@@ -161,6 +232,10 @@
 
             @endforelse
 
+            <div class="empty-products no-result" id="homeNoResult">
+                Filtreye uygun ürün bulunamadı.
+            </div>
+
         </div>
 
     </div>
@@ -168,6 +243,7 @@
 
 <section class="double-banner">
     <div class="container">
+
         <div class="double-banner-grid">
 
             <a href="{{ route('products.index') }}" class="image-banner reveal">
@@ -193,82 +269,6 @@
                     <h3>Kadın Güneş Gözlükleri</h3>
                 </div>
             </a>
-
-        </div>
-    </div>
-</section>
-
-<section class="product-section bg-soft">
-    <div class="container">
-
-        <div class="section-title reveal">
-            <div>
-                <span>TREND KOLEKSİYON</span>
-                <h2>Çok Satanlar</h2>
-                <p>Çok satan ürünlerimizi inceleyebilirsiniz.</p>
-            </div>
-
-            <a href="{{ route('products.index') }}">
-                Tümünü Gör →
-            </a>
-        </div>
-
-        <div class="product-grid">
-
-            @forelse($bestSellerProducts as $product)
-
-                <div class="product-card reveal">
-
-                    <button class="wishlist-btn" type="button">
-                        ♡
-                    </button>
-
-                    <a href="{{ route('products.show', $product->slug) }}">
-                        <div class="product-image">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                        </div>
-                    </a>
-
-                    <div class="product-content">
-                        <span class="product-category">
-                            {{ $product->category?->name ?? 'Ürün' }}
-                        </span>
-
-                        <h3>{{ $product->name }}</h3>
-
-                        <div class="product-prices">
-                            <strong>
-                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
-                            </strong>
-
-                            @if($product->discount_price)
-                                <span>
-                                    ₺{{ number_format($product->price, 0, ',', '.') }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <button
-                            class="cart-btn js-add-cart"
-                            type="button"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}"
-                            data-img="{{ $product->image_url }}"
-                        >
-                            Sepete Ekle
-                        </button>
-                    </div>
-
-                </div>
-
-            @empty
-
-                <div class="empty-products">
-                    Henüz ürün bulunmuyor.
-                </div>
-
-            @endforelse
 
         </div>
 
@@ -312,13 +312,8 @@
     }
 
     @keyframes heroZoom {
-        from {
-            transform: scale(1.04);
-        }
-
-        to {
-            transform: scale(1.11);
-        }
+        from { transform: scale(1.04); }
+        to { transform: scale(1.11); }
     }
 
     .hero-overlay {
@@ -426,23 +421,13 @@
     }
 
     @keyframes marqueeMove {
-        from {
-            transform: translateX(0);
-        }
-
-        to {
-            transform: translateX(-50%);
-        }
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
     }
 
     @keyframes badgePulse {
-        0%,100% {
-            scale: 1;
-        }
-
-        50% {
-            scale: 1.06;
-        }
+        0%,100% { scale: 1; }
+        50% { scale: 1.06; }
     }
 
     @keyframes heroText {
@@ -485,23 +470,19 @@
         font-size: 13px;
     }
 
-    .product-section {
-        padding: 42px 0 60px;
+    .home-category-filter {
+        padding: 0 0 40px;
     }
 
-    .bg-soft {
-        background: #f6f6f6;
-        padding: 55px 0 70px;
-    }
-
-    .section-title {
+    .category-filter-top {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
         gap: 20px;
-        margin-bottom: 25px;
+        margin-bottom: 18px;
     }
 
+    .category-filter-top span,
     .section-title span {
         display: inline-block;
         color: #c79a3a;
@@ -511,52 +492,133 @@
         letter-spacing: 1px;
     }
 
+    .category-filter-top h2,
     .section-title h2 {
         font-size: 36px;
         font-weight: 900;
         color: #000;
         margin: 0;
+        letter-spacing: -1.5px;
+    }
+
+    .category-filter-top a {
+        font-size: 14px;
+        font-weight: 900;
+        color: #000;
+    }
+
+    .category-filter-scroll {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .category-filter-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .category-filter-scroll::-webkit-scrollbar-thumb {
+        background: #d4d4d8;
+    }
+
+    .category-filter-btn {
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        min-height: 50px;
+        padding: 0 24px;
+        white-space: nowrap;
+        cursor: pointer;
+        font-weight: 900;
+        transition: .25s ease;
+    }
+
+    .category-filter-btn:hover,
+    .category-filter-btn.active {
+        background: #000;
+        color: #fff;
+        border-color: #000;
+    }
+
+    .product-section {
+        padding: 35px 0 70px;
+        background: #f6f6f6;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        margin-bottom: 18px;
     }
 
     .section-title p {
         margin-top: 5px;
-        color: #a1a1aa;
+        color: #777;
         font-size: 15px;
     }
 
-    .section-title a {
-        font-size: 14px;
+    .home-search-sort {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .home-search-sort input,
+    .home-search-sort select {
+        height: 48px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        outline: 0;
+        padding: 0 15px;
         font-weight: 800;
-        color: #000;
+    }
+
+    .home-search-sort input {
+        width: 240px;
+    }
+
+    .product-result-text {
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .product-result-text b {
+        font-size: 15px;
+        font-weight: 900;
     }
 
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 18px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
     }
 
     .product-card {
         background: #fff;
         position: relative;
         overflow: hidden;
-        border: 1px solid #eee;
-        transition: .28s ease;
+        border: 1px solid #f1f1f1;
+        transition: .35s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,.04);
+        display: flex;
+        flex-direction: column;
     }
 
     .product-card:hover {
-        box-shadow: 0 18px 50px rgba(0,0,0,.08);
-        transform: translateY(-6px);
+        transform: translateY(-8px);
+        box-shadow: 0 24px 60px rgba(0,0,0,.12);
     }
 
     .product-badge {
         position: absolute;
-        top: 12px;
-        left: 12px;
+        top: 14px;
+        left: 14px;
         z-index: 3;
         background: #000;
         color: #fff;
-        padding: 7px 10px;
+        padding: 8px 12px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 900;
@@ -564,8 +626,8 @@
 
     .wishlist-btn {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 14px;
+        right: 14px;
         width: 38px;
         height: 38px;
         border: 0;
@@ -578,17 +640,18 @@
         transition: .22s ease;
     }
 
-    .wishlist-btn:hover {
+    .wishlist-btn:hover,
+    .wishlist-btn.active {
         background: #000;
         color: #fff;
     }
 
     .product-image {
-        height: 260px;
+        height: 340px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 22px;
+        padding: 26px;
         background: #fff;
         overflow: hidden;
     }
@@ -600,12 +663,15 @@
     }
 
     .product-card:hover .product-image img {
-        transform: scale(1.06);
+        transform: scale(1.07);
     }
 
     .product-content {
-        padding: 16px;
+        padding: 18px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
 
     .product-category {
@@ -613,15 +679,33 @@
         color: #8b8b8b;
         font-size: 13px;
         margin-bottom: 8px;
+        font-weight: 800;
     }
 
     .product-content h3 {
         color: #111;
-        font-size: 15px;
-        font-weight: 700;
-        line-height: 1.45;
-        min-height: 44px;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.35;
+        min-height: 50px;
         margin-bottom: 12px;
+    }
+
+    .product-meta {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .product-meta span {
+        background: #f3f3f3;
+        color: #555;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: 900;
     }
 
     .product-prices {
@@ -630,11 +714,12 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 14px;
+        margin-top: auto;
     }
 
     .product-prices strong {
         color: #000;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 900;
     }
 
@@ -647,11 +732,11 @@
 
     .cart-btn {
         width: 100%;
-        height: 43px;
+        height: 46px;
         border: 0;
         background: #000;
         color: #fff;
-        font-weight: 800;
+        font-weight: 900;
         cursor: pointer;
         transition: .25s ease;
     }
@@ -660,8 +745,14 @@
         background: #c79a3a;
     }
 
+    .cart-btn:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+    }
+
     .double-banner {
-        padding: 0 0 55px;
+        padding: 55px 0 60px;
+        background: #fff;
     }
 
     .double-banner-grid {
@@ -718,6 +809,11 @@
         padding: 35px;
         text-align: center;
         color: #777;
+        font-weight: 800;
+    }
+
+    .no-result {
+        display: none;
     }
 
     @media(max-width: 1200px) {
@@ -735,6 +831,31 @@
 
         .discount-badge {
             display: none;
+        }
+    }
+
+    @media(max-width: 900px) {
+        .section-title,
+        .category-filter-top {
+            display: block;
+        }
+
+        .home-search-sort {
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .home-search-sort input,
+        .home-search-sort select {
+            width: 100%;
+        }
+
+        .home-search-sort {
+            flex-direction: column;
+        }
+
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
@@ -762,11 +883,6 @@
             padding: 14px 28px;
         }
 
-        .section-title {
-            display: block;
-        }
-
-        .product-grid,
         .double-banner-grid,
         .mini-feature-grid {
             grid-template-columns: 1fr;
@@ -776,6 +892,114 @@
             height: 260px;
         }
     }
+
+    @media(max-width: 560px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+    }
 </style>
+
+@endsection
+
+@section('page_js')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterButtons = document.querySelectorAll('.category-filter-btn');
+        const productCards = Array.from(document.querySelectorAll('.js-product-card'));
+        const searchInput = document.getElementById('homeProductSearch');
+        const sortSelect = document.getElementById('homeSortSelect');
+        const productGrid = document.getElementById('homeProductGrid');
+        const resultText = document.getElementById('homeProductResult');
+        const noResult = document.getElementById('homeNoResult');
+
+        let activeFilter = 'all';
+        let activeSearch = '';
+
+        function applyHomeProducts() {
+            let visibleCards = productCards.filter(card => {
+                const categoryMatch =
+                    activeFilter === 'all'
+                    || card.dataset.category === activeFilter;
+
+                const searchMatch =
+                    !activeSearch
+                    || (card.dataset.name || '').includes(activeSearch)
+                    || card.innerText.toLocaleLowerCase('tr-TR').includes(activeSearch);
+
+                return categoryMatch && searchMatch;
+            });
+
+            const sort = sortSelect?.value || 'default';
+
+            visibleCards.sort((a, b) => {
+                const priceA = Number(a.dataset.price || 0);
+                const priceB = Number(b.dataset.price || 0);
+
+                const nameA = a.dataset.name || '';
+                const nameB = b.dataset.name || '';
+
+                if (sort === 'priceAsc') return priceA - priceB;
+                if (sort === 'priceDesc') return priceB - priceA;
+                if (sort === 'nameAsc') return nameA.localeCompare(nameB, 'tr');
+
+                return 0;
+            });
+
+            productCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            visibleCards.forEach(card => {
+                card.style.display = 'flex';
+                productGrid.appendChild(card);
+            });
+
+            if (resultText) {
+                resultText.textContent = `${visibleCards.length} ürün listeleniyor`;
+            }
+
+            if (noResult) {
+                noResult.style.display = visibleCards.length === 0 ? 'block' : 'none';
+                productGrid.appendChild(noResult);
+            }
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                button.classList.add('active');
+
+                activeFilter = button.dataset.filter || 'all';
+
+                applyHomeProducts();
+            });
+        });
+
+        searchInput?.addEventListener('input', function () {
+            activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
+
+            applyHomeProducts();
+        });
+
+        sortSelect?.addEventListener('change', applyHomeProducts);
+
+        document.addEventListener('click', function (e) {
+            const wishBtn = e.target.closest('.wishlist-btn');
+
+            if (!wishBtn) return;
+
+            wishBtn.classList.toggle('active');
+        });
+
+        applyHomeProducts();
+    });
+</script>
 
 @endsection
