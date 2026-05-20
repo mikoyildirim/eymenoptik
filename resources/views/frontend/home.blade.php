@@ -4,49 +4,65 @@
 
 @section('content')
 
-<section class="hero-banner reveal">
+<section class="hero-slider-section reveal">
     <div class="container">
 
-        <div class="hero-full">
+        <div class="hero-slider" id="heroSlider">
 
-            <img
-                src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90"
-                alt="Eymen Optik Banner"
-            >
+            <div class="hero-slide active">
+                <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90" alt="Eymen Optik">
 
-            <div class="hero-overlay"></div>
+                <div class="hero-overlay"></div>
 
-            <div class="hero-content-full">
-
-                <div class="discount-badge">
-                    %25<br>İNDİRİM
+                <div class="hero-content">
+                    <span>Yeni Sezon Koleksiyonu</span>
+                    <h1>Tarzın Gözlerinden Okunsun</h1>
+                    <p>Güneş gözlükleri, optik çerçeveler ve premium modelleri keşfet.</p>
+                    <a href="#products">Ürünleri İncele</a>
                 </div>
+            </div>
 
-                <span class="hero-small-title">
-                    Yeni Sezon Koleksiyonu
-                </span>
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1800&q=90" alt="Kadın Gözlükleri">
 
-                <h1>
-                    Tarzın Gözlerinden<br>
-                    Okunsun
-                </h1>
+                <div class="hero-overlay"></div>
 
-                <p>
-                    Güneş gözlükleri, optik çerçeveler ve premium modelleri tek ekranda keşfet.
-                </p>
+                <div class="hero-content">
+                    <span>Premium Seçimler</span>
+                    <h1>Modern ve Şık Gözlükler</h1>
+                    <p>Günlük stilini tamamlayan özel optik modeller burada.</p>
+                    <a href="{{ route('products.index') }}">Koleksiyonu Gör</a>
+                </div>
+            </div>
 
-                <a href="#products">
-                    ÜRÜNLERİ İNCELE
-                </a>
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1800&q=90" alt="Erkek Gözlükleri">
 
+                <div class="hero-overlay"></div>
+
+                <div class="hero-content">
+                    <span>Ücretsiz Kargo</span>
+                    <h1>3000 TL Üzeri Kargo Bizden</h1>
+                    <p>Seçili ürünlerde güvenli alışveriş ve hızlı teslimat avantajı.</p>
+                    <a href="#products">Alışverişe Başla</a>
+                </div>
+            </div>
+
+            <button class="slider-btn prev" type="button" id="sliderPrev">‹</button>
+            <button class="slider-btn next" type="button" id="sliderNext">›</button>
+
+            <div class="slider-dots" id="sliderDots">
+                <button class="active" type="button"></button>
+                <button type="button"></button>
+                <button type="button"></button>
             </div>
 
         </div>
 
         <div class="marquee">
             <span>
-                %25 İNDİRİME EK YENİ ÜYELERE ÖZEL %10 İNDİRİM • ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ •
-                %25 İNDİRİME EK YENİ ÜYELERE ÖZEL %10 İNDİRİM • ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ •
+                3000 TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+                3000 TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
             </span>
         </div>
 
@@ -60,7 +76,7 @@
 
             <div class="mini-feature reveal">
                 <strong>🚚 Ücretsiz Kargo</strong>
-                <span>Belirli tutar üzeri siparişlerde.</span>
+                <span>3000 TL üzeri siparişlerde.</span>
             </div>
 
             <div class="mini-feature reveal">
@@ -92,9 +108,7 @@
                 <h2>Koleksiyona Göre Filtrele</h2>
             </div>
 
-            <a href="{{ route('products.index') }}">
-                Tüm Ürünler →
-            </a>
+            <a href="{{ route('products.index') }}">Tüm Ürünler →</a>
         </div>
 
         <div class="category-filter-scroll reveal">
@@ -104,15 +118,9 @@
             </button>
 
             @foreach($categories as $category)
-
-                <button
-                    class="category-filter-btn"
-                    type="button"
-                    data-filter="{{ $category->slug }}"
-                >
+                <button class="category-filter-btn" type="button" data-filter="{{ $category->slug }}">
                     {{ $category->name }}
                 </button>
-
             @endforeach
 
         </div>
@@ -157,23 +165,11 @@
                     data-price="{{ $product->final_price }}"
                 >
 
-                    @if($product->discount_price && $product->price > 0)
-                        <div class="product-badge">
-                            %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
-                        </div>
-                    @elseif($product->is_featured)
-                        <div class="product-badge">
-                            Öne Çıkan
-                        </div>
-                    @else
-                        <div class="product-badge">
-                            Yeni
-                        </div>
-                    @endif
+                    <div class="product-badge">
+                        {{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}
+                    </div>
 
-                    <button class="wishlist-btn" type="button">
-                        ♡
-                    </button>
+                    <button class="wishlist-btn" type="button">♡</button>
 
                     <a href="{{ route('products.show', $product->slug) }}">
                         <div class="product-image">
@@ -187,9 +183,7 @@
                             {{ $product->category?->name ?? 'Ürün' }}
                         </span>
 
-                        <h3>
-                            {{ $product->name }}
-                        </h3>
+                        <h3>{{ $product->name }}</h3>
 
                         <div class="product-meta">
                             <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
@@ -200,12 +194,6 @@
                             <strong>
                                 ₺{{ number_format($product->final_price, 0, ',', '.') }}
                             </strong>
-
-                            @if($product->discount_price)
-                                <span>
-                                    ₺{{ number_format($product->price, 0, ',', '.') }}
-                                </span>
-                            @endif
                         </div>
 
                         <button
@@ -247,10 +235,7 @@
         <div class="double-banner-grid">
 
             <a href="{{ route('products.index') }}" class="image-banner reveal">
-                <img
-                    src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90"
-                    alt="Erkek Gözlükleri"
-                >
+                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90" alt="Erkek Gözlükleri">
 
                 <div>
                     <span>Yeni Sezon</span>
@@ -259,10 +244,7 @@
             </a>
 
             <a href="{{ route('products.index') }}" class="image-banner reveal">
-                <img
-                    src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90"
-                    alt="Kadın Gözlükleri"
-                >
+                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90" alt="Kadın Gözlükleri">
 
                 <div>
                     <span>Yeni Ürün</span>
@@ -280,11 +262,11 @@
 @section('page_css')
 
 <style>
-    .hero-banner {
+    .hero-slider-section {
         padding: 25px 0 35px;
     }
 
-    .hero-full {
+    .hero-slider {
         height: 640px;
         position: relative;
         overflow: hidden;
@@ -292,115 +274,152 @@
         box-shadow: 0 26px 70px rgba(0,0,0,.08);
     }
 
-    .hero-full::before {
-        content: "";
+    .hero-slide {
         position: absolute;
         inset: 0;
-        z-index: 2;
-        background:
-            linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.75)),
-            radial-gradient(circle at 70% 40%,rgba(255,255,255,.35),transparent 35%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .8s ease, visibility .8s ease;
     }
 
-    .hero-full img {
+    .hero-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    .hero-slide img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: center;
-        transform: scale(1.04);
-        animation: heroZoom 8s ease-in-out infinite alternate;
+        transform: scale(1.06);
+        transition: transform 6s ease;
     }
 
-    @keyframes heroZoom {
-        from { transform: scale(1.04); }
-        to { transform: scale(1.11); }
+    .hero-slide.active img {
+        transform: scale(1.13);
     }
 
     .hero-overlay {
         position: absolute;
         inset: 0;
         z-index: 3;
-        background: linear-gradient(
-            90deg,
-            rgba(255,255,255,.08) 0%,
-            rgba(255,255,255,.52) 52%,
-            rgba(255,255,255,.82) 100%
-        );
+        background:
+            linear-gradient(
+                90deg,
+                rgba(0,0,0,.55) 0%,
+                rgba(0,0,0,.20) 45%,
+                rgba(255,255,255,.40) 100%
+            );
     }
 
-    .hero-content-full {
+    .hero-content {
         position: absolute;
-        right: 110px;
+        left: 80px;
         top: 50%;
         transform: translateY(-50%);
         z-index: 5;
-        text-align: center;
-        animation: heroText .9s ease both;
         max-width: 620px;
+        color: #fff;
     }
 
-    .hero-small-title {
+    .hero-content span {
         display: inline-block;
-        background: #fff;
-        color: #111;
+        background: rgba(255,255,255,.16);
+        border: 1px solid rgba(255,255,255,.35);
+        backdrop-filter: blur(12px);
+        color: #fff;
         padding: 10px 18px;
         border-radius: 999px;
         font-size: 13px;
         font-weight: 900;
         margin-bottom: 20px;
-        box-shadow: 0 10px 25px rgba(0,0,0,.08);
     }
 
-    .discount-badge {
-        position: absolute;
-        left: -290px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 190px;
-        height: 190px;
-        border-radius: 50%;
-        background: #000;
-        color: #fff;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        font-size: 39px;
-        font-weight: 900;
-        line-height: 1.1;
-        border: 5px dotted #fff;
-        animation: badgePulse 2.4s infinite ease-in-out;
-    }
-
-    .hero-content-full h1 {
-        font-family: Georgia,'Times New Roman',serif;
+    .hero-content h1 {
+        font-family: Georgia, 'Times New Roman', serif;
         font-size: 78px;
         line-height: 1.02;
         font-weight: 500;
-        color: #111;
         letter-spacing: -2px;
         margin-bottom: 18px;
     }
 
-    .hero-content-full p {
-        color: #535353;
+    .hero-content p {
         line-height: 1.8;
-        font-size: 16px;
+        font-size: 17px;
         margin-bottom: 28px;
+        color: rgba(255,255,255,.86);
     }
 
-    .hero-content-full a {
-        background: #111;
-        color: #fff;
-        padding: 18px 54px;
-        font-size: 23px;
-        font-weight: 800;
+    .hero-content a {
+        background: #fff;
+        color: #111;
+        padding: 17px 45px;
+        font-size: 17px;
+        font-weight: 900;
         display: inline-block;
         transition: .25s ease;
     }
 
-    .hero-content-full a:hover {
-        background: #c79a3a;
+    .hero-content a:hover {
+        background: #111;
+        color: #fff;
         transform: translateY(-4px);
+    }
+
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 54px;
+        height: 54px;
+        border: 0;
+        background: rgba(255,255,255,.85);
+        color: #111;
+        font-size: 42px;
+        cursor: pointer;
+        transition: .25s ease;
+    }
+
+    .slider-btn:hover {
+        background: #111;
+        color: #fff;
+    }
+
+    .slider-btn.prev {
+        left: 24px;
+    }
+
+    .slider-btn.next {
+        right: 24px;
+    }
+
+    .slider-dots {
+        position: absolute;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%);
+        z-index: 12;
+        display: flex;
+        gap: 9px;
+    }
+
+    .slider-dots button {
+        width: 10px;
+        height: 10px;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255,255,255,.6);
+        cursor: pointer;
+        transition: .25s ease;
+    }
+
+    .slider-dots button.active {
+        width: 34px;
+        background: #fff;
     }
 
     .marquee {
@@ -423,23 +442,6 @@
     @keyframes marqueeMove {
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
-    }
-
-    @keyframes badgePulse {
-        0%,100% { scale: 1; }
-        50% { scale: 1.06; }
-    }
-
-    @keyframes heroText {
-        from {
-            opacity: 0;
-            transform: translateY(-42%);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(-50%);
-        }
     }
 
     .mini-feature-section {
@@ -514,14 +516,6 @@
         padding-bottom: 8px;
     }
 
-    .category-filter-scroll::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .category-filter-scroll::-webkit-scrollbar-thumb {
-        background: #d4d4d8;
-    }
-
     .category-filter-btn {
         border: 1px solid #e5e7eb;
         background: #fff;
@@ -584,11 +578,6 @@
         color: #555;
     }
 
-    .product-result-text b {
-        font-size: 15px;
-        font-weight: 900;
-    }
-
     .product-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -637,7 +626,6 @@
         cursor: pointer;
         z-index: 3;
         box-shadow: 0 8px 22px rgba(0,0,0,.08);
-        transition: .22s ease;
     }
 
     .wishlist-btn:hover,
@@ -721,13 +709,6 @@
         color: #000;
         font-size: 24px;
         font-weight: 900;
-    }
-
-    .product-prices span {
-        color: #999;
-        text-decoration: line-through;
-        font-size: 13px;
-        font-weight: 700;
     }
 
     .cart-btn {
@@ -825,12 +806,8 @@
             grid-template-columns: repeat(2, 1fr);
         }
 
-        .hero-content-full {
-            right: 70px;
-        }
-
-        .discount-badge {
-            display: none;
+        .hero-content h1 {
+            font-size: 58px;
         }
     }
 
@@ -843,15 +820,12 @@
         .home-search-sort {
             margin-top: 16px;
             width: 100%;
+            flex-direction: column;
         }
 
         .home-search-sort input,
         .home-search-sort select {
             width: 100%;
-        }
-
-        .home-search-sort {
-            flex-direction: column;
         }
 
         .product-grid {
@@ -860,27 +834,33 @@
     }
 
     @media(max-width: 768px) {
-        .hero-full {
-            height: 480px;
+        .hero-slider {
+            height: 500px;
         }
 
-        .hero-content-full {
+        .hero-content {
             left: 24px;
             right: 24px;
-            text-align: left;
+            max-width: none;
         }
 
-        .hero-content-full h1 {
+        .hero-content h1 {
             font-size: 42px;
         }
 
-        .hero-content-full p {
+        .hero-content p {
             font-size: 14px;
         }
 
-        .hero-content-full a {
-            font-size: 16px;
+        .hero-content a {
+            font-size: 15px;
             padding: 14px 28px;
+        }
+
+        .slider-btn {
+            width: 42px;
+            height: 42px;
+            font-size: 32px;
         }
 
         .double-banner-grid,
@@ -901,6 +881,10 @@
         .product-image {
             height: 300px;
         }
+
+        .marquee {
+            font-size: 17px;
+        }
     }
 </style>
 
@@ -910,6 +894,60 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('#sliderDots button');
+        const prevBtn = document.getElementById('sliderPrev');
+        const nextBtn = document.getElementById('sliderNext');
+
+        let currentSlide = 0;
+        let sliderTimer;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            currentSlide = (index + slides.length) % slides.length;
+
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function startSlider() {
+            sliderTimer = setInterval(nextSlide, 5000);
+        }
+
+        function resetSlider() {
+            clearInterval(sliderTimer);
+            startSlider();
+        }
+
+        nextBtn?.addEventListener('click', function () {
+            nextSlide();
+            resetSlider();
+        });
+
+        prevBtn?.addEventListener('click', function () {
+            prevSlide();
+            resetSlider();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', function () {
+                showSlide(index);
+                resetSlider();
+            });
+        });
+
+        startSlider();
+
         const filterButtons = document.querySelectorAll('.category-filter-btn');
         const productCards = Array.from(document.querySelectorAll('.js-product-card'));
         const searchInput = document.getElementById('homeProductSearch');
