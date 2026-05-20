@@ -21,14 +21,14 @@ class HomeController extends Controller
             ->where('is_active', 1)
             ->whereNotNull('discount_price')
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
 
         $bestSellerProducts = Product::with(['category', 'brand'])
             ->where('is_active', 1)
             ->where('is_featured', 1)
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
 
         return view('frontend.home', [

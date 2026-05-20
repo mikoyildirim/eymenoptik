@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Iyzipay\Model\Address;
 use Iyzipay\Model\BasketItem;
@@ -80,6 +81,10 @@ class CheckoutController extends Controller
         $iyzicoRequest->setCurrency(Currency::TL);
         $iyzicoRequest->setBasketId($conversationId);
         $iyzicoRequest->setPaymentGroup(PaymentGroup::PRODUCT);
+        $iyzicoRequest->setPaymentSource(config('app.name', 'Eymen Optik'));
+        $iyzicoRequest->setForceThreeDS(1);
+        $iyzicoRequest->setPosOrderId($conversationId);
+        $iyzicoRequest->setDebitCardAllowed('true');
         $iyzicoRequest->setCallbackUrl(route('checkout.callback'));
         $iyzicoRequest->setEnabledInstallments([1, 2, 3, 6, 9]);
 
@@ -87,13 +92,13 @@ class CheckoutController extends Controller
         $buyer->setId((string) Auth::id());
         $buyer->setName($this->firstName($request->full_name));
         $buyer->setSurname($this->lastName($request->full_name));
-        $buyer->setGsmNumber($request->phone);
+        $buyer->setGsmNumber($this->normalizePhoneForIyzico($request->phone));
         $buyer->setEmail($request->email);
-        $buyer->setIdentityNumber('11111111111');
+        $buyer->setIdentityNumber('10000000146');
         $buyer->setLastLoginDate(now()->format('Y-m-d H:i:s'));
         $buyer->setRegistrationDate(Auth::user()->created_at?->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'));
         $buyer->setRegistrationAddress($request->address);
-        $buyer->setIp($request->ip());
+        $buyer->setIp($this->normalizeIpForIyzico($request->ip()));
         $buyer->setCity($request->city);
         $buyer->setCountry('Turkey');
         $buyer->setZipCode('58000');
@@ -151,13 +156,21 @@ class CheckoutController extends Controller
         );
 
         if ($checkoutFormInitialize->getStatus() !== 'success') {
-           $errorMessage = $checkoutFormInitialize->getErrorMessage()
-    ?: $checkoutFormInitialize->getErrorCode()
-    ?: 'İyzico ödeme başlatılırken bilinmeyen bir hata oluştu.';
+            $errorMessage = $checkoutFormInitialize->getErrorMessage()
+                ?: $checkoutFormInitialize->getErrorCode()
+                ?: 'İyzico ödeme başlatılırken bilinmeyen bir hata oluştu.';
 
-return redirect()
-    ->route('checkout.failed')
-    ->with('payment_error', $errorMessage);
+            Log::warning('Iyzico checkout initialize failed', [
+                'status' => $checkoutFormInitialize->getStatus(),
+                'error_code' => $checkoutFormInitialize->getErrorCode(),
+                'error_message' => $checkoutFormInitialize->getErrorMessage(),
+                'error_group' => $checkoutFormInitialize->getErrorGroup(),
+                'conversation_id' => $conversationId,
+            ]);
+
+            return redirect()
+                ->route('checkout.failed')
+                ->with('error', $errorMessage);
         }
 
         Session::put('iyzico_token', $checkoutFormInitialize->getToken());
@@ -242,5 +255,39 @@ return redirect()
         array_shift($parts);
 
         return implode(' ', $parts);
+    }
+
+    private function normalizePhoneForIyzico(?string $phone): string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $phone);
+
+        if ($digits === '') {
+            return '+905550000000';
+        }
+
+        if (str_starts_with($digits, '0')) {
+            $digits = substr($digits, 1);
+        }
+
+        if (str_starts_with($digits, '90')) {
+            return '+' . $digits;
+        }
+
+        return '+90' . substr($digits, -10);
+    }
+
+    private function normalizeIpForIyzico(?string $ip): string
+    {
+        if (!is_string($ip) || $ip === '') {
+            return '85.34.78.112';
+        }
+
+        $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, $flags)) {
+            return $ip;
+        }
+
+        return '85.34.78.112';
     }
 }

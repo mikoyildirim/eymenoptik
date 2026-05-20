@@ -24,6 +24,46 @@
     </div>
 </section>
 
+<script>
+    // Iyzico iframe'ını ekran boyutuna göre responsive hale getir
+    document.addEventListener('DOMContentLoaded', function() {
+        const resizeIframe = () => {
+            const iframe = document.querySelector('.iyzico-box iframe');
+            const iyzico_box = document.querySelector('.iyzico-box');
+            
+            if (iframe && iyzico_box) {
+                // Konteyner genişliğini al
+                const containerWidth = iyzico_box.offsetWidth;
+                
+                // iframe'ın width'ini ve diğer özelliklerini konteyner genişliğine ayarla
+                // setAttribute ile inline style'ı tamamen override ederiz
+                iframe.setAttribute('style', `width: ${containerWidth}px !important; max-width: 100% !important; min-height: 600px !important; display: block !important;`);
+            }
+        };
+        
+        // Başlangıçta - çeşitli zamanlarda boyutlandır (Iyzico'nun rendering'ine kadar bekle)
+        setTimeout(resizeIframe, 50);
+        setTimeout(resizeIframe, 200);
+        setTimeout(resizeIframe, 500);
+        setTimeout(resizeIframe, 1000);
+        
+        // Window resize olayında yeniden boyutlandır
+        window.addEventListener('resize', resizeIframe);
+        
+        // Iyzico iframe load olduğunda boyutlandır
+        window.addEventListener('load', resizeIframe);
+        
+        // Mutation Observer kullanarak iframe dinamik olarak eklendikten sonra da boyutlandır
+        const observer = new MutationObserver(resizeIframe);
+        observer.observe(document.querySelector('.iyzico-box') || document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'width', 'height']
+        });
+    });
+</script>
+
 <style>
     .payment-page {
         padding: 70px 0;
@@ -64,6 +104,31 @@
 
     .iyzico-box {
         min-height: 400px;
+        width: 100%;
+        overflow: visible !important;
+    }
+
+    /* Iyzico iframe responsive ayarlaması */
+    .iyzico-box iframe {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 600px !important;
+        display: block !important;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .payment-card {
+            padding: 20px;
+        }
+
+        .payment-card h1 {
+            font-size: 28px;
+        }
+
+        .iyzico-box iframe {
+            min-height: 700px !important;
+        }
     }
 </style>
 
