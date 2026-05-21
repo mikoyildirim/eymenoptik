@@ -167,37 +167,37 @@
                 </div>
 
                 @php
-                    $categoryIcons = [
-                        'gunes-gozlugu' => '🕶️',
-                        'optik-cerceve' => '👓',
-                        'polarize-gozluk' => '😎',
-                        'luxury-seri' => '✨',
-                        'spor-gozluk' => '🏃',
-                        'cocuk-gozluk' => '🧒',
-                    ];
+                $categoryIcons = [
+                'gunes-gozlugu' => '🕶️',
+                'optik-cerceve' => '👓',
+                'polarize-gozluk' => '😎',
+                'luxury-seri' => '✨',
+                'spor-gozluk' => '🏃',
+                'cocuk-gozluk' => '🧒',
+                ];
                 @endphp
 
                 <div class="category-grid reveal">
 
                     @forelse($categories as $category)
 
-                        <a href="{{ route('products.index') }}?category={{ $category->slug }}" class="category-card">
+                    <a href="{{ route('products.index') }}" class="category-card js-top-category-link" data-category="{{ $category->slug }}">
 
-                            <span>
-                                {{ $categoryIcons[$category->slug] ?? '◦' }}
-                            </span>
+                        <span>
+                            {{ $categoryIcons[$category->slug] ?? '◦' }}
+                        </span>
 
-                            <h3>{{ $category->name }}</h3>
+                        <h3>{{ $category->name }}</h3>
 
-                            <p>{{ $category->products_count }} ürün</p>
+                        <p>{{ $category->products_count }} ürün</p>
 
-                        </a>
+                    </a>
 
                     @empty
 
-                        <div class="empty-box">
-                            Henüz kategori bulunmuyor.
-                        </div>
+                    <div class="empty-box">
+                        Henüz kategori bulunmuyor.
+                    </div>
 
                     @endforelse
 
@@ -219,69 +219,68 @@
 
                     @forelse($products as $product)
 
-                        <article class="account-product-card reveal">
+                    <article class="account-product-card reveal">
 
-                            <span class="product-label">
-                                {{ $product->is_featured ? 'Önerilen' : 'Yeni' }}
-                            </span>
+                        <span class="product-label">
+                            {{ $product->is_featured ? 'Önerilen' : 'Yeni' }}
+                        </span>
 
-                            <button class="heart-btn" type="button">
-                                ♡
-                            </button>
+                        <button class="heart-btn" type="button">
+                            ♡
+                        </button>
 
-                            <a href="{{ route('products.show', $product->slug) }}" class="product-image">
-                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                            </a>
+                        <a href="{{ route('products.show', $product->slug) }}" class="product-image">
+                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                        </a>
 
-                            <div class="product-body">
+                        <div class="product-body">
 
-                                <div class="product-meta">
-                                    <span>{{ $product->category?->name ?? 'Ürün' }}</span>
-                                    <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
-                                </div>
-
-                                <h3>{{ $product->name }}</h3>
-
-                                <div class="specs">
-                                    <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
-                                    <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
-                                </div>
-
-                                <div class="price-row">
-                                    <div>
-                                        <strong>
-                                            ₺{{ number_format($product->final_price, 0, ',', '.') }}
-                                        </strong>
-
-                                        @if($product->discount_price)
-                                            <small>
-                                                ₺{{ number_format($product->price, 0, ',', '.') }}
-                                            </small>
-                                        @endif
-                                    </div>
-
-                                    <button
-                                        class="add-cart js-add-cart"
-                                        type="button"
-                                        data-id="{{ $product->id }}"
-                                        data-name="{{ $product->name }}"
-                                        data-price="{{ $product->final_price }}"
-                                        data-img="{{ $product->image_url }}"
-                                        {{ $product->stock <= 0 ? 'disabled' : '' }}
-                                    >
-                                        +
-                                    </button>
-                                </div>
-
+                            <div class="product-meta">
+                                <span>{{ $product->category?->name ?? 'Ürün' }}</span>
+                                <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
                             </div>
 
-                        </article>
+                            <h3>{{ $product->name }}</h3>
+
+                            <div class="specs">
+                                <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
+                                <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
+                            </div>
+
+                            <div class="price-row">
+                                <div>
+                                    <strong>
+                                        ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                                    </strong>
+
+                                    @if($product->discount_price)
+                                    <small>
+                                        ₺{{ number_format($product->price, 0, ',', '.') }}
+                                    </small>
+                                    @endif
+                                </div>
+
+                                <button
+                                    class="add-cart js-add-cart"
+                                    type="button"
+                                    data-id="{{ $product->id }}"
+                                    data-name="{{ $product->name }}"
+                                    data-price="{{ $product->final_price }}"
+                                    data-img="{{ $product->image_url }}"
+                                    {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                                    +
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </article>
 
                     @empty
 
-                        <div class="empty-box">
-                            Henüz ürün bulunmuyor.
-                        </div>
+                    <div class="empty-box">
+                        Henüz ürün bulunmuyor.
+                    </div>
 
                     @endforelse
 
@@ -311,7 +310,7 @@
     .account-hero-box {
         min-height: 320px;
         background:
-            linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.18)),
+            linear-gradient(90deg, rgba(0, 0, 0, .72), rgba(0, 0, 0, .18)),
             url('https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=1800&q=90');
         background-size: cover;
         background-position: center;
@@ -341,7 +340,7 @@
     }
 
     .account-hero-box p {
-        color: rgba(255,255,255,.78);
+        color: rgba(255, 255, 255, .78);
         max-width: 620px;
         line-height: 1.8;
     }
@@ -369,7 +368,7 @@
         background: #fff;
         border: 1px solid #eee;
         padding: 20px;
-        box-shadow: 0 18px 45px rgba(0,0,0,.05);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .05);
     }
 
     .profile-card {
@@ -441,7 +440,7 @@
 
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 18px 45px rgba(0,0,0,.06);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .06);
     }
 
     .stat-card span {
@@ -475,7 +474,7 @@
         background: #fff;
         border: 1px solid #eee;
         padding: 28px;
-        box-shadow: 0 18px 45px rgba(0,0,0,.04);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .04);
     }
 
     .panel-head {
@@ -488,7 +487,7 @@
 
     .panel-head span,
     .section-title span,
-    .coupon-panel > span {
+    .coupon-panel>span {
         color: #c79a3a;
         font-size: 12px;
         font-weight: 900;
@@ -568,7 +567,7 @@
 
     .coupon-panel {
         background:
-            radial-gradient(circle at 100% 0%, rgba(199,154,58,.35), transparent 35%),
+            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .35), transparent 35%),
             linear-gradient(135deg, #07111f, #183b67);
         color: #fff;
         display: flex;
@@ -584,13 +583,13 @@
     }
 
     .coupon-panel p {
-        color: rgba(255,255,255,.7);
+        color: rgba(255, 255, 255, .7);
         line-height: 1.7;
     }
 
     .coupon-code {
         margin-top: 24px;
-        border: 1px dashed rgba(255,255,255,.35);
+        border: 1px dashed rgba(255, 255, 255, .35);
         padding: 14px;
         display: flex;
         justify-content: space-between;
@@ -661,7 +660,7 @@
     }
 
     .category-card:hover p {
-        color: rgba(255,255,255,.7);
+        color: rgba(255, 255, 255, .7);
     }
 
     .account-product-grid {
@@ -683,7 +682,7 @@
 
     .account-product-card:hover {
         transform: translateY(-7px);
-        box-shadow: 0 24px 70px rgba(0,0,0,.1);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .1);
     }
 
     .product-label {
@@ -707,7 +706,7 @@
         width: 38px;
         height: 38px;
         border: 1px solid #eee;
-        background: rgba(255,255,255,.9);
+        background: rgba(255, 255, 255, .9);
         cursor: pointer;
         font-size: 20px;
         transition: .22s ease;
@@ -892,7 +891,7 @@
 @section('page_js')
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const miniCartCount = document.getElementById('miniCartCount');
         const favoriteCount = document.getElementById('favoriteCount');
         const copyCoupon = document.getElementById('copyCoupon');
@@ -906,7 +905,7 @@
             }
         }
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             const heart = e.target.closest('.heart-btn');
 
             if (!heart) return;
@@ -920,14 +919,14 @@
             }
         });
 
-        copyCoupon?.addEventListener('click', function () {
+        copyCoupon?.addEventListener('click', function() {
             navigator.clipboard.writeText('EYEMEN15');
             copyCoupon.textContent = 'Kopyalandı';
         });
 
         updateMiniCartCount();
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (e.target.closest('.js-add-cart')) {
                 setTimeout(updateMiniCartCount, 100);
             }

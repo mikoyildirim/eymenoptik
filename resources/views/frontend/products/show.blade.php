@@ -34,8 +34,8 @@
                         <strong>₺{{ number_format($product->final_price, 0, ',', '.') }}</strong>
 
                         @if($product->discount_price)
-                            <small>₺{{ number_format($product->price, 0, ',', '.') }}</small>
-                            <span class="discount-badge">İndirimli</span>
+                        <small>₺{{ number_format($product->price, 0, ',', '.') }}</small>
+                        <span class="discount-badge">İndirimli</span>
                         @endif
                     </div>
 
@@ -56,19 +56,14 @@
                     </div>
 
                     <div class="product-actions-row">
-                        <button class="btn btn-fav" type="button" id="favBtn" data-id="{{ $product->id }}">
+                        <button class="btn btn-fav js-fav-toggle" type="button" id="favBtn" data-id="{{ $product->id }}"
+                            data-name="{{ $product->name }}" data-img="{{ $product->image_url }}" data-price="{{ $product->final_price }}">
                             ♡ Favori
                         </button>
 
-                        <button
-                            class="btn btn-add js-add-cart"
-                            type="button"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}"
-                            data-img="{{ $product->image_url }}"
-                            {{ $product->stock <= 0 ? 'disabled' : '' }}
-                        >
+                        <button class="btn btn-add js-add-cart" type="button" data-id="{{ $product->id }}"
+                            data-name="{{ $product->name }}" data-price="{{ $product->final_price }}"
+                            data-img="{{ $product->image_url }}" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                             {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
                         </button>
                     </div>
@@ -124,7 +119,7 @@
                             <strong>₺{{ number_format($related->final_price, 0, ',', '.') }}</strong>
 
                             @if($related->discount_price)
-                                <small>₺{{ number_format($related->price, 0, ',', '.') }}</small>
+                            <small>₺{{ number_format($related->price, 0, ',', '.') }}</small>
                             @endif
                         </div>
                     </div>
@@ -160,7 +155,7 @@
         border: 1px solid #ececec;
         border-radius: 26px;
         padding: 28px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.06);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .06);
     }
 
     .product-gallery {
@@ -330,7 +325,7 @@
 
     .btn-add:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(0,0,0,.22);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, .22);
     }
 
     .btn-add:disabled {
@@ -349,7 +344,7 @@
         border: 1px solid #ececec;
         border-radius: 24px;
         padding: 28px;
-        box-shadow: 0 16px 45px rgba(0,0,0,.04);
+        box-shadow: 0 16px 45px rgba(0, 0, 0, .04);
     }
 
     .description-card h2,
@@ -394,7 +389,7 @@
 
     .related-product-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 18px 45px rgba(0,0,0,.08);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
     }
 
     .related-product-image {
@@ -506,20 +501,20 @@
 
 @section('page_js')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const favBtn = document.getElementById('favBtn');
 
         if (favBtn) {
-            favBtn.addEventListener('click', function () {
+            favBtn.addEventListener('click', function() {
                 this.classList.toggle('active');
-                this.innerHTML = this.classList.contains('active')
-                    ? '♥ Favoride'
-                    : '♡ Favori';
+                this.innerHTML = this.classList.contains('active') ?
+                    '♥ Favoride' :
+                    '♡ Favori';
             });
         }
 
         document.querySelectorAll('.js-add-cart').forEach(btn => {
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function() {
                 if (this.disabled) return;
 
                 const originalText = this.textContent;

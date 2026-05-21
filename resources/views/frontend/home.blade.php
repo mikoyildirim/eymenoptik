@@ -10,7 +10,8 @@
         <div class="hero-slider" id="heroSlider">
 
             <div class="hero-slide active">
-                <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90" alt="Eymen Optik">
+                <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90"
+                    alt="Eymen Optik">
 
                 <div class="hero-overlay"></div>
 
@@ -23,7 +24,8 @@
             </div>
 
             <div class="hero-slide">
-                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1800&q=90" alt="Kadın Gözlükleri">
+                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1800&q=90"
+                    alt="Kadın Gözlükleri">
 
                 <div class="hero-overlay"></div>
 
@@ -36,7 +38,8 @@
             </div>
 
             <div class="hero-slide">
-                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1800&q=90" alt="Erkek Gözlükleri">
+                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1800&q=90"
+                    alt="Erkek Gözlükleri">
 
                 <div class="hero-overlay"></div>
 
@@ -99,130 +102,148 @@
     </div>
 </section>
 
-<section class="home-category-filter">
+<section class="product-section bg-soft">
     <div class="container">
 
-        <div class="category-filter-top reveal">
+        <div class="section-title reveal">
             <div>
-                <span>KATEGORİLER</span>
-                <h2>Koleksiyona Göre Filtrele</h2>
+                <span>TREND KOLEKSİYON</span>
+                <h2>Çok Satanlar</h2>
+                <p>Çok satan ürünlerimizi inceleyebilirsiniz.</p>
             </div>
 
-            <a href="{{ route('products.index') }}">Tüm Ürünler →</a>
+            <a href="{{ route('products.index') }}">
+                Tümünü Gör →
+            </a>
         </div>
 
-        <div class="category-filter-scroll reveal">
+        <div class="product-grid">
 
-            <button class="category-filter-btn active" type="button" data-filter="all">
-                Tümü
-            </button>
+            @forelse($bestSellerProducts as $product)
 
-            @foreach($categories as $category)
-                <button class="category-filter-btn" type="button" data-filter="{{ $category->slug }}">
-                    {{ $category->name }}
-                </button>
-            @endforeach
+            <div class="product-card reveal">
+
+                <button class="wishlist-btn js-fav-toggle" type="button" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-img="{{ $product->image_url }}" data-price="{{ $product->final_price }}">♡</button>
+                <a href="{{ route('products.show', $product->slug) }}">
+                    <div class="product-image">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                    </div>
+                </a>
+
+                <div class="product-content">
+                    <span class="product-category">
+                        {{ $product->category?->name ?? 'Ürün' }}
+                    </span>
+
+                    <h3>{{ $product->name }}</h3>
+
+                    <div class="product-prices">
+                        <strong>
+                            ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                        </strong>
+
+                        @if($product->discount_price)
+                        <span>
+                            ₺{{ number_format($product->price, 0, ',', '.') }}
+                        </span>
+                        @endif
+                    </div>
+
+                    <button class="cart-btn js-add-cart" type="button" data-id="{{ $product->id }}"
+                        data-name="{{ $product->name }}" data-price="{{ $product->final_price }}"
+                        data-img="{{ $product->image_url }}" {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                        {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
+                    </button>
+                </div>
+
+            </div>
+
+            @empty
+
+            <div class="empty-products">
+                Henüz ürün bulunmuyor.
+            </div>
+
+            @endforelse
 
         </div>
 
     </div>
 </section>
 
-<section class="product-section" id="products">
+<section class="product-section" id="featured-products">
     <div class="container">
 
         <div class="section-title reveal">
             <div>
-                <span>TÜM ÜRÜNLER</span>
-                <h2>Öne Çıkan Ürünler</h2>
-                <p>Mağazadaki aktif ürünleri kategoriye göre filtreleyerek inceleyebilirsiniz.</p>
+                <span>FIRSAT ÜRÜNLERİ</span>
+                <h2>İndirimdeki Ürünler</h2>
+                <p>İndirimdeki ürünler arasından ihtiyacınız olan ürünü satın alabilirsiniz.</p>
             </div>
 
-            <div class="home-search-sort">
-                <input type="search" id="homeProductSearch" placeholder="Ürün ara...">
-
-                <select id="homeSortSelect">
-                    <option value="default">Varsayılan</option>
-                    <option value="priceAsc">Fiyat: Artan</option>
-                    <option value="priceDesc">Fiyat: Azalan</option>
-                    <option value="nameAsc">İsim: A-Z</option>
-                </select>
-            </div>
+            <a href="{{ route('products.index') }}">
+                Tümünü Gör →
+            </a>
         </div>
 
-        <div class="product-result-text reveal">
-            <b id="homeProductResult">{{ $products->count() }} ürün listeleniyor</b>
-        </div>
+        <div class="product-grid">
 
-        <div class="product-grid" id="homeProductGrid">
+            @forelse($discountProducts as $product)
 
-            @forelse($products as $product)
+            <div class="product-card reveal">
 
-                <article
-                    class="product-card reveal js-product-card"
-                    data-category="{{ $product->category?->slug }}"
-                    data-name="{{ mb_strtolower($product->name) }}"
-                    data-price="{{ $product->final_price }}"
-                >
+                @if($product->discount_price && $product->price > 0)
+                <div class="product-badge">
+                    %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
+                </div>
+                @else
+                <div class="product-badge">
+                    Yeni
+                </div>
+                @endif
 
-                    <div class="product-badge">
-                        {{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}
+                <button class="wishlist-btn js-fav-toggle" type="button" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-img="{{ $product->image_url }}" data-price="{{ $product->final_price }}">♡</button>
+                <a href="{{ route('products.show', $product->slug) }}">
+                    <div class="product-image">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
                     </div>
+                </a>
 
-                    <button class="wishlist-btn" type="button">♡</button>
+                <div class="product-content">
+                    <span class="product-category">
+                        {{ $product->category?->name ?? 'Ürün' }}
+                    </span>
 
-                    <a href="{{ route('products.show', $product->slug) }}">
-                        <div class="product-image">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                        </div>
-                    </a>
+                    <h3>{{ $product->name }}</h3>
 
-                    <div class="product-content">
+                    <div class="product-prices">
+                        <strong>
+                            ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                        </strong>
 
-                        <span class="product-category">
-                            {{ $product->category?->name ?? 'Ürün' }}
+                        @if($product->discount_price)
+                        <span>
+                            ₺{{ number_format($product->price, 0, ',', '.') }}
                         </span>
-
-                        <h3>{{ $product->name }}</h3>
-
-                        <div class="product-meta">
-                            <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
-                            <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
-                        </div>
-
-                        <div class="product-prices">
-                            <strong>
-                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
-                            </strong>
-                        </div>
-
-                        <button
-                            class="cart-btn js-add-cart"
-                            type="button"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}"
-                            data-img="{{ $product->image_url }}"
-                            {{ $product->stock <= 0 ? 'disabled' : '' }}
-                        >
-                            {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
-                        </button>
-
+                        @endif
                     </div>
 
-                </article>
+                    <button class="cart-btn js-add-cart" type="button" data-id="{{ $product->id }}"
+                        data-name="{{ $product->name }}" data-price="{{ $product->final_price }}"
+                        data-img="{{ $product->image_url }}">
+                        Sepete Ekle
+                    </button>
+                </div>
+
+            </div>
 
             @empty
 
-                <div class="empty-products">
-                    Henüz ürün bulunmuyor.
-                </div>
+            <div class="empty-products">
+                Henüz ürün bulunmuyor.
+            </div>
 
             @endforelse
-
-            <div class="empty-products no-result" id="homeNoResult">
-                Filtreye uygun ürün bulunamadı.
-            </div>
 
         </div>
 
@@ -231,11 +252,11 @@
 
 <section class="double-banner">
     <div class="container">
-
         <div class="double-banner-grid">
 
             <a href="{{ route('products.index') }}" class="image-banner reveal">
-                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90" alt="Erkek Gözlükleri">
+                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90"
+                    alt="Erkek Gözlükleri">
 
                 <div>
                     <span>Yeni Sezon</span>
@@ -244,7 +265,8 @@
             </a>
 
             <a href="{{ route('products.index') }}" class="image-banner reveal">
-                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90" alt="Kadın Gözlükleri">
+                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90"
+                    alt="Kadın Gözlükleri">
 
                 <div>
                     <span>Yeni Ürün</span>
@@ -253,7 +275,6 @@
             </a>
 
         </div>
-
     </div>
 </section>
 
@@ -271,7 +292,7 @@
         position: relative;
         overflow: hidden;
         background: #f5f5f5;
-        box-shadow: 0 26px 70px rgba(0,0,0,.08);
+        box-shadow: 0 26px 70px rgba(0, 0, 0, .08);
     }
 
     .hero-slide {
@@ -306,12 +327,10 @@
         inset: 0;
         z-index: 3;
         background:
-            linear-gradient(
-                90deg,
-                rgba(0,0,0,.55) 0%,
-                rgba(0,0,0,.20) 45%,
-                rgba(255,255,255,.40) 100%
-            );
+            linear-gradient(90deg,
+                rgba(0, 0, 0, .55) 0%,
+                rgba(0, 0, 0, .20) 45%,
+                rgba(255, 255, 255, .40) 100%);
     }
 
     .hero-content {
@@ -326,8 +345,8 @@
 
     .hero-content span {
         display: inline-block;
-        background: rgba(255,255,255,.16);
-        border: 1px solid rgba(255,255,255,.35);
+        background: rgba(255, 255, 255, .16);
+        border: 1px solid rgba(255, 255, 255, .35);
         backdrop-filter: blur(12px);
         color: #fff;
         padding: 10px 18px;
@@ -350,7 +369,7 @@
         line-height: 1.8;
         font-size: 17px;
         margin-bottom: 28px;
-        color: rgba(255,255,255,.86);
+        color: rgba(255, 255, 255, .86);
     }
 
     .hero-content a {
@@ -377,7 +396,7 @@
         width: 54px;
         height: 54px;
         border: 0;
-        background: rgba(255,255,255,.85);
+        background: rgba(255, 255, 255, .85);
         color: #111;
         font-size: 42px;
         cursor: pointer;
@@ -412,7 +431,7 @@
         height: 10px;
         border: 0;
         border-radius: 999px;
-        background: rgba(255,255,255,.6);
+        background: rgba(255, 255, 255, .6);
         cursor: pointer;
         transition: .25s ease;
     }
@@ -440,8 +459,37 @@
     }
 
     @keyframes marqueeMove {
-        from { transform: translateX(0); }
-        to { transform: translateX(-50%); }
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @keyframes badgePulse {
+
+        0%,
+        100% {
+            scale: 1;
+        }
+
+        50% {
+            scale: 1.06;
+        }
+    }
+
+    @keyframes heroText {
+        from {
+            opacity: 0;
+            transform: translateY(-42%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(-50%);
+        }
     }
 
     .mini-feature-section {
@@ -458,7 +506,7 @@
         background: #fff;
         border: 1px solid #eee;
         padding: 22px;
-        box-shadow: 0 14px 35px rgba(0,0,0,.04);
+        box-shadow: 0 14px 35px rgba(0, 0, 0, .04);
     }
 
     .mini-feature strong {
@@ -472,8 +520,17 @@
         font-size: 13px;
     }
 
+    .product-section {
+        padding: 42px 0 60px;
+    }
+
     .home-category-filter {
         padding: 0 0 40px;
+    }
+
+    .bg-soft {
+        background: #f6f6f6;
+        padding: 55px 0 70px;
     }
 
     .category-filter-top {
@@ -485,14 +542,6 @@
     }
 
     .category-filter-top span,
-    .section-title span {
-        display: inline-block;
-        color: #c79a3a;
-        font-weight: 900;
-        font-size: 12px;
-        margin-bottom: 6px;
-        letter-spacing: 1px;
-    }
 
     .category-filter-top h2,
     .section-title h2 {
@@ -514,6 +563,14 @@
         gap: 12px;
         overflow-x: auto;
         padding-bottom: 8px;
+    }
+
+    .category-filter-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .category-filter-scroll::-webkit-scrollbar-thumb {
+        background: #d4d4d8;
     }
 
     .category-filter-btn {
@@ -547,10 +604,32 @@
         margin-bottom: 18px;
     }
 
+    .section-title span {
+        display: inline-block;
+        color: #c79a3a;
+        font-weight: 900;
+        font-size: 12px;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+        font-size: 36px;
+        font-weight: 900;
+        color: #000;
+        margin: 0;
+    }
+
     .section-title p {
         margin-top: 5px;
-        color: #777;
+        color: #a1a1aa;
         font-size: 15px;
+    }
+
+    .section-title a {
+        font-size: 14px;
+        font-weight: 800;
+        color: #000;
     }
 
     .home-search-sort {
@@ -578,36 +657,38 @@
         color: #555;
     }
 
+    .product-result-text b {
+        font-size: 15px;
+        font-weight: 900;
+    }
+
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 24px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
     }
 
     .product-card {
         background: #fff;
         position: relative;
         overflow: hidden;
-        border: 1px solid #f1f1f1;
-        transition: .35s ease;
-        box-shadow: 0 10px 30px rgba(0,0,0,.04);
-        display: flex;
-        flex-direction: column;
+        border: 1px solid #eee;
+        transition: .28s ease;
     }
 
     .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 24px 60px rgba(0,0,0,.12);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, .08);
+        transform: translateY(-6px);
     }
 
     .product-badge {
         position: absolute;
-        top: 14px;
-        left: 14px;
+        top: 12px;
+        left: 12px;
         z-index: 3;
         background: #000;
         color: #fff;
-        padding: 8px 12px;
+        padding: 7px 10px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 900;
@@ -615,8 +696,8 @@
 
     .wishlist-btn {
         position: absolute;
-        top: 14px;
-        right: 14px;
+        top: 12px;
+        right: 12px;
         width: 38px;
         height: 38px;
         border: 0;
@@ -625,21 +706,26 @@
         font-size: 22px;
         cursor: pointer;
         z-index: 3;
-        box-shadow: 0 8px 22px rgba(0,0,0,.08);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+        transition: .22s ease;
     }
 
-    .wishlist-btn:hover,
+    .wishlist-btn:hover {
+        background: #000;
+        color: #fff;
+    }
+
     .wishlist-btn.active {
         background: #000;
         color: #fff;
     }
 
     .product-image {
-        height: 340px;
+        height: 260px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 26px;
+        padding: 22px;
         background: #fff;
         overflow: hidden;
     }
@@ -651,15 +737,12 @@
     }
 
     .product-card:hover .product-image img {
-        transform: scale(1.07);
+        transform: scale(1.06);
     }
 
     .product-content {
-        padding: 18px;
+        padding: 16px;
         text-align: center;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
     }
 
     .product-category {
@@ -667,15 +750,14 @@
         color: #8b8b8b;
         font-size: 13px;
         margin-bottom: 8px;
-        font-weight: 800;
     }
 
     .product-content h3 {
         color: #111;
-        font-size: 18px;
-        font-weight: 800;
-        line-height: 1.35;
-        min-height: 50px;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.45;
+        min-height: 44px;
         margin-bottom: 12px;
     }
 
@@ -707,17 +789,24 @@
 
     .product-prices strong {
         color: #000;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 900;
+    }
+
+    .product-prices span {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 13px;
+        font-weight: 700;
     }
 
     .cart-btn {
         width: 100%;
-        height: 46px;
+        height: 43px;
         border: 0;
         background: #000;
         color: #fff;
-        font-weight: 900;
+        font-weight: 800;
         cursor: pointer;
         transition: .25s ease;
     }
@@ -732,7 +821,7 @@
     }
 
     .double-banner {
-        padding: 55px 0 60px;
+        padding: 0 0 55px;
         background: #fff;
     }
 
@@ -763,7 +852,7 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, transparent, rgba(0,0,0,.48));
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .48));
     }
 
     .image-banner div {
@@ -790,7 +879,6 @@
         padding: 35px;
         text-align: center;
         color: #777;
-        font-weight: 800;
     }
 
     .no-result {
@@ -809,9 +897,18 @@
         .hero-content h1 {
             font-size: 58px;
         }
+
+        .hero-content-full {
+            right: 70px;
+        }
+
+        .discount-badge {
+            display: none;
+        }
     }
 
     @media(max-width: 900px) {
+
         .section-title,
         .category-filter-top {
             display: block;
@@ -820,12 +917,15 @@
         .home-search-sort {
             margin-top: 16px;
             width: 100%;
-            flex-direction: column;
         }
 
         .home-search-sort input,
         .home-search-sort select {
             width: 100%;
+        }
+
+        .home-search-sort {
+            flex-direction: column;
         }
 
         .product-grid {
@@ -863,6 +963,7 @@
             font-size: 32px;
         }
 
+        .product-grid,
         .double-banner-grid,
         .mini-feature-grid {
             grid-template-columns: 1fr;
@@ -893,7 +994,7 @@
 @section('page_js')
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('#sliderDots button');
         const prevBtn = document.getElementById('sliderPrev');
@@ -929,18 +1030,18 @@
             startSlider();
         }
 
-        nextBtn?.addEventListener('click', function () {
+        nextBtn?.addEventListener('click', function() {
             nextSlide();
             resetSlider();
         });
 
-        prevBtn?.addEventListener('click', function () {
+        prevBtn?.addEventListener('click', function() {
             prevSlide();
             resetSlider();
         });
 
         dots.forEach((dot, index) => {
-            dot.addEventListener('click', function () {
+            dot.addEventListener('click', function() {
                 showSlide(index);
                 resetSlider();
             });
@@ -962,13 +1063,12 @@
         function applyHomeProducts() {
             let visibleCards = productCards.filter(card => {
                 const categoryMatch =
-                    activeFilter === 'all'
-                    || card.dataset.category === activeFilter;
+                    activeFilter === 'all' ||
+                    card.dataset.category === activeFilter;
 
-                const searchMatch =
-                    !activeSearch
-                    || (card.dataset.name || '').includes(activeSearch)
-                    || card.innerText.toLocaleLowerCase('tr-TR').includes(activeSearch);
+                const searchMatch = !activeSearch ||
+                    (card.dataset.name || '').includes(activeSearch) ||
+                    card.innerText.toLocaleLowerCase('tr-TR').includes(activeSearch);
 
                 return categoryMatch && searchMatch;
             });
@@ -1009,7 +1109,7 @@
         }
 
         filterButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
 
                 button.classList.add('active');
@@ -1020,7 +1120,7 @@
             });
         });
 
-        searchInput?.addEventListener('input', function () {
+        searchInput?.addEventListener('input', function() {
             activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
 
             applyHomeProducts();
@@ -1028,7 +1128,7 @@
 
         sortSelect?.addEventListener('change', applyHomeProducts);
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             const wishBtn = e.target.closest('.wishlist-btn');
 
             if (!wishBtn) return;
