@@ -613,7 +613,7 @@
                 @endforeach
                 @endisset
 
-                <a href="{{ route('blog.index') }}" class="menu-link">Blog</a>
+                <a href="{{ route('blog.index') }}" class="menu-link">Yardım Merkezi</a>
                 <a href="{{ route('brands.index') }}" class="menu-link">Markalar</a>
                 <a href="{{ route('contact') }}" class="menu-link">İletişim</a>
 
@@ -653,24 +653,26 @@
                 </div>
 
                 <div>
+                   <!-- burası dinamik olacak -->
                     <h3>Kategoriler</h3>
-                    <a href="{{ route('products.index') }}">Güneş Gözlükleri</a>
-                    <a href="{{ route('products.index') }}">Optik Gözlükler</a>
-                    <a href="{{ route('products.index') }}">Lensler</a>
+                    @isset($categories)
+                    @foreach($categories as $category)
+                    <a href="{{ route('products.index', ['category' => $category->slug]) }}">{{ $category->name }}</a>
+                    @endforeach
+                    @endisset
                 </div>
 
                 <div>
                     <h3>Mağaza</h3>
-                    <a href="#">Kampanyalar</a>
                     <a href="#">Çok Satanlar</a>
                     <a href="#">Yeni Sezon</a>
                 </div>
 
                 <div>
                     <h3>Destek</h3>
-                    <a href="#">Sipariş Takibi</a>
-                    <a href="#">İade Politikası</a>
-                    <a href="#">Sık Sorulanlar</a>
+                    <a href="{{ route('blog.index') }}">Sıkça Sorulan Sorular</a>
+                    <a href="{{ route('blog.index') }}#garanti-ve-iade">Garanti ve İade</a>
+                    <a href="{{ route('blog.index') }}#kargo-ve-teslimat">Kargo ve Teslimat</a>
                 </div>
 
                 <div>
