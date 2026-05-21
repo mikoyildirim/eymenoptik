@@ -6,48 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Eymen Optik')</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-    }
-
-    .main-menu {
-        display: flex;
-        align-items: center;
-        gap: 28px;
-        flex-wrap: wrap;
-    }
-
-    .menu-link {
-        position: relative;
-        font-size: 15px;
-        font-weight: 800;
-        color: #111;
-        transition: .25s ease;
-    }
-
-    .menu-link::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -8px;
-        width: 0;
-        height: 2px;
-        background: #c79a3a;
-        transition: .25s ease;
-    }
-
-    .menu-link:hover {
-        color: #c79a3a;
-    }
-
-    .menu-link:hover::after {
-        width: 100%;
     }
 
     html {
@@ -82,60 +47,30 @@
     }
 
     .top-sale {
-        background: #f1f2f4;
-        min-height: 70px;
+        background: #111;
+        color: #fff;
+        min-height: 48px;
         display: flex;
         align-items: center;
     }
 
     .top-sale-inner {
-        display: grid;
-        grid-template-columns: 180px 1fr 280px;
+        display: flex;
         align-items: center;
-        gap: 20px;
-    }
-
-    .top-sale-logo {
-        font-size: 21px;
-        line-height: 1;
-        font-weight: 900;
-    }
-
-    .top-sale-logo span {
-        display: block;
-        color: #aaa;
-        font-style: italic;
+        justify-content: center;
     }
 
     .top-sale-text {
         text-align: center;
-        font-size: 42px;
+        font-size: 17px;
         font-weight: 900;
-        letter-spacing: -1px;
-    }
-
-    .top-sale-text span {
-        font-weight: 300;
-    }
-
-    .app-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-    }
-
-    .app-buttons div {
-        background: #000;
-        color: #fff;
-        border-radius: 7px;
-        padding: 8px 14px;
-        font-size: 12px;
-        font-weight: 700;
+        letter-spacing: .3px;
     }
 
     .info-bar {
-        padding: 18px 0;
+        padding: 13px 0;
         border-bottom: 1px solid #eee;
+        background: #fff;
     }
 
     .info-inner {
@@ -143,25 +78,26 @@
         justify-content: space-between;
         align-items: center;
         gap: 20px;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .info-left,
     .info-right {
         display: flex;
         align-items: center;
-        gap: 22px;
+        gap: 18px;
     }
 
     .login-btn {
         background: #000;
         color: #fff;
-        padding: 11px 20px;
-        font-weight: 700;
+        padding: 10px 18px;
+        font-weight: 800;
+        border-radius: 999px;
     }
 
     .main-header {
-        padding: 20px 0;
+        padding: 18px 0;
         border-bottom: 1px solid #eee;
         background: rgba(255, 255, 255, .96);
         position: sticky;
@@ -172,66 +108,72 @@
 
     .header-inner {
         display: grid;
-        grid-template-columns: 200px 1fr 430px;
+        grid-template-columns: 190px 1fr 420px;
         align-items: center;
-        gap: 25px;
+        gap: 24px;
     }
 
     .logo {
-        font-size: 38px;
-        letter-spacing: 12px;
-        font-weight: 900;
-        line-height: 1;
         display: inline-flex;
         align-items: center;
     }
 
     .logo img {
         width: auto;
-        max-width: 170px;
+        max-width: 165px;
         height: auto;
         object-fit: contain;
-        display: block;
     }
 
-    .logo small {
-        display: block;
-        font-size: 16px;
-        letter-spacing: 9px;
-        font-weight: 600;
-        margin-left: 44px;
-    }
-
-    .menu {
+    .main-menu {
         display: flex;
         align-items: center;
-        gap: 24px;
-        font-size: 14px;
-        font-weight: 700;
+        gap: 26px;
+        flex-wrap: wrap;
+    }
+
+    .menu-link {
+        position: relative;
+        font-size: 15px;
+        font-weight: 800;
+        color: #111;
+        transition: .25s ease;
         white-space: nowrap;
     }
 
-    .menu a {
-        transition: .22s ease;
+    .menu-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 0;
+        height: 2px;
+        background: #c79a3a;
+        transition: .25s ease;
     }
 
-    .menu a:hover {
+    .menu-link:hover {
         color: #c79a3a;
+    }
+
+    .menu-link:hover::after {
+        width: 100%;
     }
 
     .search-area {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 14px;
     }
 
     .search-box {
         flex: 1;
-        background: #eee;
+        background: #f1f1f1;
         border-radius: 999px;
         display: flex;
         overflow: hidden;
-        height: 46px;
+        height: 48px;
+        border: 1px solid #eee;
     }
 
     .search-box input {
@@ -239,36 +181,76 @@
         border: 0;
         background: transparent;
         outline: 0;
-        padding: 0 22px;
+        padding: 0 20px;
+        font-size: 14px;
     }
 
     .search-box button {
-        width: 54px;
+        width: 52px;
         border: 0;
         background: #000;
         color: #fff;
-        border-radius: 50%;
         cursor: pointer;
         font-size: 20px;
     }
 
     .head-icon {
-        font-size: 27px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #f5f5f5;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
         position: relative;
     }
 
     .count {
         position: absolute;
-        top: -9px;
-        right: -11px;
+        top: -6px;
+        right: -6px;
         background: #000;
         color: #fff;
-        width: 21px;
-        height: 21px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
-        font-size: 12px;
+        font-size: 11px;
         display: grid;
         place-items: center;
+    }
+
+    .hamburger-btn {
+        display: none;
+        width: 46px;
+        height: 46px;
+        border: 0;
+        background: #000;
+        border-radius: 14px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .hamburger-btn span {
+        width: 22px;
+        height: 2px;
+        background: #fff;
+        border-radius: 20px;
+        transition: .3s ease;
+    }
+
+    .hamburger-btn.active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-btn.active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
     }
 
     .footer {
@@ -299,10 +281,6 @@
         font-size: 14px;
     }
 
-    .footer a:hover {
-        color: #fff;
-    }
-
     .copyright {
         padding-top: 22px;
         display: flex;
@@ -311,17 +289,6 @@
         flex-wrap: wrap;
         color: rgba(255, 255, 255, .5);
         font-size: 13px;
-    }
-
-    .reveal {
-        opacity: 0;
-        transform: translateY(34px);
-        transition: .8s ease;
-    }
-
-    .reveal.show {
-        opacity: 1;
-        transform: translateY(0);
     }
 
     .cart-overlay {
@@ -366,13 +333,8 @@
     }
 
     .cart-head h3 {
-        font-size: 28px;
+        font-size: 26px;
         font-weight: 900;
-    }
-
-    .cart-head span {
-        color: #888;
-        font-size: 13px;
     }
 
     #cartClose {
@@ -383,6 +345,7 @@
         color: #fff;
         font-size: 24px;
         cursor: pointer;
+        border-radius: 12px;
     }
 
     .cart-list {
@@ -404,39 +367,12 @@
         height: 70px;
         object-fit: contain;
         background: #f6f6f6;
+        border-radius: 12px;
     }
 
     .cart-item h4 {
         font-size: 14px;
         margin-bottom: 6px;
-    }
-
-    .cart-item-price {
-        font-size: 13px;
-        color: #777;
-        font-weight: 700;
-    }
-
-    .cart-qty {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-top: 8px;
-    }
-
-    .cart-qty button,
-    .cart-remove {
-        width: 28px;
-        height: 28px;
-        border: 0;
-        background: #f1f1f1;
-        cursor: pointer;
-        font-weight: 900;
-    }
-
-    .cart-remove {
-        background: #fff0f0;
-        color: #d22;
     }
 
     .cart-bottom {
@@ -447,44 +383,38 @@
     .cart-total-row {
         display: flex;
         justify-content: space-between;
-        font-size: 22px;
+        font-size: 21px;
         font-weight: 900;
         margin-bottom: 16px;
     }
 
-    .checkout-btn {
+    .btn-checkout {
         width: 100%;
         height: 52px;
-        border: 0;
         background: #000;
         color: #fff;
+        display: grid;
+        place-items: center;
         font-weight: 900;
-        cursor: pointer;
+        border-radius: 14px;
     }
 
     @media(max-width: 1200px) {
-
-        .top-sale-inner,
         .header-inner {
-            grid-template-columns: 1fr;
+            grid-template-columns: 170px 1fr;
         }
 
-        .top-sale {
-            height: auto;
-            padding: 16px 0;
+        .main-menu {
+            grid-column: 1 / -1;
+            justify-content: center;
         }
 
-        .top-sale-text {
-            font-size: 28px;
+        .search-area {
+            grid-column: 1 / -1;
         }
 
-        .app-buttons {
-            justify-content: flex-start;
-        }
-
-        .menu {
-            overflow-x: auto;
-            padding-bottom: 6px;
+        .footer-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
@@ -493,45 +423,136 @@
             width: min(100% - 28px, 1510px);
         }
 
-        .top-sale-logo,
-        .app-buttons,
-        .info-left {
-            display: none;
+        .top-sale {
+            min-height: 42px;
         }
 
         .top-sale-text {
-            font-size: 22px;
+            font-size: 13px;
+            line-height: 1.35;
         }
 
-        .info-inner {
-            justify-content: center;
+        .info-bar {
+            display: none;
         }
 
-        .info-right {
-            gap: 12px;
-            font-size: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .main-header {
+            padding: 12px 0;
+            top: 0;
         }
 
         .header-inner {
-            gap: 16px;
-        }
-
-        .logo {
-            font-size: 30px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
         }
 
         .logo img {
-            max-width: 128px;
+            max-width: 130px;
+        }
+
+        .hamburger-btn {
+            display: flex;
+        }
+
+        .main-menu {
+            position: fixed;
+            top: 67px;
+            left: 12px;
+            right: 12px;
+            width: auto;
+            max-height: calc(100vh - 92px);
+            overflow-y: auto;
+            background: #fff;
+            padding: 18px;
+            border-radius: 24px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, .18);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-12px) scale(.98);
+            transition: .3s ease;
+            z-index: 999;
+        }
+
+        .main-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .menu-link {
+            width: 100%;
+            padding: 15px 16px;
+            border-radius: 16px;
+            background: #f7f7f7;
+            font-size: 15px;
+        }
+
+        .menu-link::after {
+            display: none;
+        }
+
+        .menu-link:hover {
+            background: #111;
+            color: #fff;
         }
 
         .search-area {
+            grid-column: 1 / -1;
+            width: 100%;
             gap: 10px;
+        }
+
+        .search-box {
+            height: 46px;
+            border-radius: 16px;
+        }
+
+        .search-box input {
+            padding: 0 14px;
+            font-size: 13px;
+        }
+
+        .search-box button {
+            width: 48px;
+            border-radius: 0;
+        }
+
+        .head-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            font-size: 19px;
+        }
+
+        .footer {
+            padding: 38px 0 22px;
         }
 
         .footer-grid {
             grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .copyright {
+            font-size: 12px;
+        }
+
+        .cart-drawer {
+            width: 100%;
+            right: -100%;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .cart-item {
+            grid-template-columns: 64px 1fr auto;
+        }
+
+        .cart-item img {
+            height: 64px;
         }
     }
     </style>
@@ -543,17 +564,8 @@
 
     <div class="top-sale">
         <div class="container top-sale-inner">
-            <div class="top-sale-logo">
-                FARKLI <span>GÖRÜN</span>
-            </div>
-
             <div class="top-sale-text">
-                %25 İNDİRİM <span>- EK %10 YENİ ÜYE İNDİRİMİ SİZİNLE!</span>
-            </div>
-
-            <div class="app-buttons">
-                <div>Google Play</div>
-                <div>App Store</div>
+                3000 TL VE ÜZERİ ÜCRETSİZ KARGO
             </div>
         </div>
     </div>
@@ -575,20 +587,24 @@
                 @else
                 <a href="{{ route('login') }}" class="login-btn">Giriş Yap</a>
                 @endauth
-
             </div>
         </div>
     </div>
 
     <header class="main-header">
         <div class="container header-inner">
+
             <a href="{{ route('home') }}" class="logo">
                 <img src="{{ asset('images/eymen.svg') }}" alt="Eymen Optik">
             </a>
 
-            <nav class="main-menu">
+            <button type="button" class="hamburger-btn" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-                {{-- Dinamik Kategoriler --}}
+            <nav class="main-menu" id="mainMenu">
                 @isset($categories)
                 @foreach($categories as $category)
                 <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="menu-link">
@@ -597,29 +613,31 @@
                 @endforeach
                 @endisset
 
-                {{-- Sabit Menü --}}
-                <a href="{{ route('blog.index') }}" class="menu-link">
-                    Blog
-                </a>
+                <a href="{{ route('blog.index') }}" class="menu-link">Blog</a>
+                <a href="{{ route('brands.index') }}" class="menu-link">Markalar</a>
+                <a href="{{ route('contact') }}" class="menu-link">İletişim</a>
 
-                <a href="{{ route('brands.index') }}" class="menu-link">
-                    Markalar
-                </a>
-
-                <a href="{{ route('contact') }}" class="menu-link">
-                    İletişim
-                </a>
-
+                @auth
+                <a href="{{ route('account') }}" class="menu-link">Hesabım</a>
+                @else
+                <a href="{{ route('login') }}" class="menu-link">Giriş Yap</a>
+                @endauth
             </nav>
+
             <div class="search-area">
                 <form class="search-box" action="{{ route('products.index') }}" method="GET">
-                    <input type="text" name="q" placeholder="Aramak istediğiniz ürünü yazınız......">
+                    <input type="text" name="q" placeholder="Ürün ara...">
                     <button type="submit">⌕</button>
                 </form>
 
                 <a href="#" class="head-icon">♡</a>
-                <a href="#" class="head-icon" id="cartOpenBtn">🛍<span class="count">0</span></a>
+
+                <a href="#" class="head-icon" id="cartOpenBtn">
+                    🛍
+                    <span class="count">0</span>
+                </a>
             </div>
+
         </div>
     </header>
 
@@ -628,6 +646,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
+
                 <div>
                     <h3>Eymen Optik</h3>
                     <p>Modern, güvenilir ve premium optik alışveriş deneyimi.</p>
@@ -660,6 +679,7 @@
                     <p>info@eymenoptik.com.tr</p>
                     <p>Sivas / Merkez</p>
                 </div>
+
             </div>
 
             <div class="copyright">
@@ -690,17 +710,9 @@
             </div>
 
             @auth
-
-            <a href="{{ route('checkout.index') }}" class="btn-checkout">
-                Ödemeye Geç
-            </a>
-
+            <a href="{{ route('checkout.index') }}" class="btn-checkout">Ödemeye Geç</a>
             @else
-
-            <a href="{{ route('login') }}" class="btn-checkout">
-                Giriş Yap ve Devam Et
-            </a>
-
+            <a href="{{ route('login') }}" class="btn-checkout">Giriş Yap ve Devam Et</a>
             @endauth
         </div>
     </aside>
@@ -708,21 +720,32 @@
     @yield('page_js')
 
     <script>
-    const revealItems = document.querySelectorAll('.reveal');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mainMenu = document.getElementById('mainMenu');
 
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.classList.add('show');
-                }, index * 70);
-            }
-        });
-    }, {
-        threshold: 0.12
+    hamburgerBtn?.addEventListener('click', function() {
+        hamburgerBtn.classList.toggle('active');
+        mainMenu.classList.toggle('active');
     });
 
-    revealItems.forEach(item => revealObserver.observe(item));
+    document.querySelectorAll('.main-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn?.classList.remove('active');
+            mainMenu?.classList.remove('active');
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!mainMenu || !hamburgerBtn) return;
+
+        const clickedInsideMenu = mainMenu.contains(e.target);
+        const clickedHamburger = hamburgerBtn.contains(e.target);
+
+        if (!clickedInsideMenu && !clickedHamburger) {
+            hamburgerBtn.classList.remove('active');
+            mainMenu.classList.remove('active');
+        }
+    });
 
     const cartDrawer = document.getElementById('cartDrawer');
     const cartOverlay = document.getElementById('cartOverlay');
@@ -784,13 +807,8 @@
 
         if (!item) return;
 
-        if (type === 'plus') {
-            item.qty += 1;
-        }
-
-        if (type === 'minus') {
-            item.qty -= 1;
-        }
+        if (type === 'plus') item.qty += 1;
+        if (type === 'minus') item.qty -= 1;
 
         if (item.qty <= 0) {
             removeCart(id);
@@ -804,9 +822,7 @@
         const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
         const totalPrice = cart.reduce((sum, item) => sum + (Number(item.price) * item.qty), 0);
 
-        if (cartCounter) {
-            cartCounter.textContent = totalQty;
-        }
+        if (cartCounter) cartCounter.textContent = totalQty;
 
         if (cartSubText) {
             cartSubText.textContent = totalQty > 0 ? `${totalQty} ürün sepetinizde` : 'Sepetinizde ürün yok';
@@ -828,14 +844,16 @@
                 <img src="${item.img}" alt="${item.name}">
                 <div>
                     <h4>${item.name}</h4>
-                    <div class="cart-item-price">₺${Number(item.price).toLocaleString('tr-TR')}</div>
-                    <div class="cart-qty">
-                        <button onclick="changeQty('${item.id}','minus')">-</button>
+                    <div style="font-size:13px;color:#777;font-weight:800;">
+                        ₺${Number(item.price).toLocaleString('tr-TR')}
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+                        <button onclick="changeQty('${item.id}','minus')" style="width:28px;height:28px;border:0;background:#eee;border-radius:8px;">-</button>
                         <strong>${item.qty}</strong>
-                        <button onclick="changeQty('${item.id}','plus')">+</button>
+                        <button onclick="changeQty('${item.id}','plus')" style="width:28px;height:28px;border:0;background:#eee;border-radius:8px;">+</button>
                     </div>
                 </div>
-                <button class="cart-remove" onclick="removeCart('${item.id}')">×</button>
+                <button onclick="removeCart('${item.id}')" style="width:30px;height:30px;border:0;background:#fff0f0;color:#d22;border-radius:8px;">×</button>
             </div>
         `).join('');
     }
@@ -851,15 +869,6 @@
             price: Number(btn.dataset.price),
             img: btn.dataset.img
         });
-    });
-
-    document.getElementById('checkoutBtn')?.addEventListener('click', function() {
-        if (cart.length === 0) {
-            alert('Sepetiniz boş.');
-            return;
-        }
-
-        window.location.href = '/checkout';
     });
 
     renderCart();
