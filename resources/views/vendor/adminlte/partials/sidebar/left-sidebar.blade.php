@@ -26,7 +26,7 @@
             <div class="eo-menu-title">ANA MENÜ</div>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                class="eo-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <span><i class="fas fa-chart-pie"></i></span>
                 <p>Dashboard</p>
             </a>
@@ -34,25 +34,25 @@
             <div class="eo-menu-title">KATALOG</div>
 
             <a href="{{ route('admin.products.index') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
+                class="eo-menu-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
                 <span><i class="fas fa-glasses"></i></span>
                 <p>Ürünler</p>
             </a>
 
             <a href="{{ route('admin.products.create') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.products.create') ? 'active' : '' }}">
+                class="eo-menu-link {{ request()->routeIs('admin.products.create') ? 'active' : '' }}">
                 <span><i class="fas fa-plus"></i></span>
                 <p>Yeni Ürün</p>
             </a>
 
             <a href="{{ route('admin.categories.index') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                class="eo-menu-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <span><i class="fas fa-layer-group"></i></span>
                 <p>Kategoriler</p>
             </a>
 
             <a href="{{ route('admin.brands.index') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
+                class="eo-menu-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
                 <span><i class="fas fa-tags"></i></span>
                 <p>Markalar</p>
             </a>
@@ -60,8 +60,8 @@
             <div class="eo-menu-title">SATIŞ</div>
 
             <a href="{{ route('admin.orders.index') }}"
-               class="eo-menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                <span><i class="fas fa-bag-shopping"></i></span>
+                class="eo-menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+                <span><i class="fas fa-shopping-bag"></i></span>
                 <p>Siparişler</p>
             </a>
 
@@ -75,11 +75,17 @@
 
         <div class="eo-sidebar-footer">
             <div>
-                <b>Store Status</b>
-                <span>Online</span>
+                <b>Mağaza Durumu</b>
+                <span>Aktif</span>
             </div>
             <i class="fas fa-circle"></i>
         </div>
+
+        <a href="{{ route('admin.settings.edit') }}"
+            class="eo-settings-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+            <span><i class="fas fa-cog"></i></span>
+            <p>Ayarlar</p>
+        </a>
 
         <form action="{{ route('logout') }}" method="POST">
             @csrf
@@ -95,11 +101,11 @@
 <style>
     .eo-sidebar {
         background:
-            radial-gradient(circle at 20% 0%, rgba(40,84,217,.28), transparent 28%),
-            radial-gradient(circle at 100% 20%, rgba(199,154,58,.18), transparent 26%),
+            radial-gradient(circle at 20% 0%, rgba(40, 84, 217, .28), transparent 28%),
+            radial-gradient(circle at 100% 20%, rgba(199, 154, 58, .18), transparent 26%),
             linear-gradient(180deg, #050b16 0%, #07111f 48%, #0b1424 100%) !important;
-        border-right: 1px solid rgba(255,255,255,.06);
-        box-shadow: 18px 0 60px rgba(7,17,31,.18);
+        border-right: 1px solid rgba(255, 255, 255, .06);
+        box-shadow: 18px 0 60px rgba(7, 17, 31, .18);
     }
 
     .eo-sidebar-inner {
@@ -114,7 +120,7 @@
         gap: 13px;
         color: #fff !important;
         text-decoration: none !important;
-        border-bottom: 1px solid rgba(255,255,255,.06);
+        border-bottom: 1px solid rgba(255, 255, 255, .06);
     }
 
     .eo-logo {
@@ -122,13 +128,13 @@
         height: 48px;
         border-radius: 18px;
         background:
-            radial-gradient(circle at 30% 20%, rgba(255,255,255,.28), transparent 34%),
+            radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .28), transparent 34%),
             linear-gradient(135deg, #2854d9, #c79a3a);
         display: grid;
         place-items: center;
         color: #fff;
         font-size: 19px;
-        box-shadow: 0 18px 36px rgba(40,84,217,.24);
+        box-shadow: 0 18px 36px rgba(40, 84, 217, .24);
     }
 
     .eo-brand strong {
@@ -142,7 +148,7 @@
     .eo-brand span {
         display: block;
         margin-top: 5px;
-        color: rgba(255,255,255,.42);
+        color: rgba(255, 255, 255, .42);
         font-size: 11px;
         font-weight: 800;
         letter-spacing: 1.8px;
@@ -156,8 +162,8 @@
         display: flex;
         align-items: center;
         gap: 13px;
-        background: rgba(255,255,255,.055);
-        border: 1px solid rgba(255,255,255,.075);
+        background: rgba(255, 255, 255, .055);
+        border: 1px solid rgba(255, 255, 255, .075);
         backdrop-filter: blur(16px);
     }
 
@@ -170,7 +176,7 @@
         color: #fff;
         font-weight: 950;
         background: linear-gradient(135deg, #17375f, #2854d9);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
     }
 
     .eo-admin-card b {
@@ -183,7 +189,7 @@
     .eo-admin-card small {
         display: block;
         margin-top: 3px;
-        color: rgba(255,255,255,.45);
+        color: rgba(255, 255, 255, .45);
         font-size: 11px;
         font-weight: 700;
     }
@@ -194,7 +200,7 @@
     }
 
     .eo-menu-title {
-        color: rgba(255,255,255,.28);
+        color: rgba(255, 255, 255, .28);
         font-size: 10px;
         font-weight: 950;
         letter-spacing: 1.5px;
@@ -208,7 +214,7 @@
         gap: 12px;
         padding: 9px 10px;
         border-radius: 17px;
-        color: rgba(255,255,255,.68) !important;
+        color: rgba(255, 255, 255, .68) !important;
         text-decoration: none !important;
         position: relative;
         transition: .25s ease;
@@ -220,8 +226,8 @@
         border-radius: 13px;
         display: grid;
         place-items: center;
-        background: rgba(255,255,255,.055);
-        color: rgba(255,255,255,.74);
+        background: rgba(255, 255, 255, .055);
+        color: rgba(255, 255, 255, .74);
         transition: .25s ease;
     }
 
@@ -232,22 +238,22 @@
     }
 
     .eo-menu-link:hover {
-        background: rgba(255,255,255,.055);
+        background: rgba(255, 255, 255, .055);
         color: #fff !important;
         transform: translateX(3px);
     }
 
     .eo-menu-link:hover span {
-        background: rgba(255,255,255,.1);
+        background: rgba(255, 255, 255, .1);
         color: #fff;
     }
 
     .eo-menu-link.active {
         color: #fff !important;
         background:
-            radial-gradient(circle at 100% 0%, rgba(199,154,58,.25), transparent 32%),
-            linear-gradient(135deg, rgba(40,84,217,.96), rgba(23,55,95,.96));
-        box-shadow: 0 14px 34px rgba(40,84,217,.24);
+            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .25), transparent 32%),
+            linear-gradient(135deg, rgba(40, 84, 217, .96), rgba(23, 55, 95, .96));
+        box-shadow: 0 14px 34px rgba(40, 84, 217, .24);
     }
 
     .eo-menu-link.active::before {
@@ -262,7 +268,7 @@
     }
 
     .eo-menu-link.active span {
-        background: rgba(255,255,255,.16);
+        background: rgba(255, 255, 255, .16);
         color: #fff;
     }
 
@@ -274,9 +280,9 @@
         justify-content: space-between;
         align-items: center;
         background:
-            radial-gradient(circle at 0% 0%, rgba(22,163,107,.18), transparent 35%),
-            rgba(255,255,255,.055);
-        border: 1px solid rgba(255,255,255,.07);
+            radial-gradient(circle at 0% 0%, rgba(22, 163, 107, .18), transparent 35%),
+            rgba(255, 255, 255, .055);
+        border: 1px solid rgba(255, 255, 255, .07);
     }
 
     .eo-sidebar-footer b {
@@ -287,7 +293,7 @@
     }
 
     .eo-sidebar-footer span {
-        color: rgba(255,255,255,.48);
+        color: rgba(255, 255, 255, .48);
         font-size: 11px;
         font-weight: 800;
     }
@@ -295,7 +301,61 @@
     .eo-sidebar-footer i {
         color: #16a36b;
         font-size: 10px;
-        filter: drop-shadow(0 0 8px rgba(22,163,107,.8));
+        filter: drop-shadow(0 0 8px rgba(22, 163, 107, .8));
+    }
+
+    .eo-settings-link {
+        margin-top: 10px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 9px 10px;
+        border-radius: 17px;
+        color: rgba(255, 255, 255, .68) !important;
+        text-decoration: none !important;
+        transition: .25s ease;
+    }
+
+    .eo-settings-link span {
+        width: 34px;
+        height: 34px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, .055);
+        color: rgba(255, 255, 255, .74);
+        transition: .25s ease;
+    }
+
+    .eo-settings-link p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 850;
+    }
+
+    .eo-settings-link:hover {
+        background: rgba(255, 255, 255, .055);
+        color: #fff !important;
+        transform: translateX(3px);
+    }
+
+    .eo-settings-link:hover span {
+        background: rgba(255, 255, 255, .1);
+        color: #fff;
+    }
+
+    .eo-settings-link.active {
+        color: #fff !important;
+        background:
+            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .25), transparent 32%),
+            linear-gradient(135deg, rgba(40, 84, 217, .96), rgba(23, 55, 95, .96));
+        box-shadow: 0 14px 34px rgba(40, 84, 217, .24);
+    }
+
+    .eo-settings-link.active span {
+        background: rgba(255, 255, 255, .16);
+        color: #fff;
     }
 
     .eo-logout {
@@ -304,7 +364,7 @@
         height: 48px;
         border: 0;
         border-radius: 17px;
-        background: rgba(227,59,59,.12);
+        background: rgba(227, 59, 59, .12);
         color: #ff8b8b;
         font-weight: 900;
         cursor: pointer;
@@ -312,7 +372,7 @@
     }
 
     .eo-logout:hover {
-        background: rgba(227,59,59,.2);
+        background: rgba(227, 59, 59, .2);
         color: #fff;
         transform: translateY(-2px);
     }

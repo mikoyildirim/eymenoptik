@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,11 +16,20 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        SiteSetting::query()->updateOrCreate(
+            ['id' => 1],
+            [
+                'site_name' => 'Eymen Optik',
+                'shipping_free_threshold' => 3000,
+                'shipping_cost' => 59.99,
+            ]
+        );
+
         User::updateOrCreate(
             ['email' => 'admin@eymenoptik.com'],
             [
                 'name' => 'Eymen Optik Admin',
-                'phone' => '05550000000',
+                'phone' => '05427639975',
                 'password' => Hash::make('12345678'),
                 'is_admin' => true,
             ]

@@ -26,6 +26,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->intended('/checkout');
+        return redirect()->intended('/')->with('success', 'Başarıyla çıkış yaptınız.');
     }
 }

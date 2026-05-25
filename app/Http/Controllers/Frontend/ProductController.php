@@ -15,6 +15,23 @@ class ProductController extends Controller
     {
         $query = Product::with('category', 'brand')->where('is_active', 1);
 
+        if ($request->filled('q')) {
+            $search = trim((string) $request->input('q'));
+
+            $query->where(function ($searchQuery) use ($search) {
+                $searchQuery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('short_description', 'like', '%' . $search . '%')
+                    ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                        $categoryQuery->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('brand', function ($brandQuery) use ($search) {
+                        $brandQuery->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
         if ($request->filled('category')) {
             $query->whereHas('category', function ($categoryQuery) use ($request) {
                 $categoryQuery->where('slug', $request->string('category'));
@@ -25,6 +42,10 @@ class ProductController extends Controller
             $query->whereHas('brand', function ($brandQuery) use ($request) {
                 $brandQuery->where('slug', $request->string('brand'));
             });
+        }
+
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->string('gender'));
         }
 
         $products = $query->latest()->get();

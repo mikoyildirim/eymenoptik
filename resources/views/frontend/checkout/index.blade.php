@@ -17,6 +17,13 @@
         <form method="POST" action="{{ route('checkout.payment') }}" class="checkout-grid" id="checkoutForm">
             @csrf
 
+            <script>
+                window.checkoutShippingConfig = {
+                    freeShippingThreshold: @json($freeShippingThreshold),
+                    shippingCost: @json($shippingCost),
+                };
+            </script>
+
             <input type="hidden" name="cart_json" id="cartJson">
             <input type="hidden" name="total_price" id="totalPriceInput">
 
@@ -98,7 +105,6 @@
                 <div class="checkout-card">
                     <div class="card-title">
                         <h2>Ödeme Yöntemi</h2>
-                        <p>İyzico entegrasyonunda bu alan kart ödeme formuna bağlanacak.</p>
                     </div>
 
                     <label class="payment-option active">
@@ -109,13 +115,13 @@
                         </span>
                     </label>
 
-                    <label class="payment-option">
+                    <!-- <label class="payment-option">
                         <input type="radio" name="payment_method" value="transfer">
                         <span>
                             <b>Havale / EFT</b>
                             <small>Manuel ödeme bildirimi için kullanılabilir.</small>
                         </span>
-                    </label>
+                    </label> -->
                 </div>
 
             </div>
@@ -439,7 +445,10 @@
         const checkoutForm = document.getElementById('checkoutForm');
 
         function formatPrice(price) {
-            return '₺' + Number(price).toLocaleString('tr-TR');
+            return '₺' + Number(price).toLocaleString('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
         }
 
         function renderCheckout() {
@@ -476,7 +485,9 @@
                 return sum + Number(item.price) * Number(item.qty || 1);
             }, 0);
 
-            const shippingValue = subtotalValue >= 1000 ? 0 : 99;
+            const shippingValue = subtotalValue >= window.checkoutShippingConfig.freeShippingThreshold
+                ? 0
+                : window.checkoutShippingConfig.shippingCost;
             const grandTotalValue = subtotalValue + shippingValue;
 
             subTotal.textContent = formatPrice(subtotalValue);

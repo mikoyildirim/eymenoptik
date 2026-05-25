@@ -33,40 +33,40 @@
 
 <div class="row">
     @php
-        $cards = [
-            [
-                'title' => 'Ürünler',
-                'count' => $productCount,
-                'icon' => 'fas fa-glasses',
-                'route' => 'admin.products.index',
-                'class' => 'eo-card-blue',
-                'text' => 'Mağazadaki tüm ürünler'
-            ],
-            [
-                'title' => 'Kategoriler',
-                'count' => $categoryCount,
-                'icon' => 'fas fa-layer-group',
-                'route' => 'admin.categories.index',
-                'class' => 'eo-card-green',
-                'text' => 'Kategori vitrinleri'
-            ],
-            [
-                'title' => 'Markalar',
-                'count' => $brandCount,
-                'icon' => 'fas fa-tags',
-                'route' => 'admin.brands.index',
-                'class' => 'eo-card-gold',
-                'text' => 'Marka yönetimi'
-            ],
-            [
-                'title' => 'Siparişler',
-                'count' => $orderCount,
-                'icon' => 'fas fa-shopping-bag',
-                'route' => 'admin.orders.index',
-                'class' => 'eo-card-red',
-                'text' => 'Satış ve teslimat takibi'
-            ],
-        ];
+    $cards = [
+    [
+    'title' => 'Ürünler',
+    'count' => $productCount,
+    'icon' => 'fas fa-glasses',
+    'route' => 'admin.products.index',
+    'class' => 'eo-card-blue',
+    'text' => 'Mağazadaki tüm ürünler'
+    ],
+    [
+    'title' => 'Kategoriler',
+    'count' => $categoryCount,
+    'icon' => 'fas fa-layer-group',
+    'route' => 'admin.categories.index',
+    'class' => 'eo-card-green',
+    'text' => 'Kategori vitrinleri'
+    ],
+    [
+    'title' => 'Markalar',
+    'count' => $brandCount,
+    'icon' => 'fas fa-tags',
+    'route' => 'admin.brands.index',
+    'class' => 'eo-card-gold',
+    'text' => 'Marka yönetimi'
+    ],
+    [
+    'title' => 'Siparişler',
+    'count' => $orderCount,
+    'icon' => 'fas fa-shopping-bag',
+    'route' => 'admin.orders.index',
+    'class' => 'eo-card-red',
+    'text' => 'Satış ve teslimat takibi'
+    ],
+    ];
     @endphp
 
     @foreach($cards as $card)
@@ -94,16 +94,18 @@
     <div class="col-lg-8">
         <div class="card eo-card">
             <div class="card-header eo-card-header">
-                <div>
+                <div class="eo-card-header-left">
                     <h3 class="card-title">
                         <i class="fas fa-receipt mr-2"></i>Son Siparişler
                     </h3>
-                    <p>En güncel müşteri siparişleri</p>
+                    <p>En güncel 5 sipariş</p>
                 </div>
 
-                <a href="{{ route('admin.orders.index') }}" class="eo-link">
-                    Tümünü Gör <i class="fas fa-arrow-right"></i>
-                </a>
+                <div class="eo-card-header-right">
+                    <a href="{{ route('admin.orders.index') }}" class="eo-link">
+                        Tümünü Gör →
+                    </a>
+                </div>
             </div>
 
             <div class="card-body p-0">
@@ -115,12 +117,20 @@
                                 <th>Müşteri</th>
                                 <th>Tutar</th>
                                 <th>Durum</th>
-                                <th class="text-right">İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($latestOrders as $order)
-                            <tr>
+                            @php
+                            $detailUrl = route('admin.orders.show', $order);
+                            @endphp
+                            <tr
+                                class="eo-order-row"
+                                role="link"
+                                tabindex="0"
+                                data-href="{{ $detailUrl }}"
+                                onclick="window.location.href = this.dataset.href"
+                                onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.location.href = this.dataset.href; }">
                                 <td>
                                     <strong>{{ $order->order_number }}</strong>
                                 </td>
@@ -138,28 +148,23 @@
                                 </td>
                                 <td>
                                     @php
-                                        $statusClass = match($order->status) {
-                                            'tamamlandi' => 'success',
-                                            'kargoda' => 'info',
-                                            'hazirlaniyor' => 'warning',
-                                            'iptal' => 'danger',
-                                            default => 'secondary'
-                                        };
+                                    $statusClass = match($order->status) {
+                                    'tamamlandi' => 'success',
+                                    'kargoda' => 'info',
+                                    'hazirlaniyor' => 'warning',
+                                    'iptal' => 'danger',
+                                    default => 'secondary'
+                                    };
                                     @endphp
 
                                     <span class="badge badge-{{ $statusClass }} eo-badge">
                                         {{ ucfirst($order->status) }}
                                     </span>
                                 </td>
-                                <td class="text-right">
-                                    <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm eo-btn-mini">
-                                        Detay
-                                    </a>
-                                </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5">
+                                <td colspan="4">
                                     <div class="eo-empty">
                                         <i class="fas fa-shopping-bag"></i>
                                         <h4>Henüz sipariş yok</h4>
@@ -174,7 +179,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
         <div class="eo-side-panel">
             <div class="eo-side-icon">
@@ -183,24 +188,24 @@
             <h3>Mağaza Durumu</h3>
             <p>Eymen Optik ürün vitrini ve admin yönetimi aktif durumda.</p>
 
-            <div class="eo-progress-item">
-                <span>Ürün Yönetimi</span>
-                <b>%100</b>
-            </div>
-            <div class="progress eo-progress">
-                <div class="progress-bar" style="width:100%"></div>
-            </div>
+            <div class="eo-status-grid">
+                <div class="eo-status-box eo-status-complete">
+                    <span>Tamamlanan Siparişler</span>
+                    <strong>{{ $completedOrderCount }}</strong>
+                </div>
 
-            <div class="eo-progress-item mt-3">
-                <span>Sipariş Takibi</span>
-                <b>%85</b>
-            </div>
-            <div class="progress eo-progress">
-                <div class="progress-bar bg-warning" style="width:85%"></div>
+                <div class="eo-status-box eo-status-pending">
+                    <span>Bekleyen Siparişler</span>
+                    <strong>{{ $pendingOrderCount }}</strong>
+                </div>
             </div>
 
             <a href="{{ route('admin.products.create') }}" class="btn eo-btn-dark btn-block mt-4">
                 <i class="fas fa-plus"></i> Ürün Ekle
+            </a>
+
+            <a href="{{ route('admin.orders.index') }}" class="btn eo-btn-light btn-block mt-2">
+                <i class="fas fa-shopping-bag"></i> Siparişleri Görüntüle
             </a>
         </div>
     </div>
@@ -212,8 +217,8 @@
 <style>
     .content-wrapper {
         background:
-            radial-gradient(circle at 0% 0%, rgba(40,84,217,.08), transparent 32%),
-            radial-gradient(circle at 100% 0%, rgba(199,154,58,.12), transparent 28%),
+            radial-gradient(circle at 0% 0%, rgba(40, 84, 217, .08), transparent 32%),
+            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .12), transparent 28%),
             #f4f6fb;
     }
 
@@ -226,7 +231,7 @@
         color: #fff;
         border-radius: 28px;
         padding: 28px;
-        box-shadow: 0 24px 60px rgba(7,17,31,.18);
+        box-shadow: 0 24px 60px rgba(7, 17, 31, .18);
         margin-bottom: 8px;
     }
 
@@ -237,7 +242,7 @@
     }
 
     .eo-header p {
-        color: rgba(255,255,255,.68);
+        color: rgba(255, 255, 255, .68);
         margin: 0;
     }
 
@@ -245,13 +250,13 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(255,255,255,.12);
-        border: 1px solid rgba(255,255,255,.18);
+        background: rgba(255, 255, 255, .12);
+        border: 1px solid rgba(255, 255, 255, .18);
         padding: 8px 13px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 800;
-        color: rgba(255,255,255,.86);
+        color: rgba(255, 255, 255, .86);
     }
 
     .eo-header-actions {
@@ -270,7 +275,7 @@
     .eo-btn-dark {
         background: #07111f;
         color: #fff;
-        border: 1px solid rgba(255,255,255,.15);
+        border: 1px solid rgba(255, 255, 255, .15);
     }
 
     .eo-btn-dark:hover {
@@ -281,13 +286,13 @@
     .eo-btn-light {
         background: #fff;
         color: #07111f;
-        border: 1px solid rgba(7,17,31,.08);
+        border: 1px solid rgba(7, 17, 31, .08);
     }
 
     .eo-alert {
         border-radius: 18px;
         border: 0;
-        box-shadow: 0 14px 34px rgba(22,163,107,.12);
+        box-shadow: 0 14px 34px rgba(22, 163, 107, .12);
     }
 
     .eo-stat-card {
@@ -298,13 +303,13 @@
         min-height: 176px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 18px 45px rgba(7,17,31,.12);
+        box-shadow: 0 18px 45px rgba(7, 17, 31, .12);
         transition: .28s ease;
     }
 
     .eo-stat-card:hover {
         transform: translateY(-6px);
-        box-shadow: 0 28px 70px rgba(7,17,31,.18);
+        box-shadow: 0 28px 70px rgba(7, 17, 31, .18);
     }
 
     .eo-stat-card::after {
@@ -315,13 +320,24 @@
         border-radius: 50%;
         right: -55px;
         top: -55px;
-        background: rgba(255,255,255,.12);
+        background: rgba(255, 255, 255, .12);
     }
 
-    .eo-card-blue { background: linear-gradient(135deg, #2854d9, #17375f); }
-    .eo-card-green { background: linear-gradient(135deg, #16a36b, #0f5d45); }
-    .eo-card-gold { background: linear-gradient(135deg, #c79a3a, #7b5a16); }
-    .eo-card-red { background: linear-gradient(135deg, #e33b3b, #7a1724); }
+    .eo-card-blue {
+        background: linear-gradient(135deg, #2854d9, #17375f);
+    }
+
+    .eo-card-green {
+        background: linear-gradient(135deg, #16a36b, #0f5d45);
+    }
+
+    .eo-card-gold {
+        background: linear-gradient(135deg, #c79a3a, #7b5a16);
+    }
+
+    .eo-card-red {
+        background: linear-gradient(135deg, #e33b3b, #7a1724);
+    }
 
     .eo-stat-top {
         display: flex;
@@ -332,7 +348,7 @@
     }
 
     .eo-stat-top span {
-        color: rgba(255,255,255,.7);
+        color: rgba(255, 255, 255, .7);
         font-size: 13px;
         font-weight: 700;
     }
@@ -346,7 +362,7 @@
 
     .eo-stat-top p {
         margin: 0;
-        color: rgba(255,255,255,.88);
+        color: rgba(255, 255, 255, .88);
         font-weight: 800;
     }
 
@@ -356,8 +372,8 @@
         border-radius: 20px;
         display: grid;
         place-items: center;
-        background: rgba(255,255,255,.14);
-        border: 1px solid rgba(255,255,255,.18);
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .18);
         font-size: 24px;
     }
 
@@ -370,27 +386,38 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: rgba(255,255,255,.76);
+        color: rgba(255, 255, 255, .76);
         font-weight: 800;
         font-size: 13px;
     }
 
     .eo-card,
     .eo-side-panel {
-        border: 1px solid rgba(7,17,31,.08);
+        border: 1px solid rgba(7, 17, 31, .08);
         border-radius: 26px;
-        box-shadow: 0 18px 44px rgba(7,17,31,.07);
+        box-shadow: 0 18px 44px rgba(7, 17, 31, .07);
         overflow: hidden;
     }
 
     .eo-card-header {
-        background: rgba(255,255,255,.9);
+        background: rgba(255, 255, 255, .9);
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 16px;
-        border-bottom: 1px solid rgba(7,17,31,.08);
+        border-bottom: 1px solid rgba(7, 17, 31, .08);
         padding: 20px 22px;
+    }
+
+    .eo-card-header-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .eo-card-header-right {
+        margin-left: auto;
     }
 
     .eo-card-header h3 {
@@ -406,14 +433,29 @@
     }
 
     .eo-link {
-        color: #2854d9;
+        color: #07111f;
         font-weight: 900;
-        font-size: 13px;
+        font-size: 16px;
+    }
+
+    .eo-order-row {
+        cursor: pointer;
+        transition: background-color .18s ease, transform .18s ease;
+    }
+
+    .eo-order-row:hover {
+        background: rgba(199, 154, 58, .08);
+    }
+
+    .eo-order-row:focus {
+        outline: none;
+        background: rgba(199, 154, 58, .12);
+        box-shadow: inset 0 0 0 2px rgba(199, 154, 58, .28);
     }
 
     .eo-table thead th {
         border-top: 0;
-        border-bottom: 1px solid rgba(7,17,31,.08);
+        border-bottom: 1px solid rgba(7, 17, 31, .08);
         color: #707b8d;
         font-size: 12px;
         text-transform: uppercase;
@@ -424,7 +466,7 @@
     .eo-table td {
         vertical-align: middle;
         padding: 16px;
-        border-top: 1px solid rgba(7,17,31,.06);
+        border-top: 1px solid rgba(7, 17, 31, .06);
     }
 
     .eo-user {
@@ -433,7 +475,7 @@
         gap: 10px;
     }
 
-    .eo-user > span {
+    .eo-user>span {
         width: 38px;
         height: 38px;
         border-radius: 14px;
@@ -486,7 +528,7 @@
 
     .eo-side-panel {
         background:
-            radial-gradient(circle at 100% 0%, rgba(199,154,58,.2), transparent 32%),
+            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .2), transparent 32%),
             #fff;
         padding: 24px;
     }
@@ -522,14 +564,41 @@
         margin-bottom: 8px;
     }
 
-    .eo-progress {
-        height: 9px;
-        border-radius: 999px;
-        background: #eef2f8;
+    .eo-status-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
     }
 
-    .eo-progress .progress-bar {
-        border-radius: 999px;
+    .eo-status-box {
+        border-radius: 20px;
+        padding: 16px 18px;
+        border: 1px solid rgba(7, 17, 31, .08);
+        background: #f8fafc;
+    }
+
+    .eo-status-box span {
+        display: block;
+        font-size: 13px;
+        color: #707b8d;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .eo-status-box strong {
+        font-size: 28px;
+        font-weight: 900;
+        color: #07111f;
+        letter-spacing: -1px;
+    }
+
+    .eo-status-complete {
+        background: linear-gradient(135deg, rgba(22, 163, 107, .10), rgba(22, 163, 107, .03));
+    }
+
+    .eo-status-pending {
+        background: linear-gradient(135deg, rgba(199, 154, 58, .12), rgba(199, 154, 58, .03));
     }
 
     @media(max-width: 768px) {
@@ -546,9 +615,18 @@
             display: block;
         }
 
+        .eo-card-header-right {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+
         .eo-link {
             display: inline-block;
             margin-top: 10px;
+        }
+
+        .eo-status-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>

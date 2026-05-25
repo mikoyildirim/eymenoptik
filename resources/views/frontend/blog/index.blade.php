@@ -4,6 +4,10 @@
 
 @section('content')
 
+@php
+    $freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
+@endphp
+
 <section class="faq-page">
     <div class="container">
 
@@ -105,7 +109,7 @@
 
                         <div class="faq-answer">
                             <p>
-                                3000 TL ve üzeri alışverişlerde ücretsiz kargo
+                                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ve üzeri alışverişlerde ücretsiz kargo
                                 avantajı sunulmaktadır.
                             </p>
                         </div>

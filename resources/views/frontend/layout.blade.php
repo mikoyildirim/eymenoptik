@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Eymen Optik')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -624,10 +625,20 @@
 
 <body>
 
+    @php
+        $siteSettings = $siteSettings ?? null;
+        $siteName = $siteSettings->site_name;
+        $sitePhone = $siteSettings->phone;
+        $siteEmail = $siteSettings->email;
+        $siteAddress = $siteSettings->address;
+        $siteFacebook = $siteSettings->facebook;
+        $siteInstagram = $siteSettings->instagram;
+    @endphp
+
     <div class="top-sale">
         <div class="container top-sale-inner">
             <div class="top-sale-text">
-                3000 TL VE ÜZERİ ÜCRETSİZ KARGO
+                {{ number_format((float) $siteSettings->shipping_free_threshold, 0, ',', '.') }} TL VE ÜZERİ ÜCRETSİZ KARGO
             </div>
         </div>
     </div>
@@ -635,14 +646,13 @@
     <div class="info-bar">
         <div class="container info-inner">
             <div class="info-left">
-                <span>☎ 0555 000 00 00</span>
-                <span>✉ info@eymenoptik.com.tr</span>
+                <span>☎ {{ $sitePhone }}</span>
+                <span>✉ {{ $siteEmail }}</span>
             </div>
 
             <div class="info-right">
-                <a href="#">Facebook</a>
-                <a href="#">Instagram</a>
-                <a href="#">Twitter</a>
+                <a href="{{ $siteFacebook }}" target="_blank" rel="noopener">Facebook</a>
+                <a href="{{ $siteInstagram }}" target="_blank" rel="noopener">Instagram</a>
 
                 @auth
                 <a href="{{ route('account') }}" class="login-btn">Hesabım</a>
@@ -669,14 +679,16 @@
             <nav class="main-menu" id="mainMenu">
                 @isset($categories)
                 @foreach($categories as $category)
-                <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="menu-link js-top-category-link" data-category="{{ $category->slug }}">
+                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                    class="menu-link js-top-category-link" data-category="{{ $category->slug }}">
                     {{ $category->name }}
                 </a>
                 @endforeach
                 @endisset
 
-                <a href="{{ route('blog.index') }}" class="menu-link">Yardım Merkezi</a>
+                <a href="{{ route('products.index') }}" class="menu-link">Tüm Ürünler</a>
                 <a href="{{ route('brands.index') }}" class="menu-link">Markalar</a>
+                <a href="{{ route('blog.index') }}" class="menu-link">Yardım Merkezi</a>
                 <a href="{{ route('contact') }}" class="menu-link">İletişim</a>
 
                 @auth
@@ -688,7 +700,7 @@
 
             <div class="search-area">
                 <form class="search-box" action="{{ route('products.index') }}" method="GET">
-                    <input type="text" name="q" placeholder="Ürün ara...">
+                    <input type="text" name="q" placeholder="Ürün ara..." value="{{ request('q') }}">
                     <button type="submit">⌕</button>
                 </form>
 
@@ -705,6 +717,22 @@
         </div>
     </header>
 
+    @if(session('success'))
+    <div id="flashMessage" style="position:fixed;right:20px;bottom:20px;z-index:9999;background:#000;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 18px 45px rgba(0,0,0,.22);font-weight:800;">
+        <i class="fas fa-check-circle" style="margin-right:8px"></i>{{ session('success') }}
+    </div>
+    <script>
+        setTimeout(function(){
+            var el = document.getElementById('flashMessage');
+            if(!el) return;
+            el.style.transition = 'opacity .25s ease, transform .25s ease';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(12px)';
+            setTimeout(function(){ el.remove(); }, 300);
+        }, 1800);
+    </script>
+    @endif
+
     @yield('content')
 
     <footer class="footer">
@@ -712,24 +740,23 @@
             <div class="footer-grid">
 
                 <div>
-                    <h3>Eymen Optik</h3>
+                    <h3>{{ $siteName }}</h3>
                     <p>Modern, güvenilir ve premium optik alışveriş deneyimi.</p>
                 </div>
 
                 <div>
-                    <!-- burası dinamik olacak -->
                     <h3>Kategoriler</h3>
                     @isset($categories)
                     @foreach($categories as $category)
-                    <a href="{{ route('products.index', ['category' => $category->slug]) }}">{{ $category->name }}</a>
+                    <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="js-top-category-link" data-category="{{ $category->slug }}">{{ $category->name }}</a>
                     @endforeach
                     @endisset
                 </div>
 
                 <div>
                     <h3>Mağaza</h3>
-                    <a href="#">Çok Satanlar</a>
-                    <a href="#">Yeni Sezon</a>
+                    <a href="{{ route('products.index') }}">Çok Satanlar</a>
+                    <a href="{{ route('products.index') }}">Yeni Sezon</a>
                 </div>
 
                 <div>
@@ -741,9 +768,9 @@
 
                 <div>
                     <h3>İletişim</h3>
-                    <p>0555 000 00 00</p>
-                    <p>info@eymenoptik.com.tr</p>
-                    <p>Sivas / Merkez</p>
+                    <p>{{ $sitePhone }}</p>
+                    <p>{{ $siteEmail }}</p>
+                    <p>{{ $siteAddress }}</p>
                 </div>
 
             </div>
@@ -794,11 +821,7 @@
                 <strong id="cartTotal">₺0</strong>
             </div>
 
-            @auth
             <a href="{{ route('checkout.index') }}" class="btn-checkout">Ödemeye Geç</a>
-            @else
-            <a href="{{ route('login') }}" class="btn-checkout">Giriş Yap ve Devam Et</a>
-            @endauth
         </div>
     </aside>
 
@@ -955,6 +978,29 @@
         // Favorites (localStorage)
         let favorites = JSON.parse(localStorage.getItem('eymen_favs')) || [];
 
+        const isAuthenticated = @json(auth()->check());
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        const favoritesIndexUrl = "{{ route('favorites.index') }}";
+        const favoritesToggleUrl = "{{ route('favorites.toggle') }}";
+
+        // If user is authenticated, load server-side favorites and sync to local UI
+        if (isAuthenticated) {
+            fetch(favoritesIndexUrl, {
+                    credentials: 'same-origin'
+                })
+                .then(res => res.ok ? res.json() : [])
+                .then(data => {
+                    favorites = data.map(p => ({
+                        id: String(p.id),
+                        name: p.name,
+                        img: p.img,
+                        price: p.price
+                    }));
+                    saveFavs();
+                })
+                .catch(() => {});
+        }
+
         function saveFavs() {
             localStorage.setItem('eymen_favs', JSON.stringify(favorites));
             renderFavs();
@@ -969,7 +1015,8 @@
             }
 
             const safeId = CSS.escape(String(item.id));
-            const sourceButton = document.querySelector(`.js-add-cart[data-id="${safeId}"], .js-fav-toggle[data-id="${safeId}"]`);
+            const sourceButton = document.querySelector(
+                `.js-add-cart[data-id="${safeId}"], .js-fav-toggle[data-id="${safeId}"]`);
             const sourcePrice = Number(sourceButton?.dataset?.price || 0);
 
             return Number.isFinite(sourcePrice) ? sourcePrice : 0;
@@ -986,8 +1033,39 @@
         }
 
         function removeFav(id) {
-            favorites = favorites.filter(item => item.id !== id);
-            saveFavs();
+            if (isAuthenticated) {
+                fetch(favoritesToggleUrl, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            product_id: Number(id)
+                        })
+                    }).then(() => fetch(favoritesIndexUrl, {
+                        credentials: 'same-origin'
+                    }))
+                    .then(r => r.ok ? r.json() : [])
+                    .then(data => {
+                        favorites = data.map(p => ({
+                            id: String(p.id),
+                            name: p.name,
+                            img: p.img,
+                            price: p.price
+                        }));
+                        saveFavs();
+                    }).catch(() => {
+                        // fallback to local remove on error
+                        favorites = favorites.filter(item => item.id !== id);
+                        saveFavs();
+                    });
+            } else {
+                favorites = favorites.filter(item => item.id !== id);
+                saveFavs();
+            }
         }
 
         function renderFavs() {
@@ -1119,12 +1197,43 @@
                     price: favBtn.dataset.price,
                 };
 
-                toggleFav(product);
-                // immediately reflect state on the clicked button for snappy UI
-                setTimeout(() => {
-                    favBtn.classList.toggle('active', favorites.some(f => f.id === product.id));
-                    if (favCounter) favCounter.textContent = favorites.length;
-                }, 0);
+                if (isAuthenticated) {
+                    // Toggle on server, then refresh local list
+                    fetch(favoritesToggleUrl, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: product.id
+                            })
+                        }).then(() => fetch(favoritesIndexUrl, {
+                            credentials: 'same-origin'
+                        }))
+                        .then(r => r.ok ? r.json() : [])
+                        .then(data => {
+                            favorites = data.map(p => ({
+                                id: String(p.id),
+                                name: p.name,
+                                img: p.img,
+                                price: p.price
+                            }));
+                            saveFavs();
+                            favBtn.classList.toggle('active', favorites.some(f => f.id === product.id));
+                            if (favCounter) favCounter.textContent = favorites.length;
+                        }).catch(() => {});
+                } else {
+                    toggleFav(product);
+                    // immediately reflect state on the clicked button for snappy UI
+                    setTimeout(() => {
+                        favBtn.classList.toggle('active', favorites.some(f => f.id === product.id));
+                        if (favCounter) favCounter.textContent = favorites.length;
+                    }, 0);
+                }
+
                 return;
             }
 

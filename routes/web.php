@@ -9,12 +9,14 @@ use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\MemberBrandController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\FavoriteController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -77,7 +79,6 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])
         ->name('password.update');
-
 });
 
 /*
@@ -94,12 +95,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/hesabim', [AccountController::class, 'index'])
         ->name('account');
 
-    Route::get('/checkout', [CheckoutController::class, 'index'])
-        ->name('checkout.index');
 
-    Route::post('/checkout/order', [CheckoutController::class, 'store'])
-        ->name('checkout.store');
-
+    // Favorites
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 });
 
 /*
@@ -128,6 +127,12 @@ Route::middleware(['auth', 'admin'])
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('/settings', [SettingsController::class, 'edit'])
+            ->name('settings.edit');
+
+        Route::put('/settings', [SettingsController::class, 'update'])
+            ->name('settings.update');
+
         Route::resource('categories', CategoryController::class);
 
         Route::resource('brands', BrandController::class);
@@ -142,14 +147,10 @@ Route::middleware(['auth', 'admin'])
 
         Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])
             ->name('orders.status');
-
     });
 
-    Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
-});
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+Route::post('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 Route::post('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
-Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-Route::get('/checkout/failed', [CheckoutController::class, 'failed'])->name('checkout.failed');

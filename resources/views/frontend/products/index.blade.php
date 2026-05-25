@@ -24,6 +24,7 @@
             @php
             $activeCategorySlug = (string) (request()->query('category') ?? '');
             $activeBrandSlug = (string) (request()->query('brand') ?? '');
+            $activeGenderSlug = (string) (request()->query('gender') ?? '');
             @endphp
 
             <div class="shop-layout">
@@ -106,11 +107,11 @@
                         <h3>Cinsiyet</h3>
 
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn active" type="button" data-filter-group="gender" data-filter="all"
+                            <button class="filter-btn {{ !$activeGenderSlug ? 'active' : '' }}" type="button" data-filter-group="gender" data-filter="all"
                                 data-label="Tümü">Tümü</button>
                             @foreach(['unisex'=>'Unisex','erkek'=>'Erkek','kadin'=>'Kadın','cocuk'=>'Çocuk'] as $key =>
                             $label)
-                            <button class="filter-btn" type="button" data-filter-group="gender" data-filter="{{ $key }}"
+                            <button class="filter-btn {{ $activeGenderSlug === $key ? 'active' : '' }}" type="button" data-filter-group="gender" data-filter="{{ $key }}"
                                 data-label="{{ $label }}">{{ $label }}
                                 <span>{{ $genderCounts[$key] ?? 0 }}</span></button>
                             @endforeach
@@ -129,7 +130,7 @@
 
                         <div class="toolbar-actions">
                             <form class="shop-search" id="productSearchForm">
-                                <input type="search" id="productSearchInput" placeholder="Ürün ara...">
+                                <input type="search" id="productSearchInput" placeholder="Ürün ara..." value="{{ request('q') }}">
                                 <button type="submit">Ara</button>
                             </form>
 
@@ -241,12 +242,13 @@
                             const sortSelect = document.getElementById('sortSelect');
                             const searchForm = document.getElementById('productSearchForm');
                             const searchInput = document.getElementById('productSearchInput');
+                            const productsIndexUrl = "{{ route('products.index') }}";
                             const filterButtons = Array.from(document.querySelectorAll(
                                 '.shop-sidebar .filter-btn[data-filter-group]'));
 
                             const filterGroups = ['category', 'brand', 'frame_color', 'glass_color', 'gender'];
                             const activeFilters = Object.fromEntries(filterGroups.map(group => [group, []]));
-                            let activeSearch = '';
+                            let activeSearch = normalize(searchInput?.value || '');
 
                             const noResult = document.createElement('div');
                             noResult.className = 'no-result';
@@ -386,6 +388,13 @@
                                 updateFilterSummary();
                             }
 
+                            function hasUrlFilters() {
+                                const params = new URLSearchParams(window.location.search);
+
+                                return ['q', 'category', 'brand', 'gender'].some(key => params.has(key) &&
+                                    params.get(key).trim() !== '');
+                            }
+
                             filterButtons.forEach(button => {
                                 button.addEventListener('click', function() {
                                     const group = this.dataset.filterGroup;
@@ -426,6 +435,11 @@
                             sortSelect?.addEventListener('change', applyFilters);
 
                             resetFiltersBtn?.addEventListener('click', function() {
+                                if (hasUrlFilters()) {
+                                    window.location.href = productsIndexUrl;
+                                    return;
+                                }
+
                                 filterGroups.forEach(group => {
                                     activeFilters[group] = [];
                                     setGroupState(group);
@@ -461,10 +475,16 @@
                                     const data = JSON.parse(pending);
                                     if (data.category) activeFilters.category = [data.category];
                                     if (data.brand) activeFilters.brand = [data.brand];
+                                    if (data.gender) activeFilters.gender = [data.gender];
                                     sessionStorage.removeItem('productFilters');
                                 }
                             } catch (err) {
                                 // ignore
+                            }
+
+                            const activeGenderSlug = "{{ $activeGenderSlug }}";
+                            if (activeGenderSlug) {
+                                activeFilters.gender = [activeGenderSlug];
                             }
 
                             filterGroups.forEach(group => setGroupState(group));

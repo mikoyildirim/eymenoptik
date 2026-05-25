@@ -4,6 +4,10 @@
 
 @section('content')
 
+@php
+    $freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
+@endphp
+
 <section class="hero-slider-section reveal">
     <div class="container">
 
@@ -19,7 +23,7 @@
                     <span>Yeni Sezon Koleksiyonu</span>
                     <h1>Tarzın Gözlerinden Okunsun</h1>
                     <p>Güneş gözlükleri, optik çerçeveler ve premium modelleri keşfet.</p>
-                    <a href="#products">Ürünleri İncele</a>
+                    <a href="{{ route('products.index') }}">Ürünleri İncele</a>
                 </div>
             </div>
 
@@ -45,9 +49,9 @@
 
                 <div class="hero-content">
                     <span>Ücretsiz Kargo</span>
-                    <h1>3000 TL Üzeri Kargo Bizden</h1>
+                    <h1>{{ number_format($freeShippingThreshold, 0, ',', '.') }} TL Üzeri Kargo Bizden</h1>
                     <p>Seçili ürünlerde güvenli alışveriş ve hızlı teslimat avantajı.</p>
-                    <a href="#products">Alışverişe Başla</a>
+                    <a href="{{ route('products.index') }}">Alışverişe Başla</a>
                 </div>
             </div>
 
@@ -64,8 +68,8 @@
 
         <div class="marquee">
             <span>
-                3000 TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
-                3000 TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
             </span>
         </div>
 
@@ -79,7 +83,7 @@
 
             <div class="mini-feature reveal">
                 <strong>🚚 Ücretsiz Kargo</strong>
-                <span>3000 TL üzeri siparişlerde.</span>
+                <span>{{ number_format($freeShippingThreshold, 0, ',', '.') }} TL üzeri siparişlerde.</span>
             </div>
 
             <div class="mini-feature reveal">
@@ -254,7 +258,7 @@
     <div class="container">
         <div class="double-banner-grid">
 
-            <a href="{{ route('products.index') }}" class="image-banner reveal">
+            <a href="{{ route('products.index', ['gender' => 'erkek']) }}" class="image-banner reveal">
                 <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90"
                     alt="Erkek Gözlükleri">
 
@@ -264,7 +268,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('products.index') }}" class="image-banner reveal">
+            <a href="{{ route('products.index', ['gender' => 'kadin']) }}" class="image-banner reveal">
                 <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90"
                     alt="Kadın Gözlükleri">
 

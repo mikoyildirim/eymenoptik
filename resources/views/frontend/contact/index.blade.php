@@ -28,7 +28,7 @@
 
                     <div class="contact-box">
                         <strong>Telefon</strong>
-                        <span>0555 000 00 00</span>
+                        <span>0542 763 99 75</span>
                     </div>
 
                     <div class="contact-box">
@@ -38,7 +38,7 @@
 
                     <div class="contact-box">
                         <strong>Adres</strong>
-                        <span>Sivas / Merkez</span>
+                        <span>Örtülüpınar, İnönü Blv. 42 C, 58030 Merkez/Sivas</span>
                     </div>
 
                 </div>

@@ -52,7 +52,6 @@
                     <a href="#orders">Siparişlerim</a>
                     <a href="#categories">Kategoriler</a>
                     <a href="#products">Önerilen Ürünler</a>
-                    <a href="#coupon">Kuponlarım</a>
                 </nav>
 
             </aside>
@@ -63,23 +62,19 @@
 
                     <div class="stat-card">
                         <span>📦</span>
-                        <b>3</b>
+                        <b>{{ $activeOrdersCount }}</b>
                         <p>Aktif Sipariş</p>
                     </div>
 
-                    <div class="stat-card">
+                    <div class="stat-card stat-card-action" role="button" tabindex="0" data-open-drawer="favorites">
                         <span>♡</span>
-                        <b id="favoriteCount">0</b>
+                        <b id="favoriteCount">{{ $favoriteCount }}</b>
                         <p>Favori Ürün</p>
                     </div>
 
-                    <div class="stat-card">
-                        <span>🎁</span>
-                        <b>1</b>
-                        <p>Aktif Kupon</p>
-                    </div>
+                    <!-- Kupon kartı kaldırıldı -->
 
-                    <div class="stat-card">
+                    <div class="stat-card stat-card-action" role="button" tabindex="0" data-open-drawer="cart">
                         <span>🛒</span>
                         <b id="miniCartCount">0</b>
                         <p>Sepette Ürün</p>
@@ -96,65 +91,87 @@
                                 <span>SİPARİŞLER</span>
                                 <h2>Son Siparişler</h2>
                             </div>
-
-                            <a href="#">Tümünü Gör</a>
                         </div>
 
-                        <div class="order-list">
+                        <div id="ordersCardContent">
 
-                            <div class="order-item">
-                                <div class="order-icon">🕶️</div>
-
-                                <div>
-                                    <b>#EO-1024 • Milano Black</b>
-                                    <small>12 Mayıs 2026 • ₺1.249</small>
-                                </div>
-
-                                <span class="status delivered">Teslim Edildi</span>
+                            <div class="orders-loading" aria-hidden="true">
+                                <div class="orders-spinner"></div>
                             </div>
 
-                            <div class="order-item">
-                                <div class="order-icon">👓</div>
+                            <div class="order-list orders-fade">
 
-                                <div>
-                                    <b>#EO-1025 • Classic Frame</b>
-                                    <small>15 Mayıs 2026 • ₺899</small>
+                                @forelse($orders as $order)
+                                @php
+                                $firstItem = $order->items->first();
+                                $statusClass = match($order->status) {
+                                'tamamlandi' => 'delivered',
+                                'kargoda' => 'cargo',
+                                'hazirlaniyor', 'beklemede' => 'preparing',
+                                'iptal' => 'preparing',
+                                default => 'preparing'
+                                };
+
+                                $statusText = match($order->status) {
+                                'tamamlandi' => 'Teslim Edildi',
+                                'kargoda' => 'Kargoda',
+                                'hazirlaniyor' => 'Hazırlanıyor',
+                                'beklemede' => 'Beklemede',
+                                'iptal' => 'İptal',
+                                default => ucfirst($order->status)
+                                };
+                                @endphp
+
+                                <div class="order-item">
+                                    <div class="order-icon">🕶️</div>
+
+                                    <div>
+                                        <b>#{{ $order->order_number }} • {{ $firstItem->product_name ?? 'Sipariş' }}</b>
+                                        <small>{{ $order->created_at->format('d F Y') }} • ₺{{ number_format($order->total_price, 0, ',', '.') }}</small>
+                                    </div>
+
+                                    <span class="status {{ $statusClass }}">{{ $statusText }}</span>
                                 </div>
 
-                                <span class="status cargo">Kargoda</span>
-                            </div>
+                                @empty
 
-                            <div class="order-item">
-                                <div class="order-icon">✨</div>
-
-                                <div>
-                                    <b>#EO-1026 • Gold Edition</b>
-                                    <small>17 Mayıs 2026 • ₺2.499</small>
+                                <div class="empty-box">
+                                    Henüz sipariş bulunmuyor.
                                 </div>
 
-                                <span class="status preparing">Hazırlanıyor</span>
+                                @endforelse
+
                             </div>
+
+                            @if(method_exists($orders, 'hasPages') && $orders->hasPages())
+                            <nav class="orders-pagination" aria-label="Sipariş sayfaları">
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item {{ $orders->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $orders->previousPageUrl() ?? '#' }}" aria-label="Previous" @if($orders->onFirstPage()) tabindex="-1" aria-disabled="true" @endif>
+                                            <span aria-hidden="true">&lsaquo;</span>
+                                        </a>
+                                    </li>
+
+                                    @foreach ($orders->getUrlRange(1, $orders->lastPage()) as $page => $url)
+                                    <li class="page-item {{ $page === $orders->currentPage() ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                    @endforeach
+
+                                    <li class="page-item {{ $orders->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link" href="{{ $orders->nextPageUrl() ?? '#' }}" aria-label="Next" @if(!$orders->hasMorePages()) tabindex="-1" aria-disabled="true" @endif>
+                                            <span aria-hidden="true">&rsaquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            @endif
 
                         </div>
 
                     </div>
 
-                    <div class="coupon-panel reveal" id="coupon">
-
-                        <span>ÜYE KUPONU</span>
-
-                        <h2>%15 Ekstra İndirim</h2>
-
-                        <p>
-                            Yeni sezon seçili gözlüklerde kullanılabilir özel üye kuponu.
-                        </p>
-
-                        <div class="coupon-code">
-                            <b>EYEMEN15</b>
-                            <button type="button" id="copyCoupon">Kopyala</button>
-                        </div>
-
-                    </div>
+                    <!-- Kupon paneli kaldırıldı -->
 
                 </div>
 
@@ -305,6 +322,11 @@
 
     .account-hero {
         padding: 34px 0 24px;
+
+        .account-panel.is-loading {
+            opacity: .65;
+            pointer-events: none;
+        }
     }
 
     .account-hero-box {
@@ -415,6 +437,36 @@
         font-size: 14px;
         font-weight: 800;
         transition: .22s ease;
+
+        .orders-loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            margin-bottom: 14px;
+        }
+
+        .orders-spinner {
+            width: 34px;
+            height: 34px;
+            border: 3px solid #000;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: ordersSpin .8s linear infinite;
+        }
+
+        .account-panel.is-loading .orders-loading {
+            display: flex;
+        }
+
+        .account-panel.is-loading .orders-fade {
+            opacity: .25;
+            transform: translateY(4px);
+        }
+
+        .orders-fade {
+            transition: opacity .22s ease, transform .22s ease;
+        }
     }
 
     .account-menu a.active,
@@ -426,7 +478,7 @@
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 16px;
         margin-bottom: 24px;
     }
@@ -436,6 +488,15 @@
         border: 1px solid #eee;
         padding: 24px;
         transition: .25s ease;
+    }
+
+    .stat-card-action {
+        cursor: pointer;
+    }
+
+    .stat-card-action:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .06);
     }
 
     .stat-card:hover {
@@ -464,16 +525,15 @@
 
     .panel-grid {
         display: grid;
-        grid-template-columns: 1.2fr .8fr;
+        grid-template-columns: 1fr;
         gap: 24px;
         margin-bottom: 28px;
     }
 
-    .account-panel,
-    .coupon-panel {
+    .account-panel {
         background: #fff;
         border: 1px solid #eee;
-        padding: 28px;
+        padding: 32px;
         box-shadow: 0 18px 45px rgba(0, 0, 0, .04);
     }
 
@@ -486,8 +546,7 @@
     }
 
     .panel-head span,
-    .section-title span,
-    .coupon-panel>span {
+    .section-title span {
         color: #c79a3a;
         font-size: 12px;
         font-weight: 900;
@@ -496,7 +555,7 @@
 
     .panel-head h2,
     .section-title h2 {
-        font-size: 32px;
+        font-size: 34px;
         letter-spacing: -1.5px;
         margin-top: 6px;
     }
@@ -510,26 +569,110 @@
 
     .order-list {
         display: grid;
-        gap: 12px;
+        gap: 14px;
+    }
+
+    .orders-pagination {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .orders-pagination .pagination {
+        display: inline-flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: .2rem;
+        overflow: hidden;
+        box-shadow: none;
+    }
+
+    .orders-pagination .page-item {
+        margin-left: -1px;
+    }
+
+    .orders-pagination .page-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 .6rem;
+        border: 1px solid #dee2e6;
+        background: #fff;
+        color: #000;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.25;
+        text-decoration: none;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    .orders-pagination .page-link:hover {
+        z-index: 2;
+        background: #000;
+        color: #fff;
+        border-color: #000;
+    }
+
+    .orders-pagination .page-item.active .page-link {
+        z-index: 3;
+        background: #000;
+        color: #fff;
+        border-color: #000;
+    }
+
+    .orders-pagination .page-item.disabled .page-link {
+        color: #adb5bd;
+        background: #fff;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .orders-pagination .page-link svg {
+        display: block;
+    }
+
+    @keyframes ordersSpin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media(max-width: 680px) {
+        .orders-pagination .page-link {
+            min-width: 30px;
+            height: 30px;
+            padding: 0 .5rem;
+            font-size: 12px;
+        }
     }
 
     .order-item {
         display: grid;
         grid-template-columns: auto 1fr auto;
-        gap: 14px;
+        gap: 18px;
         align-items: center;
         background: #fafafa;
         border: 1px solid #eee;
-        padding: 14px;
+        padding: 18px;
+        border-radius: 8px;
     }
 
     .order-icon {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         background: #fff;
         display: grid;
         place-items: center;
-        font-size: 22px;
+        font-size: 26px;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
     }
 
     .order-item b {
@@ -565,45 +708,7 @@
         color: #9b741d;
     }
 
-    .coupon-panel {
-        background:
-            radial-gradient(circle at 100% 0%, rgba(199, 154, 58, .35), transparent 35%),
-            linear-gradient(135deg, #07111f, #183b67);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 290px;
-    }
-
-    .coupon-panel h2 {
-        font-size: 38px;
-        line-height: 1;
-        margin: 16px 0;
-    }
-
-    .coupon-panel p {
-        color: rgba(255, 255, 255, .7);
-        line-height: 1.7;
-    }
-
-    .coupon-code {
-        margin-top: 24px;
-        border: 1px dashed rgba(255, 255, 255, .35);
-        padding: 14px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .coupon-code button {
-        border: 0;
-        background: transparent;
-        color: #fff;
-        font-weight: 900;
-        cursor: pointer;
-    }
+    /* Kupon stilleri kaldırıldı */
 
     .section-title {
         display: flex;
@@ -894,7 +999,33 @@
     document.addEventListener('DOMContentLoaded', function() {
         const miniCartCount = document.getElementById('miniCartCount');
         const favoriteCount = document.getElementById('favoriteCount');
-        const copyCoupon = document.getElementById('copyCoupon');
+        const ordersPanel = document.getElementById('orders');
+        const favoritesOpenBtn = document.getElementById('favoritesOpenBtn');
+        const cartOpenBtn = document.getElementById('cartOpenBtn');
+        // coupon copy functionality removed
+
+        function openDrawerFromCard(type) {
+            if (type === 'favorites') {
+                favoritesOpenBtn?.click();
+                return;
+            }
+
+            if (type === 'cart') {
+                cartOpenBtn?.click();
+            }
+        }
+
+        document.querySelectorAll('.stat-card-action').forEach(card => {
+            const trigger = () => openDrawerFromCard(card.dataset.openDrawer || '');
+
+            card.addEventListener('click', trigger);
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    trigger();
+                }
+            });
+        });
 
         function updateMiniCartCount() {
             const cart = JSON.parse(localStorage.getItem('eymen_cart')) || [];
@@ -919,16 +1050,96 @@
             }
         });
 
-        copyCoupon?.addEventListener('click', function() {
-            navigator.clipboard.writeText('EYEMEN15');
-            copyCoupon.textContent = 'Kopyalandı';
-        });
+        // coupon copy functionality removed
 
         updateMiniCartCount();
 
         document.addEventListener('click', function(e) {
             if (e.target.closest('.js-add-cart')) {
                 setTimeout(updateMiniCartCount, 100);
+            }
+        });
+
+        document.addEventListener('click', async function(e) {
+            const paginationLink = e.target.closest('.orders-pagination a');
+
+            if (!paginationLink || paginationLink.getAttribute('aria-disabled') === 'true') {
+                return;
+            }
+
+            e.preventDefault();
+
+            const targetUrl = paginationLink.getAttribute('href');
+
+            if (!targetUrl || targetUrl === '#') {
+                return;
+            }
+
+            try {
+                if (ordersPanel) {
+                    ordersPanel.classList.add('is-loading');
+                }
+
+                const response = await fetch(targetUrl, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Pagination request failed');
+                }
+
+                const html = await response.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const nextOrdersContent = doc.getElementById('ordersCardContent');
+                const currentOrdersContent = document.getElementById('ordersCardContent');
+
+                if (nextOrdersContent && currentOrdersContent) {
+                    currentOrdersContent.classList.remove('orders-fade');
+                    void currentOrdersContent.offsetWidth;
+                    currentOrdersContent.innerHTML = nextOrdersContent.innerHTML;
+                    currentOrdersContent.classList.add('orders-fade');
+                    window.history.pushState({}, '', targetUrl);
+                }
+            } catch (error) {
+                window.location.href = targetUrl;
+            } finally {
+                if (ordersPanel) {
+                    ordersPanel.classList.remove('is-loading');
+                }
+            }
+        });
+
+        window.addEventListener('popstate', async function() {
+            const currentUrl = window.location.href;
+
+            try {
+                const response = await fetch(currentUrl, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html',
+                    },
+                });
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const html = await response.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const nextOrdersContent = doc.getElementById('ordersCardContent');
+                const currentOrdersContent = document.getElementById('ordersCardContent');
+
+                if (nextOrdersContent && currentOrdersContent) {
+                    currentOrdersContent.classList.remove('orders-fade');
+                    void currentOrdersContent.offsetWidth;
+                    currentOrdersContent.innerHTML = nextOrdersContent.innerHTML;
+                    currentOrdersContent.classList.add('orders-fade');
+                }
+            } catch (error) {
+                window.location.reload();
             }
         });
     });
