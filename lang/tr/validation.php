@@ -6,7 +6,9 @@ return [
     'boolean' => ':attribute alanı true ya da false olmalıdır.',
     'confirmed' => ':attribute doğrulaması eşleşmiyor.',
     'email' => ':attribute geçerli bir e-posta adresi olmalıdır.',
+    'image' => ':attribute geçerli bir görsel olmalıdır.',
     'integer' => ':attribute alanı bir tam sayı olmalıdır.',
+    'mimes' => ':attribute şu formatlardan biri olmalıdır: :values.',
     'max' => [
         'numeric' => ':attribute en fazla :max olmalıdır.',
         'file' => ':attribute en fazla :max kilobayt olmalıdır.',
@@ -24,6 +26,7 @@ return [
     'unique' => 'Bu :attribute zaten kayıtlı.',
 
     'attributes' => [
+        'images' => 'ürün görselleri',
         'name' => 'ad soyad',
         'email' => 'e-posta',
         'password' => 'şifre',

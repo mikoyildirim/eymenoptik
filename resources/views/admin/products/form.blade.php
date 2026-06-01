@@ -269,15 +269,40 @@
 
                 <div class="card-body">
 
-                    @if($product->exists && !empty($product->image_url))
+                    @php
+                        $existingMainImage = $product->exists && $product->image ? $product->image_url : null;
+                        $existingExtraImages = $product->exists ? $product->images : collect();
+                    @endphp
+
+                    @if($product->exists && ($existingMainImage || $existingExtraImages->isNotEmpty()))
                     <div class="eo-preview">
-                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                        <div class="eo-preview-grid">
+                            @if($existingMainImage)
+                            <div class="eo-preview-item" data-existing-main="1">
+                                <img src="{{ $existingMainImage }}" alt="{{ $product->name }}">
+                                <button type="button" class="eo-preview-remove" data-remove-main="1">×</button>
+                                <span class="eo-upload-label">Ana görsel</span>
+                            </div>
+                            @endif
+
+                            @foreach($existingExtraImages as $image)
+                            <div class="eo-preview-item" data-existing-id="{{ $image->id }}">
+                                <img src="{{ asset('storage/' . $image->image) }}" alt="{{ $product->name }}">
+                                <button type="button" class="eo-preview-remove" data-image-id="{{ $image->id }}">×</button>
+                                <span class="eo-upload-label">Ek görsel</span>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
                     @endif
 
                     <div class="form-group mb-0">
-                        <label>Görsel Yükle</label>
-                        <input type="file" name="image" class="form-control eo-input" accept="image/*">
+                        <label>Görselleri Yükle</label>
+                        <input type="file" id="productImagesInput" name="images[]" class="form-control eo-input" accept="image/*" multiple {{ $product->exists ? '' : 'required' }}>
+                        <input type="hidden" id="removedMainImageInput" name="removed_main_image" value="0">
+                        <div id="removedImageIds"></div>
+                        <div id="productImagesPreview" class="eo-upload-preview"></div>
+                        <small class="text-muted d-block mt-2">En az 1, en fazla 4 görsel olabilir. Mevcut görsellerin üzerindeki çarpı ile silebilir, yeni görsel ekleyebilirsiniz.</small>
                     </div>
 
                 </div>
@@ -466,18 +491,119 @@
     }
 
     .eo-preview {
-        width: 100%;
-        height: 190px;
+        background: #eef2f8;
         border-radius: 22px;
         overflow: hidden;
-        background: #eef2f8;
+        padding: 14px;
         margin-bottom: 18px;
     }
 
-    .eo-preview img {
+    .eo-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .eo-preview-grid img {
         width: 100%;
-        height: 100%;
+        height: 140px;
         object-fit: cover;
+        border-radius: 14px;
+    }
+
+    .eo-preview-item {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(7, 17, 31, .08);
+        background: #fff;
+        box-shadow: 0 10px 22px rgba(7, 17, 31, .06);
+    }
+
+    .eo-preview-item img {
+        display: block;
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .eo-preview-remove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(17, 17, 17, .88);
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+        display: grid;
+        place-items: center;
+    }
+
+    .is-hidden {
+        display: none !important;
+    }
+
+    .eo-upload-preview {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .eo-upload-item {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(7, 17, 31, .08);
+        background: #fff;
+        box-shadow: 0 10px 22px rgba(7, 17, 31, .06);
+    }
+
+    .eo-upload-item img {
+        display: block;
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .eo-upload-remove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(17, 17, 17, .88);
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+        display: grid;
+        place-items: center;
+    }
+
+    .eo-upload-label {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        background: rgba(255, 255, 255, .92);
+        color: #111;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    @media(max-width: 768px) {
+        .eo-upload-preview {
+            grid-template-columns: 1fr;
+        }
     }
 
     .eo-check {
@@ -519,4 +645,118 @@
         }
     }
 </style>
+@endsection
+
+@section('page_js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('productImagesInput');
+        const preview = document.getElementById('productImagesPreview');
+        const form = input?.closest('form');
+        const removedMainImageInput = document.getElementById('removedMainImageInput');
+        const removedImageIdsContainer = document.getElementById('removedImageIds');
+        let selectedFiles = [];
+
+        const existingItems = Array.from(document.querySelectorAll('[data-existing-main], [data-existing-id]'));
+
+        function syncInputFiles() {
+            if (!input) return;
+
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+        }
+
+        function renderPreview() {
+            if (!preview) return;
+
+            if (selectedFiles.length === 0) {
+                preview.innerHTML = '';
+                return;
+            }
+
+            preview.innerHTML = selectedFiles.map((file, index) => {
+                const url = URL.createObjectURL(file);
+
+                return `
+                    <div class="eo-upload-item">
+                        <img src="${url}" alt="Seçilen görsel ${index + 1}">
+                        <button type="button" class="eo-upload-remove" data-index="${index}" aria-label="Görseli kaldır">×</button>
+                        <span class="eo-upload-label">${index + 1}. görsel</span>
+                    </div>
+                `;
+            }).join('');
+
+            preview.querySelectorAll('img').forEach(img => {
+                img.addEventListener('load', function() {
+                    URL.revokeObjectURL(this.src);
+                });
+            });
+        }
+
+        input?.addEventListener('change', function() {
+            const incoming = Array.from(this.files || []);
+            const combined = [...selectedFiles, ...incoming].slice(0, 4);
+
+            selectedFiles = combined;
+            syncInputFiles();
+            renderPreview();
+        });
+
+        document.addEventListener('click', function(e) {
+            const removeExistingButton = e.target.closest('.eo-preview-remove');
+            if (!removeExistingButton) return;
+
+            const existingMain = removeExistingButton.dataset.removeMain === '1';
+            const imageId = removeExistingButton.dataset.imageId;
+
+            if (existingMain && removedMainImageInput) {
+                removedMainImageInput.value = '1';
+                removeExistingButton.closest('[data-existing-main]')?.classList.add('is-hidden');
+            }
+
+            if (imageId) {
+                if (removedImageIdsContainer) {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = 'removed_image_ids[]';
+                    hidden.value = imageId;
+                    removedImageIdsContainer.appendChild(hidden);
+                }
+
+                removeExistingButton.closest('[data-existing-id]')?.classList.add('is-hidden');
+            }
+
+            if (selectedFiles.length === 0) return;
+        });
+
+        preview?.addEventListener('click', function(e) {
+            const removeButton = e.target.closest('.eo-upload-remove');
+            if (!removeButton) return;
+
+            const index = Number(removeButton.dataset.index);
+            if (Number.isNaN(index)) return;
+
+            selectedFiles.splice(index, 1);
+            syncInputFiles();
+            renderPreview();
+        });
+
+        form?.addEventListener('submit', function(e) {
+            if (!input) return;
+
+            syncInputFiles();
+
+            if (selectedFiles.length > 4) {
+                selectedFiles = selectedFiles.slice(0, 4);
+                syncInputFiles();
+                renderPreview();
+            }
+
+            if (selectedFiles.length === 0 && !form.querySelector('input[name="images[]"][required]')) {
+                return;
+            }
+        });
+    });
+</script>
 @endsection

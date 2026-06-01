@@ -13,8 +13,18 @@
 
                 <div class="product-gallery">
                     <div class="product-image-box">
-                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" id="productMainImage">
                     </div>
+
+                    @if($product->gallery_images->count() > 1)
+                    <div class="product-thumbs">
+                        @foreach($product->gallery_images as $imagePath)
+                        <button type="button" class="product-thumb {{ $loop->first ? 'active' : '' }}" data-image="{{ asset('storage/' . $imagePath) }}">
+                            <img src="{{ asset('storage/' . $imagePath) }}" alt="{{ $product->name }}">
+                        </button>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
 
                 <div class="product-info-box">
@@ -187,10 +197,39 @@
         transform: scale(1.04);
     }
 
+    .product-thumbs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .product-thumb {
+        border: 1px solid #e8e8e8;
+        border-radius: 14px;
+        padding: 8px;
+        background: #fff;
+        cursor: pointer;
+        transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .product-thumb.active {
+        border-color: #111;
+        box-shadow: 0 8px 18px rgba(17, 17, 17, .12);
+    }
+
+    .product-thumb img {
+        width: 100%;
+        height: 86px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
     .product-info-box {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        padding-top: 34px;
         min-width: 0;
     }
 
@@ -465,6 +504,10 @@
             min-height: 390px;
         }
 
+        .product-thumbs {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
         .related-products-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -502,6 +545,20 @@
 @section('page_js')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.product-thumb').forEach(button => {
+            button.addEventListener('click', function() {
+                const mainImage = document.getElementById('productMainImage');
+                const nextImage = this.dataset.image;
+
+                if (mainImage && nextImage) {
+                    mainImage.src = nextImage;
+                }
+
+                document.querySelectorAll('.product-thumb').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
         const favBtn = document.getElementById('favBtn');
 
         if (favBtn) {
