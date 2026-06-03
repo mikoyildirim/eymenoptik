@@ -186,10 +186,14 @@
     }
 
     .product-image-box img {
-        width: 100%;
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
         max-height: 500px;
+        width: auto;
+        height: auto;
         object-fit: contain;
+        object-position: center;
         transition: transform .35s ease;
     }
 
@@ -441,9 +445,14 @@
     }
 
     .related-product-image img {
-        width: 100%;
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
         object-fit: contain;
+        object-position: center;
         transition: transform .3s ease;
     }
 

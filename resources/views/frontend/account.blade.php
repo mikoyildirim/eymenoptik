@@ -833,8 +833,14 @@
     }
 
     .product-image img {
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
         object-fit: contain;
+        object-position: center;
         transition: .3s ease;
     }
 
