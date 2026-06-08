@@ -139,7 +139,8 @@
                         {{ $product->category?->name ?? 'Ürün' }}
                     </span>
 
-                    <h3>{{ $product->name }}</h3>
+                    <h3>{{ $product->name }} @if($product->lens_degree) ({{ $product->lens_degree }}) @endif</h3>
+
 
                     <div class="product-prices">
                         <strong>
@@ -218,7 +219,7 @@
                         {{ $product->category?->name ?? 'Ürün' }}
                     </span>
 
-                    <h3>{{ $product->name }}</h3>
+                    <h3>{{ $product->name }} @if($product->lens_degree) ({{ $product->lens_degree }}) @endif</h3>
 
                     <div class="product-prices">
                         <strong>

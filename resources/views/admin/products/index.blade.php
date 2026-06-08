@@ -90,7 +90,7 @@
 
                                 <div class="eo-product-info">
                                     <strong>
-                                        {{ $product->name }} / @if($product->lens_degree) {{ $product->lens_degree }} @endif
+                                        {{ $product->name }} @if($product->lens_degree) ({{ $product->lens_degree }}) @endif
                                     </strong>
 
                                     <span>

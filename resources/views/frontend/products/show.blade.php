@@ -196,10 +196,16 @@
 
                         <h4>
                             <a href="{{ route('products.show', $related->slug) }}">
-                                {{ $related->name }}
+                                {{ $related->name }} @if($related->lens_degree) ({{ $related->lens_degree }}) @endif
                             </a>
                         </h4>
-
+                        <div class="eo-product-details">
+                            @if($product->glass_color && $product->category?->slug === 'lens')
+                            <small class="text-muted d-block">
+                                Renk: {{ $product->glass_color }}
+                            </small>
+                            @endif
+                        </div>
                         <div class="related-price">
                             <strong>₺{{ number_format($related->final_price, 0, ',', '.') }}</strong>
 
@@ -342,6 +348,18 @@
         color: #666;
         margin: 0 0 22px;
         max-width: 560px;
+    }
+
+    .eo-product-details {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+    }
+
+    .eo-product-details small {
+        color: #707b8d;
+        font-size: 12px;
+        font-weight: 500;
     }
 
     .price-area {
