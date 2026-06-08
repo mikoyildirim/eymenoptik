@@ -6,7 +6,6 @@
         </div>
         <div>
             <strong>Eymen Optik</strong>
-            <span>Admin Studio</span>
         </div>
     </a>
 
@@ -29,6 +28,11 @@
                 class="eo-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <span><i class="fas fa-chart-pie"></i></span>
                 <p>Dashboard</p>
+            </a>
+
+            <a href="https://mt-arnor-da.guzelhosting.com/roundcube/" target="_blank" class="eo-menu-link">
+                <span><i class="fas fa-envelope"></i></span>
+                <p>Maillere Git</p>
             </a>
 
             <div class="eo-menu-title">KATALOG</div>

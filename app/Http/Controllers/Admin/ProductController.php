@@ -54,7 +54,7 @@ class ProductController extends Controller
         $d = $this->valid($r, true);
         $imageFiles = $r->file('images', []);
         $removedImageIds = collect($r->input('removed_image_ids', []))
-            ->map(fn ($id) => (int) $id)
+            ->map(fn($id) => (int) $id)
             ->filter()
             ->unique()
             ->values();
@@ -121,21 +121,31 @@ class ProductController extends Controller
             }
 
             $product->fill([
-                'category_id' => $d['category_id'],
-                'brand_id' => $d['brand_id'],
-                'name' => $d['name'],
-                'gender' => $d['gender'],
-                'model_code' => $d['model_code'],
-                'frame_color' => $d['frame_color'],
-                'glass_color' => $d['glass_color'],
-                'frame_material' => $d['frame_material'],
-                'glass_type' => $d['glass_type'],
-                'price' => $d['price'],
-                'discount_price' => $d['discount_price'],
-                'stock' => $d['stock'],
+                'category_id' => $d['category_id'] ?? null,
+                'brand_id' => $d['brand_id'] ?? null,
+                'name' => $d['name'] ?? null,
+                'gender' => $d['gender'] ?? null,
+                'model_code' => $d['model_code'] ?? null,
+                'frame_color' => $d['frame_color'] ?? null,
+                'glass_color' => $d['glass_color'] ?? null,
+                'frame_material' => $d['frame_material'] ?? null,
+                'glass_type' => $d['glass_type'] ?? null,
+                'lens_degree' => $d['lens_degree'] ?? null,
+                'lens_type' => $d['lens_type'] ?? null,
+                'lens_usage' => $d['lens_usage'] ?? null,
+                'lens_package_content' => $d['lens_package_content'] ?? null,
+                'lens_water_content' => $d['lens_water_content'] ?? null,
+                'lens_base_curve' => $d['lens_base_curve'] ?? null,
+                'lens_diameter' => $d['lens_diameter'] ?? null,
+                'lens_material' => $d['lens_material'] ?? null,
+                'lens_center_thickness' => $d['lens_center_thickness'] ?? null,
+                'lens_oxygen_permeability' => $d['lens_oxygen_permeability'] ?? null,
+                'price' => $d['price'] ?? null,
+                'discount_price' => $d['discount_price'] ?? null,
+                'stock' => $d['stock'] ?? null,
                 'image' => $mainImagePath,
-                'short_description' => $d['short_description'],
-                'description' => $d['description'],
+                'short_description' => $d['short_description'] ?? null,
+                'description' => $d['description'] ?? null,
                 'is_active' => $r->boolean('is_active'),
                 'is_featured' => $r->boolean('is_featured'),
             ]);
@@ -158,6 +168,64 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün güncellendi.');
     }
+
+    public function duplicate(Request $request, Product $product)
+    {
+        $data = $request->validate([
+            'degree_rows' => 'required|string',
+        ]);
+
+        $product->loadMissing('images');
+
+        $rows = collect(preg_split('/\r\n|\r|\n/', (string) $data['degree_rows']))
+            ->map(fn($row) => trim((string) $row))
+            ->filter();
+
+        if ($rows->isEmpty()) {
+            throw ValidationException::withMessages([
+                'degree_rows' => 'En az 1 derece satırı eklemelisiniz.',
+            ]);
+        }
+
+        DB::transaction(function () use ($rows, $product) {
+            foreach ($rows as $row) {
+                $parts = preg_split('/\s*[\|,;]\s*/', $row, 2);
+                $degree = trim((string) ($parts[0] ?? ''));
+                $stock = isset($parts[1]) ? trim((string) $parts[1]) : null;
+
+                if ($degree === '') {
+                    throw ValidationException::withMessages([
+                        'degree_rows' => 'Her satırda derece bulunmalıdır. Örnek: -0.50|10',
+                    ]);
+                }
+
+                if ($stock === null || $stock === '') {
+                    $stock = $product->stock;
+                }
+
+                // build a clean base name by removing any existing degree suffix
+                // $baseName = preg_replace('/\s*(Numarasiz|Numarasız|[+-]?\d+[\.,]?\d*)$/iu', '', $product->name);
+                // $baseName = trim($baseName);
+
+                $clone = $product->replicate();
+                $clone->name = $product->name;
+                $clone->slug = Str::slug($clone->name) . '-' . uniqid();
+                $clone->lens_degree = $degree;
+                $clone->stock = (int) $stock;
+                $clone->save();
+
+                foreach ($product->images as $image) {
+                    ProductImage::create([
+                        'product_id' => $clone->id,
+                        'image' => $image->image,
+                        'sort_order' => $image->sort_order,
+                    ]);
+                }
+            }
+        });
+
+        return redirect()->route('admin.products.index')->with('success', 'Derece ürünleri oluşturuldu.');
+    }
     public function destroy(Product $product)
     {
         $product->delete();
@@ -169,6 +237,9 @@ class ProductController extends Controller
     }
     private function valid(Request $r, bool $isUpdate = false)
     {
+        $selectedCategory = Category::find($r->input('category_id'));
+        $isLensCategory = $selectedCategory && str_contains(mb_strtolower((string) ($selectedCategory->slug ?? $selectedCategory->name)), 'lens');
+
         return $r->validate([
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
@@ -177,15 +248,27 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'frame_color' => $isLensCategory ? 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik' : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+            'glass_color' => $isLensCategory
+                ? 'nullable|in:seffaf,gumus gri,parlak mavi,zumrut yesil,mavi,yesil,gri,bal rengi,ela,kahverengi'
+                : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+            'frame_material' => $isLensCategory ? 'nullable' : 'required',
+            'glass_type' => 'nullable',
+            'lens_degree' => $isLensCategory ? 'required|string|max:50' : 'nullable|string|max:50',
+            'lens_type' => $isLensCategory ? 'required|string|max:255' : 'nullable|string|max:255',
+            'lens_usage' => 'nullable|string|max:255',
+            'lens_package_content' => 'nullable|string|max:255',
+            'lens_water_content' => 'nullable|string|max:255',
+            'lens_base_curve' => 'nullable|string|max:255',
+            'lens_diameter' => 'nullable|string|max:255',
+            'lens_material' => 'nullable|string|max:255',
+            'lens_center_thickness' => 'nullable|string|max:255',
+            'lens_oxygen_permeability' => 'nullable|string|max:255',
             'images' => [$isUpdate ? 'nullable' : 'required', 'array', 'min:1', 'max:4'],
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
             'short_description' => 'nullable',
             'description' => 'nullable',
             'model_code' => 'nullable',
-            'frame_color' => 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
-            'glass_color' => 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
-            'frame_material' => 'nullable',
-            'glass_type' => 'nullable',
         ]);
     }
 

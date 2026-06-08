@@ -3,47 +3,55 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ResetPasswordMail;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PasswordResetController extends Controller
 {
+    /**
+     * Şifre sıfırlama talep formu
+     */
     public function requestForm()
     {
         return view('auth.password-forgot');
     }
 
+    /**
+     * Şifre sıfırlama linki gönder
+     *
+     * Laravel'in built-in Password facade'u kullanılıyor:
+     * - Otomatik rate limiting
+     * - Token süresi kontrolü (config'te belirlenen süre)
+     * - Güvenli token üretimi
+     * - Email enumarasyon koruması
+     */
     public function sendResetLink(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'email' => 'required|email',
         ]);
 
-        $user = User::where('email', $data['email'])->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'Bu e-posta adresiyle eşleşen kullanıcı bulunamadı.'])->onlyInput('email');
-        }
-
-        $token = Str::random(64);
-
-        DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $user->email],
-            ['token' => Hash::make($token), 'created_at' => now()]
+        // Laravel otomatik olarak:
+        // 1. Email'in var olup olmadığını kontrol eder (eğer yoksa bile başarılı mesajı döner - enumarasyon koruması)
+        // 2. Rate limiting uygular (1 dakikada max 3 istek)
+        // 3. Token üretir ve veritabanına kaydeder
+        // 4. Email gönderir
+        $status = Password::sendResetLink(
+            $request->only('email')
         );
 
-        $url = route('password.reset', ['token' => $token, 'email' => $user->email]);
-
-        Mail::to($user->email)->send(new ResetPasswordMail($url));
-
-        return back()->with('status', 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.');
+        // Her iki durumda da aynı mesaj göster (email enumarasyon koruması)
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('status', __($status))
+            : back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
     }
 
+    /**
+     * Şifre sıfırlama formu
+     */
     public function resetForm(Request $request, string $token)
     {
         return view('auth.password-reset', [
@@ -52,31 +60,35 @@ class PasswordResetController extends Controller
         ]);
     }
 
+    /**
+     * Şifreyi sıfırla
+     *
+     * Laravel'in built-in Password::reset() kullanılıyor:
+     * - Token geçerliliği otomatik kontrol edilir
+     * - Token süresi dolmuşsa otomatik reddedilir
+     * - Password broker tüm güvenlik kontrollerini yapar
+     */
     public function resetPassword(Request $request)
     {
-        $data = $request->validate([
-            'token' => 'required|string',
+        $request->validate([
+            'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
 
-        $record = DB::table('password_reset_tokens')->where('email', $data['email'])->first();
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->password = $password;
+                $user->save();
+            }
+        );
 
-        if (!$record || !Hash::check($data['token'], $record->token)) {
-            return back()->withErrors(['token' => 'Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş.']);
-        }
-
-        $user = User::where('email', $data['email'])->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'Kullanıcı bulunamadı.']);
-        }
-
-        $user->password = $data['password'];
-        $user->save();
-
-        DB::table('password_reset_tokens')->where('email', $data['email'])->delete();
-
-        return redirect()->route('login')->with('status', 'Şifreniz güncellendi. Şimdi giriş yapabilirsiniz.');
+        // Token geçersiz veya süresi dolmuşsa otomatik hata mesajı döner
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
     }
 }

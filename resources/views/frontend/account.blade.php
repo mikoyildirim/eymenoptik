@@ -123,7 +123,13 @@
                                 @endphp
 
                                 <div class="order-item">
-                                    <div class="order-icon">🕶️</div>
+                                    <div class="order-icon">
+                                        @if($firstItem && $firstItem->product && $firstItem->product->image_url)
+                                        <img src="{{ $firstItem->product->image_url }}" alt="{{ $firstItem->product_name }}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px;">
+                                        @else
+                                        🕶️
+                                        @endif
+                                    </div>
 
                                     <div>
                                         <b>#{{ $order->order_number }} • {{ $firstItem->product_name ?? 'Sipariş' }}</b>
@@ -191,13 +197,13 @@
                 'luxury-seri' => '✨',
                 'spor-gozluk' => '🏃',
                 'cocuk-gozluk' => '🧒',
+                'lens' => '👁️',
                 ];
                 @endphp
 
                 <div class="category-grid reveal">
 
-                    @forelse($categories as $category)
-
+                    @forelse($accountCategories as $category)
                     <a href="{{ route('products.index') }}" class="category-card js-top-category-link" data-category="{{ $category->slug }}">
 
                         <span>

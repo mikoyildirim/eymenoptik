@@ -77,7 +77,7 @@
                         <div class="filter-list filter-scroll">
                             <button class="filter-btn active" type="button" data-filter-group="frame_color"
                                 data-filter="all" data-label="Tümü">Tümü</button>
-                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','karisik'=>'Karışık
+                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','metalik'=>'Metalik','havana'=>'Havana','pudra'=>'Pudra','rose_gold'=>'Rose Gold','bordo'=>'Bordo','enjeksiyon'=>'Enjeksiyon','titanyum'=>'Titanyum','gri'=>'Gri','pembe'=>'Pembe','leopar_deseni'=>'Leopar Deseni','kaplumbaga_kabugu'=>'Kaplumbağa Kabuğu','seffaf_bej'=>'Şeffaf Bej','siyah_sari_mermer'=>'Siyah Sarı Mermer','col_kaplumbaga_kabugu'=>'Çöl Kaplumbağa Kabuğu','acik_pembe'=>'Açık Pembe','opak_kum'=>'Opak Kum','karisik'=>'Karışık
                             Renkler']
                             as $key => $label)
                             <button class="filter-btn" type="button" data-filter-group="frame_color"
@@ -93,7 +93,7 @@
                         <div class="filter-list filter-scroll">
                             <button class="filter-btn active" type="button" data-filter-group="glass_color"
                                 data-filter="all" data-label="Tümü">Tümü</button>
-                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','karisik'=>'Karışık
+                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','pembe'=>'Pembe','sari'=>'Sarı','kahverengi_degrade'=>'Kahverengi Degrade','bordo'=>'Bordo','turuncu'=>'Turuncu','mavi_degrade'=>'Mavi Degrade','mavi_aynali'=>'Mavi Aynalı','karisik'=>'Karışık
                             Renkler']
                             as $key => $label)
                             <button class="filter-btn" type="button" data-filter-group="glass_color"
@@ -185,11 +185,10 @@
                                     <span>{{ $product->category?->name ?? 'Ürün' }}</span>
                                     <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
                                 </div>
-
-                                <h3>{{ $product->name }}</h3>
+                                <h3>{{ $product->name }} @if($product->lens_degree)({{ $product->lens_degree }})@endif</h3>
 
                                 <p>
-                                    {{ $product->short_description ?: 'Eymen Optik koleksiyonundan seçili ürün.' }}
+                                    Renk: {{ ucfirst($product->glass_color) ?? '' }} · {{ $product->short_description ?: 'Eymen Optik koleksiyonundan seçili ürün.' }}
                                 </p>
 
                                 <div class="specs">
@@ -819,7 +818,7 @@
         width: auto;
         height: auto;
         object-fit: contain;
-        object-position:center;
+        object-position: center;
         transition: .3s ease;
     }
 

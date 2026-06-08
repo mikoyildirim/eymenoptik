@@ -34,10 +34,10 @@
                         <span>{{ $product->brand?->name ?? 'Eymen Optik' }}</span>
                     </div>
 
-                    <h1>{{ $product->name }}</h1>
+                    <h1>{{ $product->name }} @if($product->lens_degree)({{ $product->lens_degree }})@endif</h1>
 
                     <p class="short-desc">
-                        {{ $product->short_description ?: 'Eymen Optik kalitesiyle seçilmiş özel ürün.' }}
+                        @if($product->category?->slug === 'lens' && $product->glass_color) Renk: {{ ucfirst($product->glass_color) }} · @endif {{ $product->short_description ?: 'Eymen Optik kalitesiyle seçilmiş özel ürün.' }}
                     </p>
 
                     <div class="price-area">
@@ -63,8 +63,14 @@
                             <strong>{{ $product->model_code }}</strong>
                         </div>
                         @endif
-                    </div>
 
+                        @if($product->lens_degree)
+                        <div>
+                            <span>Lens Derecesi</span>
+                            <strong>{{ $product->lens_degree }}</strong>
+                        </div>
+                        @endif
+                    </div>
                     <div class="product-actions-row">
                         <button class="btn btn-fav js-fav-toggle" type="button" id="favBtn" data-id="{{ $product->id }}"
                             data-name="{{ $product->name }}" data-img="{{ $product->image_url }}" data-price="{{ $product->final_price }}">
@@ -82,6 +88,75 @@
 
             </div>
 
+        </div>
+    </section>
+
+    <section class="product-description-section">
+        <div class="container">
+            <div class="description-card reveal">
+                <h2>Ürün Özellikleri</h2>
+                @php
+                $lensDetails = [
+                'Lens Tipi' => $product->lens_type,
+                'Lens Rengi' => $product->glass_color,
+                'Kullanım Şekli' => $product->lens_usage,
+                'Ambalaj İçeriği' => $product->lens_package_content,
+                'Su İçeriği' => $product->lens_water_content,
+                'Base Curve (BC)' => $product->lens_base_curve,
+                'Çap (Dia.)' => $product->lens_diameter,
+                'Lens Materyali' => $product->lens_material,
+                'Merkez Kalınlığı' => $product->lens_center_thickness,
+                'Oksijen Aktarılabilirliği' => $product->lens_oxygen_permeability,
+                ];
+
+                foreach ($lensDetails as $key => $value) {
+                if ($value) {
+                $lensDetails[$key] = ucwords($value);
+                }
+                }
+                @endphp
+
+                @php
+                $glassDetails = [
+                'Çerçeve Rengi' => $product->frame_color,
+                'Cam Rengi' => $product->glass_color,
+                'Çerçeve Materyali' => $product->frame_material,
+                'Cam Tipi' => $product->glass_type,
+                ];
+
+                foreach ($glassDetails as $key => $value) {
+                if ($value) {
+                $glassDetails[$key] = ucwords($value);
+                }
+                }
+                @endphp
+
+                @if(collect($lensDetails)->filter()->isNotEmpty() && $product->category?->slug === 'lens')
+                <div class="lens-details-grid">
+                    @foreach($lensDetails as $label => $value)
+                    @if($value)
+                    <div>
+                        <span>{{ $label }}</span>
+                        <strong>{{ $value }}</strong>
+                    </div>
+                    @endif
+                    @endforeach
+                </div>
+                @endif
+
+                @if(collect($glassDetails)->filter()->isNotEmpty() && $product->category?->slug !== 'lens')
+                <div class="lens-details-grid">
+                    @foreach($glassDetails as $label => $value)
+                    @if($value)
+                    <div>
+                        <span>{{ $label }}</span>
+                        <strong>{{ $value }}</strong>
+                    </div>
+                    @endif
+                    @endforeach
+                </div>
+                @endif
+            </div>
         </div>
     </section>
 
@@ -300,7 +375,7 @@
 
     .info-list {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 12px;
         margin-bottom: 24px;
     }
@@ -336,6 +411,31 @@
         display: grid;
         grid-template-columns: 150px 1fr;
         gap: 12px;
+    }
+
+    .lens-details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .lens-details-grid div {
+        background: #fbfbfc;
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 12px 14px;
+    }
+
+    .lens-details-grid span {
+        display: block;
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 6px;
+    }
+
+    .lens-details-grid strong {
+        font-size: 14px;
+        color: #111;
     }
 
     .btn {

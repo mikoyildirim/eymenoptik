@@ -37,6 +37,12 @@
 </div>
 @endif
 
+@php
+$selectedCategoryId = old('category_id', $product->category_id);
+$selectedCategory = $categories->firstWhere('id', $selectedCategoryId);
+$isLensCategory = $selectedCategory && str_contains(mb_strtolower((string) ($selectedCategory->slug ?? $selectedCategory->name)), 'lens');
+@endphp
+
 <form method="POST" enctype="multipart/form-data"
     action="{{ $product->exists ? route('admin.products.update', $product) : route('admin.products.store') }}">
     @csrf
@@ -73,11 +79,11 @@
 
                         <div class="col-md-6 form-group">
                             <label>Kategori</label>
-                            <select name="category_id" class="form-control eo-input" required>
+                            <select name="category_id" id="productCategorySelect" class="form-control eo-input" required>
                                 <option value="">Kategori seçiniz</option>
 
                                 @foreach($categories as $category)
-                                <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id)
+                                <option value="{{ $category->id }}" data-slug="{{ $category->slug ?? '' }}" @selected(old('category_id', $product->category_id)
                                     == $category->id)
                                     >
                                     {{ $category->name }}
@@ -85,15 +91,17 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="col-md-6 form-group">
                             <label>Marka</label>
-                            <select name="brand_id" class="form-control eo-input">
+                            <select name="brand_id" id="brandSelect" class="form-control eo-input">
                                 <option value="">Marka seçiniz</option>
 
                                 @foreach($brands as $brand)
-                                <option value="{{ $brand->id }}" @selected(old('brand_id', $product->brand_id) ==
-                                    $brand->id)
+
+                                <option
+                                    value="{{ $brand->id }}"
+                                    data-type="{{ $brand->type }}"
+                                    @selected(old('brand_id', $product->brand_id) == $brand->id)
                                     >
                                     {{ $brand->name }}
                                 </option>
@@ -124,78 +132,171 @@
                                 class="form-control eo-input" placeholder="Örn: EM-1024">
                         </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Çerçeve Rengi</label>
-                            <select name="frame_color" class="form-control eo-input">
-                                <option value="">Renk seçiniz</option>
-                                @foreach([
-                                'siyah' => 'Siyah',
-                                'beyaz' => 'Beyaz',
-                                'kahverengi' => 'Kahverengi',
-                                'fume' => 'Füme',
-                                'saydam' => 'Şeffaf',
-                                'altin' => 'Altın',
-                                'gumus' => 'Gümüş',
-                                'kirmizi' => 'Kırmızı',
-                                'mavi' => 'Mavi',
-                                'yesil' => 'Yeşil',
-                                'karisik' => 'Karışık Renkler'
-                                ] as $key => $label)
-                                <option value="{{ $key }}" @selected(old('frame_color', $product->frame_color) ==
-                                    $key)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <fieldset id="eyewearFields" class="col-12" @if($isLensCategory) style="display:none;" disabled @endif>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Çerçeve Rengi</label>
+                                    <select name="frame_color" class="form-control eo-input">
+                                        <option value="">Renk seçiniz</option>
+                                        @foreach([
+                                        'siyah' => 'Siyah',
+                                        'beyaz' => 'Beyaz',
+                                        'kahverengi' => 'Kahverengi',
+                                        'fume' => 'Füme',
+                                        'saydam' => 'Şeffaf',
+                                        'altin' => 'Altın',
+                                        'gumus' => 'Gümüş',
+                                        'kirmizi' => 'Kırmızı',
+                                        'mavi' => 'Mavi',
+                                        'yesil' => 'Yeşil',
+                                        'metalik' => 'Metalik',
+                                        'havana' => 'Havana',
+                                        'pudra' => 'Pudra',
+                                        'rose_gold' => 'Rose Gold',
+                                        'bordo' => 'Bordo',
+                                        'enjeksiyon' => 'Enjeksiyon',
+                                        'titanyum' => 'Titanyum',
+                                        'gri' => 'Gri',
+                                        'pembe' => 'Pembe',
+                                        'leopar_deseni' => 'Leopar Deseni',
+                                        'kaplumbaga_kabugu' => 'Kaplumbağa Kabuğu',
+                                        'seffaf_bej' => 'Şeffaf Bej',
+                                        'siyah_sari_mermer' => 'Siyah Sarı Mermer',
+                                        'col_kaplumbaga_kabugu' => 'Çöl Kaplumbağa Kabuğu',
+                                        'acik_pembe' => 'Açık Pembe',
+                                        'opak_kum' => 'Opak Kum',
+                                        'karisik' => 'Karışık Renkler'
+                                        ] as $key => $label)
+                                        <option value="{{ $key }}" @selected(old('frame_color', $product->frame_color) ==
+                                            $key)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Cam Rengi</label>
-                            <select name="glass_color" class="form-control eo-input">
-                                <option value="">Cam rengi seçiniz</option>
-                                @foreach([
-                                'siyah' => 'Siyah',
-                                'beyaz' => 'Beyaz',
-                                'kahverengi' => 'Kahverengi',
-                                'fume' => 'Füme',
-                                'saydam' => 'Şeffaf',
-                                'altin' => 'Altın',
-                                'gumus' => 'Gümüş',
-                                'kirmizi' => 'Kırmızı',
-                                'mavi' => 'Mavi',
-                                'yesil' => 'Yeşil',
-                                'karisik' => 'Karışık Renkler'
-                                ] as $key => $label)
-                                <option value="{{ $key }}" @selected(old('glass_color', $product->glass_color) ==
-                                    $key)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Cam Rengi</label>
+                                    <select name="glass_color" class="form-control eo-input">
+                                        <option value="">Cam rengi seçiniz</option>
+                                        @foreach([
+                                        'siyah' => 'Siyah',
+                                        'beyaz' => 'Beyaz',
+                                        'kahverengi' => 'Kahverengi',
+                                        'fume' => 'Füme',
+                                        'saydam' => 'Şeffaf',
+                                        'altin' => 'Altın',
+                                        'gumus' => 'Gümüş',
+                                        'kirmizi' => 'Kırmızı',
+                                        'mavi' => 'Mavi',
+                                        'yesil' => 'Yeşil',
+                                        'pembe' => 'Pembe',
+                                        'sari' => 'Sarı',
+                                        'kahverengi_degrade' => 'Kahverengi Degrade',
+                                        'bordo' => 'Bordo',
+                                        'turuncu' => 'Turuncu',
+                                        'mavi_degrade' => 'Mavi Degrade',
+                                        'mavi_aynali' => 'Mavi Aynalı',
+                                        'karisik' => 'Karışık Renkler'
+                                        ] as $key => $label)
+                                        <option value="{{ $key }}" @selected(old('glass_color', $product->glass_color) ==
+                                            $key)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Çerçeve Materyali</label>
-                            <select name="frame_material" class="form-control eo-input" required>
-                                <option value="">Materyal seçiniz</option>
-                                @foreach([
-                                'asetat' => 'Asetat',
-                                'asetat_metal' => 'Asetat - Metal',
-                                'grilamid' => 'Grilamid',
-                                'metal' => 'Metal',
-                                'plastik' => 'Plastik',
-                                'diger' => 'Diğer'
-                                ] as $key => $label)
-                                <option value="{{ $key }}" @selected(old('frame_material', $product->frame_material) ==
-                                    $key)
-                                    >
-                                    {{ $label }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Çerçeve Materyali</label>
+                                    <select name="frame_material" class="form-control eo-input" required>
+                                        <option value="">Materyal seçiniz</option>
+                                        @foreach([
+                                        'asetat' => 'Asetat',
+                                        'asetat_metal' => 'Asetat - Metal',
+                                        'grilamid' => 'Grilamid',
+                                        'metal' => 'Metal',
+                                        'plastik' => 'Plastik',
+                                        'diger' => 'Diğer'
+                                        ] as $key => $label)
+                                        <option value="{{ $key }}" @selected(old('frame_material', $product->frame_material) ==
+                                            $key)
+                                            >
+                                            {{ $label }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Cam Tipi</label>
-                            <input type="text" name="glass_type" value="{{ old('glass_type', $product->glass_type) }}"
-                                class="form-control eo-input" placeholder="Örn: UV400">
-                        </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Cam Tipi</label>
+                                    <input type="text" name="glass_type" value="{{ old('glass_type', $product->glass_type) }}"
+                                        class="form-control eo-input" placeholder="Örn: UV400">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset id="lensFields" class="col-12" @if(! $isLensCategory) style="display:none;" disabled @endif>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Lens Derecesi</label>
+                                    <input type="text" name="lens_degree" value="{{ old('lens_degree', $product->lens_degree) }}"
+                                        class="form-control eo-input" placeholder="Numarasız, -0.50, +1.25">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Lens Tipi</label>
+                                    <input type="text" name="lens_type" value="{{ old('lens_type', $product->lens_type) }}"
+                                        class="form-control eo-input" placeholder="Renkli yumuşak kontakt lens">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Lens Rengi</label>
+                                    <input type="text" class="form-control eo-input" value="Şeffaf" readonly>
+                                    <input type="hidden" name="glass_color" value="seffaf">
+                                </div>
+
+
+
+                                <div class="col-md-6 form-group">
+                                    <label>Ambalaj İçeriği</label>
+                                    <input type="text" name="lens_package_content" value="{{ old('lens_package_content', $product->lens_package_content) }}"
+                                        class="form-control eo-input" placeholder="1 kutuda 2 adet">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Su İçeriği</label>
+                                    <input type="text" name="lens_water_content" value="{{ old('lens_water_content', $product->lens_water_content) }}"
+                                        class="form-control eo-input" placeholder="%33">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Base Curve (BC)</label>
+                                    <input type="text" name="lens_base_curve" value="{{ old('lens_base_curve', $product->lens_base_curve) }}"
+                                        class="form-control eo-input" placeholder="8.60 mm">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Çap (Dia.)</label>
+                                    <input type="text" name="lens_diameter" value="{{ old('lens_diameter', $product->lens_diameter) }}"
+                                        class="form-control eo-input" placeholder="14.20 mm">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Lens Materyali</label>
+                                    <input type="text" name="lens_material" value="{{ old('lens_material', $product->lens_material) }}"
+                                        class="form-control eo-input" placeholder="Lotrafilcon B">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Merkez Kalınlığı</label>
+                                    <input type="text" name="lens_center_thickness" value="{{ old('lens_center_thickness', $product->lens_center_thickness) }}"
+                                        class="form-control eo-input" placeholder="0.08 mm @ -3.00D">
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Oksijen Aktarılabilirliği</label>
+                                    <input type="text" name="lens_oxygen_permeability" value="{{ old('lens_oxygen_permeability', $product->lens_oxygen_permeability) }}"
+                                        class="form-control eo-input" placeholder="Dk/t:110, 138 @ -3.00D">
+                                </div>
+                            </div>
+                        </fieldset>
 
                         <div class="col-md-12 form-group">
                             <label>Kısa Açıklama</label>
@@ -270,8 +371,8 @@
                 <div class="card-body">
 
                     @php
-                        $existingMainImage = $product->exists && $product->image ? $product->image_url : null;
-                        $existingExtraImages = $product->exists ? $product->images : collect();
+                    $existingMainImage = $product->exists && $product->image ? $product->image_url : null;
+                    $existingExtraImages = $product->exists ? $product->images : collect();
                     @endphp
 
                     @if($product->exists && ($existingMainImage || $existingExtraImages->isNotEmpty()))
@@ -351,6 +452,42 @@
                 </div>
 
             </div>
+
+            @if($isLensCategory)
+            @if($product->exists)
+            <div class="card eo-card">
+
+                <div class="card-header eo-card-header">
+                    <div>
+                        <h3>
+                            <i class="fas fa-clone"></i>
+                            Derece Kopyalama
+                        </h3>
+                        <p>Her satıra derece ve stok yazıp ürünü çoğaltın.</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label>Derece | Stok</label>
+                        <textarea name="degree_rows" class="form-control eo-input" rows="8"
+                            placeholder="Numarasız|5&#10;-0.50|8&#10;-0.75|6&#10;+0.50|4"></textarea>
+                        <small class="text-muted d-block mt-2">Her satır için format: derece|stok. Stok yazmazsanız kaynak ürünün stoğu kullanılır.</small>
+                    </div>
+
+                    <button type="submit" class="btn eo-btn-primary btn-block"
+                        formaction="{{ route('admin.products.duplicate', $product) }}"
+                        formmethod="POST" data-duplicate="1">
+                        <i class="fas fa-clone"></i>
+                        Dereceleri Oluştur
+                    </button>
+
+                </div>
+
+            </div>
+            @endif
+            @endif
 
         </div>
 
@@ -457,6 +594,16 @@
         color: #707b8d;
         font-size: 13px;
         font-weight: 600;
+    }
+
+    .eo-section-label {
+        margin: 10px 0 16px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: #eef4ff;
+        color: #17375f;
+        font-weight: 800;
+        letter-spacing: -.2px;
     }
 
     .eo-section-title {
@@ -650,6 +797,10 @@
 @section('page_js')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('productCategorySelect');
+        const brandSelect = document.getElementById('brandSelect');
+        const eyewearFields = document.getElementById('eyewearFields');
+        const lensFields = document.getElementById('lensFields');
         const input = document.getElementById('productImagesInput');
         const preview = document.getElementById('productImagesPreview');
         const form = input?.closest('form');
@@ -657,7 +808,92 @@
         const removedImageIdsContainer = document.getElementById('removedImageIds');
         let selectedFiles = [];
 
+        function isLensCategory() {
+            const option = categorySelect?.selectedOptions?.[0];
+            const slug = (option?.dataset?.slug || option?.textContent || '').toLowerCase();
+            return slug.includes('lens');
+        }
+
+        function toggleCategoryFields() {
+            if (!eyewearFields || !lensFields) return;
+
+            if (isLensCategory()) {
+                eyewearFields.style.display = 'none';
+                lensFields.style.display = '';
+                // disable fieldsets (disables contained controls) and inputs as fallback
+                try {
+                    eyewearFields.disabled = true;
+                } catch (e) {}
+                try {
+                    lensFields.disabled = false;
+                } catch (e) {}
+                Array.from(eyewearFields.querySelectorAll('input,select,textarea')).forEach(el => el.disabled = true);
+                Array.from(lensFields.querySelectorAll('input,select,textarea')).forEach(el => el.disabled = false);
+            } else {
+                eyewearFields.style.display = '';
+                lensFields.style.display = 'none';
+                try {
+                    eyewearFields.disabled = false;
+                } catch (e) {}
+                try {
+                    lensFields.disabled = true;
+                } catch (e) {}
+                Array.from(eyewearFields.querySelectorAll('input,select,textarea')).forEach(el => el.disabled = false);
+                Array.from(lensFields.querySelectorAll('input,select,textarea')).forEach(el => el.disabled = true);
+            }
+        }
+
+        function filterBrands() {
+            if (!brandSelect) return;
+
+            const lensSelected = isLensCategory();
+
+            Array.from(brandSelect.options).forEach(option => {
+
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+
+                const type = option.dataset.type;
+
+                if (lensSelected) {
+                    option.hidden = type !== 'lens';
+                } else {
+                    option.hidden = type !== 'gozluk';
+                }
+            });
+
+            const selectedOption = brandSelect.selectedOptions[0];
+
+            if (
+                selectedOption &&
+                selectedOption.value &&
+                selectedOption.hidden
+            ) {
+                brandSelect.value = '';
+            }
+        }
+
         const existingItems = Array.from(document.querySelectorAll('[data-existing-main], [data-existing-id]'));
+
+        toggleCategoryFields();
+        filterBrands();
+
+        categorySelect?.addEventListener('change', function() {
+            toggleCategoryFields();
+            filterBrands();
+        });
+
+        // When submitting via the duplicate button, remove the method override so server sees POST
+        document.querySelectorAll('button[data-duplicate]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const methodInput = form?.querySelector('input[name="_method"]');
+                if (methodInput) {
+                    methodInput.parentNode.removeChild(methodInput);
+                }
+            });
+        });
 
         function syncInputFiles() {
             if (!input) return;

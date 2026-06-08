@@ -28,17 +28,29 @@
 
                     <div class="contact-box">
                         <strong>Telefon</strong>
-                        <span>0542 763 99 75</span>
+                        <span>
+                            <a href="tel:{{ $siteSettings->phone }}" style="color: inherit; text-decoration: none;">
+                                {{ $siteSettings->phone }}
+                            </a>
+                        </span>
                     </div>
 
                     <div class="contact-box">
                         <strong>E-Posta</strong>
-                        <span>info@eymenoptik.com</span>
+                        <span>
+                            <a href="mailto:{{ $siteSettings->email }}" style="color: inherit; text-decoration: none;">
+                                {{ $siteSettings->email }}
+                            </a>
+                        </span>
                     </div>
 
                     <div class="contact-box">
                         <strong>Adres</strong>
-                        <span>Örtülüpınar, İnönü Blv. 42 C, 58030 Merkez/Sivas</span>
+                        <span>
+                            <a href="https://www.google.com/maps/search/{{ urlencode($siteSettings->address) }}" target="_blank" style="color: inherit; text-decoration: none;">
+                                {{ $siteSettings->address }}
+                            </a>
+                        </span>
                     </div>
 
                 </div>
@@ -84,147 +96,145 @@
 </section>
 
 <style>
-
-.contact-page{
-    padding:80px 0;
-    background:#f7f7f7;
-    min-height:100vh;
-}
-
-.contact-grid{
-    display:grid;
-    grid-template-columns:1fr 520px;
-    gap:40px;
-    align-items:center;
-}
-
-.contact-badge{
-    display:inline-flex;
-    padding:10px 16px;
-    background:#000;
-    color:#fff;
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:1px;
-    margin-bottom:24px;
-}
-
-.contact-left h1{
-    font-size:72px;
-    line-height:.95;
-    letter-spacing:-4px;
-    margin-bottom:22px;
-    color:#111;
-}
-
-.contact-left p{
-    color:#666;
-    line-height:1.9;
-    max-width:650px;
-    margin-bottom:35px;
-}
-
-.contact-info{
-    display:grid;
-    gap:18px;
-}
-
-.contact-box{
-    background:#fff;
-    padding:24px;
-    border:1px solid #eee;
-}
-
-.contact-box strong{
-    display:block;
-    font-size:14px;
-    margin-bottom:8px;
-    color:#999;
-}
-
-.contact-box span{
-    font-size:22px;
-    font-weight:800;
-    color:#111;
-}
-
-.contact-form-card{
-    background:#fff;
-    padding:35px;
-    border:1px solid #eee;
-    box-shadow:0 20px 60px rgba(0,0,0,.05);
-}
-
-.contact-form{
-    display:grid;
-    gap:20px;
-}
-
-.form-group{
-    display:grid;
-    gap:10px;
-}
-
-.form-group label{
-    font-size:13px;
-    font-weight:800;
-    color:#111;
-}
-
-.form-group input,
-.form-group textarea{
-    width:100%;
-    border:1px solid #e5e5e5;
-    background:#fafafa;
-    padding:16px;
-    outline:none;
-    font-size:15px;
-}
-
-.contact-btn{
-    height:56px;
-    border:none;
-    background:#000;
-    color:#fff;
-    font-size:15px;
-    font-weight:800;
-    cursor:pointer;
-    transition:.3s ease;
-}
-
-.contact-btn:hover{
-    opacity:.85;
-}
-
-@media(max-width:992px){
-
-    .contact-grid{
-        grid-template-columns:1fr;
+    .contact-page {
+        padding: 80px 0;
+        background: #f7f7f7;
+        min-height: 100vh;
     }
 
-    .contact-left h1{
-        font-size:52px;
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 520px;
+        gap: 40px;
+        align-items: center;
     }
 
-}
-
-@media(max-width:680px){
-
-    .contact-page{
-        padding:50px 0;
+    .contact-badge {
+        display: inline-flex;
+        padding: 10px 16px;
+        background: #000;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
     }
 
-    .contact-left h1{
-        font-size:40px;
-        letter-spacing:-2px;
+    .contact-left h1 {
+        font-size: 72px;
+        line-height: .95;
+        letter-spacing: -4px;
+        margin-bottom: 22px;
+        color: #111;
     }
 
-    .contact-form-card{
-        padding:22px;
+    .contact-left p {
+        color: #666;
+        line-height: 1.9;
+        max-width: 650px;
+        margin-bottom: 35px;
     }
 
-}
+    .contact-info {
+        display: grid;
+        gap: 18px;
+    }
 
+    .contact-box {
+        background: #fff;
+        padding: 24px;
+        border: 1px solid #eee;
+    }
+
+    .contact-box strong {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #999;
+    }
+
+    .contact-box span {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111;
+    }
+
+    .contact-form-card {
+        background: #fff;
+        padding: 35px;
+        border: 1px solid #eee;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .05);
+    }
+
+    .contact-form {
+        display: grid;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: grid;
+        gap: 10px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 800;
+        color: #111;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        border: 1px solid #e5e5e5;
+        background: #fafafa;
+        padding: 16px;
+        outline: none;
+        font-size: 15px;
+    }
+
+    .contact-btn {
+        height: 56px;
+        border: none;
+        background: #000;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: .3s ease;
+    }
+
+    .contact-btn:hover {
+        opacity: .85;
+    }
+
+    @media(max-width:992px) {
+
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-left h1 {
+            font-size: 52px;
+        }
+
+    }
+
+    @media(max-width:680px) {
+
+        .contact-page {
+            padding: 50px 0;
+        }
+
+        .contact-left h1 {
+            font-size: 40px;
+            letter-spacing: -2px;
+        }
+
+        .contact-form-card {
+            padding: 22px;
+        }
+
+    }
 </style>
 
 @endsection

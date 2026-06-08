@@ -9,7 +9,7 @@ class SiteSetting extends Model
     public const DEFAULTS = [
         'site_name' => 'Eymen Optik',
         'phone' => '0542 763 99 75',
-        'email' => 'info@eymenoptik.com.tr',
+        'email' => 'info@eymenoptiklens.com',
         'address' => 'Örtülüpınar, İnönü Blv. 42 C, 58030 Merkez/Sivas',
         'facebook' => 'https://www.facebook.com/people/Eymen-Optik/100054312439127/#',
         'instagram' => 'https://www.instagram.com/eymenoptik_sivas/',

@@ -90,12 +90,26 @@
 
                                 <div class="eo-product-info">
                                     <strong>
-                                        {{ $product->name }}
+                                        {{ $product->name }} / @if($product->lens_degree) {{ $product->lens_degree }} @endif
                                     </strong>
 
                                     <span>
                                         {{ $product->brand->name ?? 'Marka belirtilmedi' }}
                                     </span>
+
+                                    <div class="eo-product-details">
+                                        @if($product->lens_degree)
+                                        <small class="text-muted d-block">
+                                            Derece: {{ $product->lens_degree }}
+                                        </small>
+                                        @endif
+                                        @if($product->glass_color && $product->category?->slug === 'lens')
+                                        <small class="text-muted d-block">
+                                            Renk: {{ $product->glass_color }}
+                                        </small>
+                                        @endif
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -247,10 +261,10 @@
 
         <div class="eo-pagination-meta">
             @if($products->total() > 0)
-                Bu sayfada <strong>{{ $products->count() }}</strong> ürün listeleniyor.
-                Toplam <strong>{{ $products->total() }}</strong> ürün var.
+            Bu sayfada <strong>{{ $products->count() }}</strong> ürün listeleniyor.
+            Toplam <strong>{{ $products->total() }}</strong> ürün var.
             @else
-                Ürün bulunamadı.
+            Ürün bulunamadı.
             @endif
         </div>
     </div>
@@ -407,6 +421,18 @@
         font-size: 13px;
         color: #707b8d;
         font-weight: 700;
+    }
+
+    .eo-product-details {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+    }
+
+    .eo-product-details small {
+        color: #707b8d;
+        font-size: 12px;
+        font-weight: 500;
     }
 
     .eo-category-badge {

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id', 'brand_id', 'name', 'slug', 'gender', 'model_code', 'frame_color', 'glass_color', 'frame_material', 'glass_type', 'price', 'discount_price', 'stock', 'image', 'short_description', 'description', 'is_featured', 'is_active'];
+    protected $fillable = ['category_id', 'brand_id', 'name', 'slug', 'gender', 'model_code', 'frame_color', 'glass_color', 'frame_material', 'glass_type', 'lens_degree', 'lens_type', 'lens_usage', 'lens_package_content', 'lens_water_content', 'lens_base_curve', 'lens_diameter', 'lens_material', 'lens_center_thickness', 'lens_oxygen_permeability', 'price', 'discount_price', 'stock', 'image', 'short_description', 'description', 'is_featured', 'is_active'];
 
     public function getRouteKeyName(): string
     {

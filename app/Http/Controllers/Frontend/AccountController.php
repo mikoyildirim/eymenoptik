@@ -41,10 +41,18 @@ class AccountController extends Controller
             $favoriteCount = Favorite::where('user_id', $user->id)->count();
         }
 
+        $categories = Category::withCount('products')
+            ->where('is_active', 1)
+            ->get();
+
+        $accountCategories = Category::withCount('products')
+            ->where('is_active', 1)
+            ->having('products_count', '>', 0)
+            ->get();
+
         return view('frontend.account', [
-            'categories' => Category::withCount('products')
-                ->where('is_active', 1)
-                ->get(),
+            'categories' => $categories,
+            'accountCategories' => $accountCategories,
 
             'products' => $products,
             'orders' => $orders,

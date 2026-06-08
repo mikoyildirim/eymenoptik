@@ -164,14 +164,21 @@
                                         <img src="{{ $item->product->image_url }}" alt="{{ $item->product_name }}"
                                             class="admin-order-thumb" />
                                         @else
-                                        <div class="admin-order-thumb placeholder"></div>
+                                        <div class="admin-order-thumb placeholder d-flex align-items-center justify-content-center">
+                                            @if($item->product_name == 'Kargo Bedeli')
+                                            <i class="fas fa-truck" style="font-size: 24px; color: #6c757d;"></i>
+                                            @endif
+                                        </div>
                                         @endif
 
                                         <div>
-                                            <strong>{{ $item->product_name }}</strong>
+                                            <strong>{{ $item->product_name }} @if($item->product && $item->product->lens_degree) {{ $item->product->lens_degree }} @endif</strong>
 
                                             @if($item->product_id)
                                             <div class="text-muted small">Ürün ID: {{ $item->product_id }}</div>
+                                            @endif
+                                            @if($item->product && $item->product->category?->slug === 'lens' && $item->product->glass_color)
+                                            <div class="text-muted small">Renk: {{ $item->product->glass_color }}</div>
                                             @endif
                                         </div>
                                     </div>
@@ -326,7 +333,7 @@
 
                     <div class="mt-3">
                         <span>Ürün Sayısı</span>
-                        <strong>{{ $order->items->count() }}</strong>
+                        <strong>{{ $order->items->where('product_name', '!=', 'Kargo Bedeli')->count() }}</strong>
                     </div>
 
                 </div>
