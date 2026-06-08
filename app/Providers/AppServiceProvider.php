@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\SiteSetting;
 use App\Support\Iyzico\LocalHttpClient;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Pagination\Paginator;
 use Iyzipay\ApiResource;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Paginator::useBootstrapFour();
+
         if ($this->app->environment('local')) {
             ApiResource::setHttpClient(new LocalHttpClient());
         }

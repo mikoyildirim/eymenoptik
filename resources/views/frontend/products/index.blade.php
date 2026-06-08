@@ -173,8 +173,10 @@
                                 </a>
                             </div>
 
-                            <a href="{{ route('products.show', $product->slug) }}" class="product-media">
-                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                            <a href="{{ route('products.show', $product->slug) }}">
+                                <div class="product-image">
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                                </div>
                             </a>
 
                             <div class="product-body">
@@ -739,7 +741,7 @@
 
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
     }
 
@@ -810,8 +812,14 @@
     }
 
     .product-media img {
-        height: 100%;
+        display: block;
+        margin: 0 auto;
+        max-width: auto;
+        max-height: 90%;
+        width: auto;
+        height: auto;
         object-fit: contain;
+        object-position:center;
         transition: .3s ease;
     }
 
@@ -848,6 +856,26 @@
         font-size: 12px;
         line-height: 1.6;
         margin-bottom: 12px;
+    }
+
+    .product-image {
+        height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        height: 100%;
+        object-fit: scale-down;
+        transition: .32s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.06);
     }
 
     .specs {
@@ -947,7 +975,7 @@
         }
 
         .product-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
         }
 
         .shop-toolbar {
@@ -1148,6 +1176,20 @@
 
         .specs span {
             font-size: 9px;
+        }
+    }
+
+    @media(max-width: 560px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .product-image {
+            height: 300px;
+        }
+
+        .marquee {
+            font-size: 17px;
         }
     }
 </style>

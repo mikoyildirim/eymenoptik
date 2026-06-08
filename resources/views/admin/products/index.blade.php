@@ -240,7 +240,19 @@
     @if(method_exists($products, 'links'))
 
     <div class="card-footer eo-pagination">
-        {{ $products->links() }}
+
+        <div class="eo-pagination-links">
+            {{ $products->links() }}
+        </div>
+
+        <div class="eo-pagination-meta">
+            @if($products->total() > 0)
+                Bu sayfada <strong>{{ $products->count() }}</strong> ürün listeleniyor.
+                Toplam <strong>{{ $products->total() }}</strong> ürün var.
+            @else
+                Ürün bulunamadı.
+            @endif
+        </div>
     </div>
 
     @endif
@@ -482,6 +494,24 @@
         background: #fff;
         border-top: 1px solid rgba(7, 17, 31, .06);
         padding: 20px;
+    }
+
+    .eo-pagination-links {
+        display: flex;
+        justify-content: center;
+    }
+
+    .eo-pagination-meta {
+        margin-top: 12px;
+        text-align: center;
+        color: #707b8d;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .eo-pagination-meta strong {
+        color: #07111f;
+        font-weight: 900;
     }
 
     @media(max-width:768px) {
