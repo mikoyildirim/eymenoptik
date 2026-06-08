@@ -138,6 +138,8 @@ Route::middleware(['auth', 'admin'])
         Route::resource('brands', BrandController::class);
 
         Route::resource('products', AdminProductController::class);
+        Route::post('products/{product}/duplicate', [AdminProductController::class, 'duplicate'])
+            ->name('products.duplicate');
 
         Route::get('orders', [OrderController::class, 'index'])
             ->name('orders.index');
