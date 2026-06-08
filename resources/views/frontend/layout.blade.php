@@ -280,7 +280,7 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.3fr repeat(4, 1fr);
+            grid-template-columns: 1.3fr repeat(5, 1fr);
             gap: 35px;
             padding-bottom: 35px;
             border-bottom: 1px solid rgba(255, 255, 255, .12);
@@ -762,8 +762,17 @@
                 <div>
                     <h3>Destek</h3>
                     <a href="{{ route('blog.index') }}">Sıkça Sorulan Sorular</a>
-                    <a href="{{ route('blog.index') }}#garanti-ve-iade">Garanti ve İade</a>
-                    <a href="{{ route('blog.index') }}#kargo-ve-teslimat">Kargo ve Teslimat</a>
+                    <a href="{{ route('delivery') }}">Garanti ve İade</a>
+                    <a href="{{ route('delivery') }}">Kargo ve Teslimat</a>
+                </div>
+
+                <div>
+                    <h3>Kurumsal</h3>
+                    <a href="{{ route('about') }}">Hakkımızda</a>
+                    <a href="{{ route('ssl') }}">SSL Sertifikası</a>
+                    <a href="{{ route('delivery') }}">Teslimat ve İade Şartları</a>
+                    <a href="{{ route('privacy') }}">Gizlilik Sözleşmesi</a>
+                    <a href="{{ route('distance-sales') }}">Mesafeli Satış Sözleşmesi</a>
                 </div>
 
                 <div>
@@ -773,6 +782,12 @@
                     <p>{{ $siteAddress }}</p>
                 </div>
 
+            </div>
+
+            <div style="margin-top:30px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
+                <img src="{{ asset('images/payment/visa.png') }}" alt="Visa" style="width:auto;height:38px;display:inline-block;object-fit:contain;">
+                <img src="{{ asset('images/payment/mastercard.png') }}" alt="MasterCard" style="width:auto;height:38px;display:inline-block;object-fit:contain;">
+                <img src="{{ asset('images/payment/iyzico.png') }}" alt="iyzico ile Öde" style="width:auto;height:38px;display:inline-block;object-fit:contain;">
             </div>
 
             <div class="copyright">

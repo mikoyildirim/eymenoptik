@@ -154,3 +154,10 @@ Route::post('/checkout/payment', [CheckoutController::class, 'payment'])->name('
 Route::post('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 Route::post('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
+
+
+Route::view('/hakkimizda', 'frontend.pages.about')->name('about');
+Route::view('/ssl-sertifikasi', 'frontend.pages.ssl')->name('ssl');
+Route::view('/teslimat-ve-iade', 'frontend.pages.delivery')->name('delivery');
+Route::view('/gizlilik-sozlesmesi', 'frontend.pages.privacy')->name('privacy');
+Route::view('/mesafeli-satis-sozlesmesi', 'frontend.pages.distance-sales')->name('distance-sales');

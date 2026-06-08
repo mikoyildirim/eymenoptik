@@ -1,0 +1,31 @@
+@extends('frontend.layout')
+
+@section('title','Teslimat ve İade Şartları')
+
+
+@section('page_css')
+<style>
+    .legal-page{padding:80px 0;background:#f7f7f7;}
+    .legal-card{background:#fff;border:1px solid #eee;padding:45px;border-radius:26px;box-shadow:0 25px 70px rgba(0,0,0,.06);}
+    .legal-card span{display:inline-block;background:#000;color:#fff;padding:8px 14px;font-size:12px;font-weight:900;margin-bottom:18px;}
+    .legal-card h1{font-size:44px;line-height:1.1;margin-bottom:18px;}
+    .legal-card h2{font-size:22px;margin:28px 0 10px;}
+    .legal-card p,.legal-card li{color:#555;line-height:1.9;font-size:15px;}
+    .legal-card ul{padding-left:20px;margin-top:10px;}
+    @media(max-width:768px){.legal-page{padding:45px 0}.legal-card{padding:28px;border-radius:20px}.legal-card h1{font-size:32px}}
+</style>
+@endsection
+
+
+@section('content')
+<section class="legal-page">
+    <div class="container">
+        <div class="legal-card">
+            <span>TESLİMAT VE İADE</span>
+            <h1>Teslimat ve İade Şartları</h1>
+            <p>Siparişleriniz ödeme onayından sonra hazırlanarak anlaşmalı kargo firması ile tarafınıza gönderilir. Kargo süresi ürün stok durumuna ve teslimat adresine göre değişiklik gösterebilir.</p>
+<h2>İade Şartları</h2><ul><li>Ürün kullanılmamış, zarar görmemiş ve tekrar satılabilir durumda olmalıdır.</li><li>İade talebi yasal süreler içerisinde iletilmelidir.</li><li>Kişiye özel hazırlanan ürünlerde iade koşulları farklılık gösterebilir.</li></ul>
+        </div>
+    </div>
+</section>
+@endsection
