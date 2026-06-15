@@ -267,8 +267,9 @@
         <div class="double-banner-grid">
 
             <a href="{{ route('products.index', ['gender' => 'erkek']) }}" class="image-banner reveal">
-                <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=1000&q=90"
-                    alt="Erkek Gözlükleri">
+                <!-- public içinden erkekgns çekilicek  -->
+                
+                <img src="{{ asset('images/erkekgns.jpg') }}" alt="Eymen Optik">
 
                 <div>
                     <span>Yeni Sezon</span>
@@ -277,7 +278,8 @@
             </a>
 
             <a href="{{ route('products.index', ['gender' => 'kadin']) }}" class="image-banner reveal">
-                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=1000&q=90"
+
+                <img src="{{ asset('images/kadinngns.jpg') }}"
                     alt="Kadın Gözlükleri">
 
                 <div>
