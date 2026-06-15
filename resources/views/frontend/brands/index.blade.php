@@ -125,12 +125,11 @@
         </div>
 
         <div class="brands-grid">
-
             @forelse($brands as $brand)
 
             <a
-                href="{{ route('products.index') }}?brand={{ $brand->slug }}"
-                class="brand-card">
+                href="{{ route('products.index', ['brand' => $brand->slug]) }}"
+                class="brand-card js-top-brand-link" data-brand="{{ $brand->slug }}">
                 <h3>
                     {{ $brand->name }}
                 </h3>
@@ -153,4 +152,27 @@
     </div>
 </section>
 
+@endsection
+
+@section('page_js')
+<script>
+    document.querySelectorAll('.js-top-brand-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const brand = this.dataset.brand;
+            if (!brand) return;
+
+            e.preventDefault();
+            try {
+                sessionStorage.setItem('productFilters', JSON.stringify({
+                    brand
+                }));
+            } catch (err) {
+                // ignore storage errors
+            }
+
+            // Navigate to products index (without query) so the products page reads sessionStorage
+            window.location.href = "<?php echo e(route('products.index')); ?>";
+        });
+    });
+</script>
 @endsection
