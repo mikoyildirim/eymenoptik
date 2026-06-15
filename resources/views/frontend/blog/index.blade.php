@@ -5,7 +5,7 @@
 @section('content')
 
 @php
-    $freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
+$freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
 @endphp
 
 <section class="faq-page">
@@ -113,6 +113,7 @@
                                     ? 'Tüm siparişlerinizde ücretsiz kargo fırsatından yararlanabilirsiniz.' 
                                     : number_format($freeShippingThreshold, 0, ',', '.') . ' TL ve üzeri siparişlerinizde ücretsiz kargo fırsatından yararlanabilirsiniz.' }}
                             </p>
+                        </div>
                     </div>
 
                     <div class="faq-item">
@@ -139,167 +140,163 @@
 </section>
 
 <style>
-
-.faq-page{
-    padding:70px 0;
-    background:#f7f7f7;
-}
-
-.faq-header{
-    margin-bottom:50px;
-}
-
-.faq-header span{
-    display:inline-block;
-    background:#000;
-    color:#fff;
-    padding:8px 14px;
-    font-size:12px;
-    font-weight:900;
-    margin-bottom:20px;
-    letter-spacing:1px;
-}
-
-.faq-header h1{
-    font-size:62px;
-    line-height:1;
-    letter-spacing:-3px;
-    margin-bottom:18px;
-}
-
-.faq-header p{
-    max-width:700px;
-    color:#666;
-    line-height:1.8;
-    font-size:16px;
-}
-
-.faq-wrapper{
-    display:flex;
-    flex-direction:column;
-    gap:40px;
-}
-
-.faq-category{
-    background:#fff;
-    padding:35px;
-    box-shadow:0 20px 60px rgba(0,0,0,.05);
-}
-
-.faq-category-title{
-    margin-bottom:25px;
-}
-
-.faq-category-title h2{
-    font-size:34px;
-    letter-spacing:-1px;
-}
-
-.faq-list{
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-}
-
-.faq-item{
-    border:1px solid #ececec;
-    overflow:hidden;
-    background:#fff;
-    transition:.3s ease;
-}
-
-.faq-item.active{
-    border-color:#000;
-}
-
-.faq-question{
-    width:100%;
-    border:none;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:22px 24px;
-    cursor:pointer;
-    font-size:18px;
-    font-weight:700;
-    text-align:left;
-}
-
-.faq-question span{
-    font-size:24px;
-    font-weight:300;
-}
-
-.faq-answer{
-    display:none;
-    padding:0 24px 24px;
-}
-
-.faq-item.active .faq-answer{
-    display:block;
-}
-
-.faq-answer p{
-    color:#666;
-    line-height:1.8;
-    font-size:15px;
-}
-
-@media(max-width:768px){
-
-    .faq-page{
-        padding:50px 0;
+    .faq-page {
+        padding: 70px 0;
+        background: #f7f7f7;
     }
 
-    .faq-header h1{
-        font-size:42px;
-        letter-spacing:-2px;
+    .faq-header {
+        margin-bottom: 50px;
     }
 
-    .faq-category{
-        padding:22px;
+    .faq-header span {
+        display: inline-block;
+        background: #000;
+        color: #fff;
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 900;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
     }
 
-    .faq-category-title h2{
-        font-size:26px;
+    .faq-header h1 {
+        font-size: 62px;
+        line-height: 1;
+        letter-spacing: -3px;
+        margin-bottom: 18px;
     }
 
-    .faq-question{
-        font-size:16px;
-        padding:18px;
+    .faq-header p {
+        max-width: 700px;
+        color: #666;
+        line-height: 1.8;
+        font-size: 16px;
     }
 
-    .faq-answer{
-        padding:0 18px 18px;
+    .faq-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
     }
 
-}
+    .faq-category {
+        background: #fff;
+        padding: 35px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .05);
+    }
 
+    .faq-category-title {
+        margin-bottom: 25px;
+    }
+
+    .faq-category-title h2 {
+        font-size: 34px;
+        letter-spacing: -1px;
+    }
+
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .faq-item {
+        border: 1px solid #ececec;
+        overflow: hidden;
+        background: #fff;
+        transition: .3s ease;
+    }
+
+    .faq-item.active {
+        border-color: #000;
+    }
+
+    .faq-question {
+        width: 100%;
+        border: none;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 24px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    .faq-question span {
+        font-size: 24px;
+        font-weight: 300;
+    }
+
+    .faq-answer {
+        display: none;
+        padding: 0 24px 24px;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+
+    .faq-answer p {
+        color: #666;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    @media(max-width:768px) {
+
+        .faq-page {
+            padding: 50px 0;
+        }
+
+        .faq-header h1 {
+            font-size: 42px;
+            letter-spacing: -2px;
+        }
+
+        .faq-category {
+            padding: 22px;
+        }
+
+        .faq-category-title h2 {
+            font-size: 26px;
+        }
+
+        .faq-question {
+            font-size: 16px;
+            padding: 18px;
+        }
+
+        .faq-answer {
+            padding: 0 18px 18px;
+        }
+
+    }
 </style>
 
 <script>
+    document.querySelectorAll('.faq-question').forEach(button => {
 
-document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
 
-    button.addEventListener('click', () => {
+            const item = button.parentElement;
 
-        const item = button.parentElement;
+            document.querySelectorAll('.faq-item').forEach(faq => {
 
-        document.querySelectorAll('.faq-item').forEach(faq => {
+                if (faq !== item) {
+                    faq.classList.remove('active');
+                }
 
-            if(faq !== item){
-                faq.classList.remove('active');
-            }
+            });
+
+            item.classList.toggle('active');
 
         });
 
-        item.classList.toggle('active');
-
     });
-
-});
-
 </script>
 
 @endsection
