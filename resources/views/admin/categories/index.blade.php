@@ -75,7 +75,6 @@
                 <thead>
 
                     <tr>
-                        <th>#</th>
                         <th>Kategori</th>
                         <th>Slug</th>
                         <th>Durum</th>
@@ -89,15 +88,6 @@
                     @forelse($categories as $category)
 
                     <tr>
-
-                        {{-- ID --}}
-                        <td>
-
-                            <div class="eo-id-box">
-                                #{{ $category->id }}
-                            </div>
-
-                        </td>
 
                         {{-- Kategori --}}
                         <td>

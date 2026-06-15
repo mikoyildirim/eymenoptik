@@ -29,7 +29,7 @@
     <strong>Formda hata var.</strong>
     <ul class="mb-0 mt-2">
         @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+        <li>{{ $error }}</li>
         @endforeach
     </ul>
 </div>
@@ -37,12 +37,11 @@
 
 <form
     method="POST"
-    action="{{ $category->exists ? route('admin.categories.update', $category) : route('admin.categories.store') }}"
->
+    action="{{ $category->exists ? route('admin.categories.update', $category) : route('admin.categories.store') }}">
     @csrf
 
     @if($category->exists)
-        @method('PUT')
+    @method('PUT')
     @endif
 
     <div class="row">
@@ -71,8 +70,7 @@
                             value="{{ old('name', $category->name) }}"
                             class="form-control eo-input"
                             placeholder="Örn: Güneş Gözlüğü"
-                            required
-                        >
+                            required>
                     </div>
 
                     <label class="eo-check">
@@ -146,10 +144,10 @@
         border-radius: 28px;
         margin-bottom: 20px;
         background:
-            radial-gradient(circle at top right, rgba(199,154,58,.18), transparent 30%),
-            linear-gradient(135deg,#07111f,#17375f);
+            radial-gradient(circle at top right, rgba(199, 154, 58, .18), transparent 30%),
+            linear-gradient(135deg, #07111f, #17375f);
         color: #fff;
-        box-shadow: 0 24px 60px rgba(7,17,31,.18);
+        box-shadow: 0 24px 60px rgba(7, 17, 31, .18);
     }
 
     .eo-page-badge {
@@ -158,7 +156,7 @@
         gap: 8px;
         padding: 8px 14px;
         border-radius: 999px;
-        background: rgba(255,255,255,.12);
+        background: rgba(255, 255, 255, .12);
         font-size: 12px;
         font-weight: 800;
         margin-bottom: 14px;
@@ -173,7 +171,7 @@
 
     .eo-page-header p {
         margin: 0;
-        color: rgba(255,255,255,.68);
+        color: rgba(255, 255, 255, .68);
     }
 
     .eo-btn-primary {
@@ -181,14 +179,14 @@
         padding: 0 22px;
         border: none;
         border-radius: 16px;
-        background: linear-gradient(135deg,#2854d9,#17375f);
+        background: linear-gradient(135deg, #2854d9, #17375f);
         color: #fff !important;
         font-weight: 800;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
-        box-shadow: 0 16px 34px rgba(40,84,217,.24);
+        box-shadow: 0 16px 34px rgba(40, 84, 217, .24);
     }
 
     .eo-btn-light {
@@ -207,14 +205,14 @@
         border: none;
         border-radius: 26px;
         overflow: hidden;
-        box-shadow: 0 18px 44px rgba(7,17,31,.07);
+        box-shadow: 0 18px 44px rgba(7, 17, 31, .07);
         margin-bottom: 20px;
     }
 
     .eo-card-header {
         background: #fff;
         padding: 22px 24px;
-        border-bottom: 1px solid rgba(7,17,31,.06);
+        border-bottom: 1px solid rgba(7, 17, 31, .06);
     }
 
     .eo-card-header h3 {
@@ -237,13 +235,13 @@
     .eo-input {
         height: 48px;
         border-radius: 15px;
-        border: 1px solid rgba(7,17,31,.09);
+        border: 1px solid rgba(7, 17, 31, .09);
         font-weight: 650;
     }
 
     .eo-input:focus {
-        border-color: rgba(40,84,217,.38);
-        box-shadow: 0 0 0 4px rgba(40,84,217,.08);
+        border-color: rgba(40, 84, 217, .38);
+        box-shadow: 0 0 0 4px rgba(40, 84, 217, .08);
     }
 
     .eo-check {
@@ -276,9 +274,9 @@
         padding: 20px;
         border-radius: 24px;
         background:
-            radial-gradient(circle at top right, rgba(199,154,58,.16), transparent 34%),
+            radial-gradient(circle at top right, rgba(199, 154, 58, .16), transparent 34%),
             #f4f6fb;
-        border: 1px solid rgba(7,17,31,.06);
+        border: 1px solid rgba(7, 17, 31, .06);
         display: flex;
         align-items: center;
         gap: 15px;
@@ -288,7 +286,7 @@
         width: 58px;
         height: 58px;
         border-radius: 20px;
-        background: linear-gradient(135deg,#2854d9,#17375f);
+        background: linear-gradient(135deg, #2854d9, #17375f);
         color: #fff;
         display: grid;
         place-items: center;
@@ -320,4 +318,21 @@
         }
     }
 </style>
+@endsection
+
+@section('page_js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const nameInput = document.querySelector('input[name="name"]');
+        const previewName = document.querySelector('.eo-preview-card h4');
+
+        if (nameInput && previewName) {
+            nameInput.addEventListener('input', function() {
+                previewName.textContent = this.value.trim() || 'Kategori Adı';
+            });
+        }
+
+    });
+</script>
 @endsection

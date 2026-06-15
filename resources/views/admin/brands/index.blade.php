@@ -75,7 +75,6 @@
                 <thead>
 
                     <tr>
-                        <th>#</th>
                         <th>Marka</th>
                         <th>Slug</th>
                         <th>Durum</th>
@@ -89,15 +88,6 @@
                     @forelse($brands as $brand)
 
                     <tr>
-
-                        {{-- ID --}}
-                        <td>
-
-                            <div class="eo-id-box">
-                                #{{ $brand->id }}
-                            </div>
-
-                        </td>
 
                         {{-- Marka --}}
                         <td>
