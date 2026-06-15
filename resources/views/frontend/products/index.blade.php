@@ -22,32 +22,38 @@
         <div class="container">
 
             @php
-            $activeCategorySlug = (string) (request()->query('category') ?? '');
-            $activeBrandSlug = (string) (request()->query('brand') ?? '');
-            $activeGenderSlug = (string) (request()->query('gender') ?? '');
+                $activeCategorySlug = (string) (request()->query('category') ?? '');
+                $activeBrandSlug = (string) (request()->query('brand') ?? '');
+                $activeGenderSlug = (string) (request()->query('gender') ?? '');
             @endphp
 
             <div class="shop-layout">
 
-                <aside class="shop-sidebar reveal">
+                <aside class="shop-sidebar reveal" id="shopSidebar">
+
+                    <div class="mobile-filter-title">
+                        <strong>Filtrele</strong>
+                        <button type="button" id="closeMobileFilters">×</button>
+                    </div>
 
                     <div class="sidebar-block">
                         <h3>Kategoriler</h3>
 
-                        {{-- $allProductsCount is provided by controller as total active products count --}}
-
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn {{ !$activeCategorySlug ? 'active' : '' }}" type="button" data-filter-group="category"
-                                data-filter="all" data-label="Tüm Ürünler">
+                            <button class="filter-btn {{ !$activeCategorySlug ? 'active' : '' }}" type="button"
+                                data-filter-group="category" data-filter="all" data-label="Tüm Ürünler">
                                 Tüm Ürünler <span>{{ $allProductsCount }}</span>
                             </button>
 
                             @foreach($categories as $category)
-                            <button class="filter-btn {{ $activeCategorySlug === $category->slug ? 'active' : '' }}" type="button" data-filter-group="category"
-                                data-filter="{{ $category->slug }}" data-label="{{ $category->name }}">
-                                {{ $category->name }}
-                                <span>{{ $category->products_count ?? $products->where('category_id', $category->id)->count() }}</span>
-                            </button>
+                                <button class="filter-btn {{ $activeCategorySlug === $category->slug ? 'active' : '' }}"
+                                    type="button"
+                                    data-filter-group="category"
+                                    data-filter="{{ $category->slug }}"
+                                    data-label="{{ $category->name }}">
+                                    {{ $category->name }}
+                                    <span>{{ $category->products_count ?? $products->where('category_id', $category->id)->count() }}</span>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -56,17 +62,20 @@
                         <h3>Markalar</h3>
 
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn {{ !$activeBrandSlug ? 'active' : '' }}" type="button" data-filter-group="brand" data-filter="all"
-                                data-label="Tüm Markalar">
+                            <button class="filter-btn {{ !$activeBrandSlug ? 'active' : '' }}" type="button"
+                                data-filter-group="brand" data-filter="all" data-label="Tüm Markalar">
                                 Tüm Markalar <span>{{ $allProductsCount }}</span>
                             </button>
 
                             @foreach($brands as $brand)
-                            <button class="filter-btn {{ $activeBrandSlug === $brand->slug ? 'active' : '' }}" type="button" data-filter-group="brand"
-                                data-filter="{{ $brand->slug }}" data-label="{{ $brand->name }}">
-                                {{ $brand->name }}
-                                <span>{{ $brand->products_count }}</span>
-                            </button>
+                                <button class="filter-btn {{ $activeBrandSlug === $brand->slug ? 'active' : '' }}"
+                                    type="button"
+                                    data-filter-group="brand"
+                                    data-filter="{{ $brand->slug }}"
+                                    data-label="{{ $brand->name }}">
+                                    {{ $brand->name }}
+                                    <span>{{ $brand->products_count }}</span>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -75,14 +84,47 @@
                         <h3>Çerçeve Rengi</h3>
 
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn active" type="button" data-filter-group="frame_color"
-                                data-filter="all" data-label="Tümü">Tümü</button>
-                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','metalik'=>'Metalik','havana'=>'Havana','pudra'=>'Pudra','rose_gold'=>'Rose Gold','bordo'=>'Bordo','enjeksiyon'=>'Enjeksiyon','titanyum'=>'Titanyum','gri'=>'Gri','pembe'=>'Pembe','leopar_deseni'=>'Leopar Deseni','kaplumbaga_kabugu'=>'Kaplumbağa Kabuğu','seffaf_bej'=>'Şeffaf Bej','siyah_sari_mermer'=>'Siyah Sarı Mermer','col_kaplumbaga_kabugu'=>'Çöl Kaplumbağa Kabuğu','acik_pembe'=>'Açık Pembe','opak_kum'=>'Opak Kum','karisik'=>'Karışık
-                            Renkler']
-                            as $key => $label)
-                            <button class="filter-btn" type="button" data-filter-group="frame_color"
-                                data-filter="{{ $key }}" data-label="{{ $label }}">{{ $label }}
-                                <span>{{ $frameColorsCount[$key] ?? 0 }}</span></button>
+                            <button class="filter-btn active" type="button"
+                                data-filter-group="frame_color" data-filter="all" data-label="Tümü">
+                                Tümü
+                            </button>
+
+                            @foreach([
+                                'siyah'=>'Siyah',
+                                'beyaz'=>'Beyaz',
+                                'kahverengi'=>'Kahverengi',
+                                'fume'=>'Füme',
+                                'saydam'=>'Şeffaf',
+                                'altin'=>'Altın',
+                                'gumus'=>'Gümüş',
+                                'kirmizi'=>'Kırmızı',
+                                'mavi'=>'Mavi',
+                                'yesil'=>'Yeşil',
+                                'metalik'=>'Metalik',
+                                'havana'=>'Havana',
+                                'pudra'=>'Pudra',
+                                'rose_gold'=>'Rose Gold',
+                                'bordo'=>'Bordo',
+                                'enjeksiyon'=>'Enjeksiyon',
+                                'titanyum'=>'Titanyum',
+                                'gri'=>'Gri',
+                                'pembe'=>'Pembe',
+                                'leopar_deseni'=>'Leopar Deseni',
+                                'kaplumbaga_kabugu'=>'Kaplumbağa Kabuğu',
+                                'seffaf_bej'=>'Şeffaf Bej',
+                                'siyah_sari_mermer'=>'Siyah Sarı Mermer',
+                                'col_kaplumbaga_kabugu'=>'Çöl Kaplumbağa Kabuğu',
+                                'acik_pembe'=>'Açık Pembe',
+                                'opak_kum'=>'Opak Kum',
+                                'karisik'=>'Karışık Renkler'
+                            ] as $key => $label)
+                                <button class="filter-btn" type="button"
+                                    data-filter-group="frame_color"
+                                    data-filter="{{ $key }}"
+                                    data-label="{{ $label }}">
+                                    {{ $label }}
+                                    <span>{{ $frameColorsCount[$key] ?? 0 }}</span>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -91,14 +133,38 @@
                         <h3>Cam Rengi</h3>
 
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn active" type="button" data-filter-group="glass_color"
-                                data-filter="all" data-label="Tümü">Tümü</button>
-                            @foreach(['siyah'=>'Siyah','beyaz'=>'Beyaz','kahverengi'=>'Kahverengi','fume'=>'Füme','saydam'=>'Şeffaf','altin'=>'Altın','gumus'=>'Gümüş','kirmizi'=>'Kırmızı','mavi'=>'Mavi','yesil'=>'Yeşil','pembe'=>'Pembe','sari'=>'Sarı','kahverengi_degrade'=>'Kahverengi Degrade','bordo'=>'Bordo','turuncu'=>'Turuncu','mavi_degrade'=>'Mavi Degrade','mavi_aynali'=>'Mavi Aynalı','karisik'=>'Karışık
-                            Renkler']
-                            as $key => $label)
-                            <button class="filter-btn" type="button" data-filter-group="glass_color"
-                                data-filter="{{ $key }}" data-label="{{ $label }}">{{ $label }}
-                                <span>{{ $glassColorsCount[$key] ?? 0 }}</span></button>
+                            <button class="filter-btn active" type="button"
+                                data-filter-group="glass_color" data-filter="all" data-label="Tümü">
+                                Tümü
+                            </button>
+
+                            @foreach([
+                                'siyah'=>'Siyah',
+                                'beyaz'=>'Beyaz',
+                                'kahverengi'=>'Kahverengi',
+                                'fume'=>'Füme',
+                                'saydam'=>'Şeffaf',
+                                'altin'=>'Altın',
+                                'gumus'=>'Gümüş',
+                                'kirmizi'=>'Kırmızı',
+                                'mavi'=>'Mavi',
+                                'yesil'=>'Yeşil',
+                                'pembe'=>'Pembe',
+                                'sari'=>'Sarı',
+                                'kahverengi_degrade'=>'Kahverengi Degrade',
+                                'bordo'=>'Bordo',
+                                'turuncu'=>'Turuncu',
+                                'mavi_degrade'=>'Mavi Degrade',
+                                'mavi_aynali'=>'Mavi Aynalı',
+                                'karisik'=>'Karışık Renkler'
+                            ] as $key => $label)
+                                <button class="filter-btn" type="button"
+                                    data-filter-group="glass_color"
+                                    data-filter="{{ $key }}"
+                                    data-label="{{ $label }}">
+                                    {{ $label }}
+                                    <span>{{ $glassColorsCount[$key] ?? 0 }}</span>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -107,13 +173,20 @@
                         <h3>Cinsiyet</h3>
 
                         <div class="filter-list filter-scroll">
-                            <button class="filter-btn {{ !$activeGenderSlug ? 'active' : '' }}" type="button" data-filter-group="gender" data-filter="all"
-                                data-label="Tümü">Tümü</button>
-                            @foreach(['unisex'=>'Unisex','erkek'=>'Erkek','kadin'=>'Kadın','cocuk'=>'Çocuk'] as $key =>
-                            $label)
-                            <button class="filter-btn {{ $activeGenderSlug === $key ? 'active' : '' }}" type="button" data-filter-group="gender" data-filter="{{ $key }}"
-                                data-label="{{ $label }}">{{ $label }}
-                                <span>{{ $genderCounts[$key] ?? 0 }}</span></button>
+                            <button class="filter-btn {{ !$activeGenderSlug ? 'active' : '' }}" type="button"
+                                data-filter-group="gender" data-filter="all" data-label="Tümü">
+                                Tümü
+                            </button>
+
+                            @foreach(['unisex'=>'Unisex','erkek'=>'Erkek','kadin'=>'Kadın','cocuk'=>'Çocuk'] as $key => $label)
+                                <button class="filter-btn {{ $activeGenderSlug === $key ? 'active' : '' }}"
+                                    type="button"
+                                    data-filter-group="gender"
+                                    data-filter="{{ $key }}"
+                                    data-label="{{ $label }}">
+                                    {{ $label }}
+                                    <span>{{ $genderCounts[$key] ?? 0 }}</span>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -121,6 +194,11 @@
                 </aside>
 
                 <div class="shop-main">
+
+                    <div class="mobile-shop-actions">
+                        <button type="button" id="openMobileFilters">☰ Filtrele</button>
+                    
+                    </div>
 
                     <div class="shop-toolbar reveal">
                         <div>
@@ -156,343 +234,99 @@
 
                         @forelse($products as $product)
 
-                        <article class="product-card reveal" data-category="{{ $product->category?->slug }}"
-                            data-brand="{{ $product->brand?->slug }}" data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}" data-frame-color="{{ $product->frame_color }}"
-                            data-glass-color="{{ $product->glass_color }}" data-gender="{{ $product->gender }}">
+                            <article class="product-card reveal"
+                                data-category="{{ $product->category?->slug }}"
+                                data-brand="{{ $product->brand?->slug }}"
+                                data-name="{{ $product->name }}"
+                                data-price="{{ $product->final_price }}"
+                                data-frame-color="{{ $product->frame_color }}"
+                                data-glass-color="{{ $product->glass_color }}"
+                                data-gender="{{ $product->gender }}">
 
-                            <span class="product-label">
-                                {{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}
-                            </span>
+                                <span class="product-label">
+                                    {{ $product->is_featured ? 'Öne Çıkan' : 'Yeni' }}
+                                </span>
 
-                            <div class="product-actions">
-                                <button class="small-action js-fav-toggle" type="button" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-img="{{ $product->image_url }}" data-price="{{ $product->final_price }}">♡</button>
+                                <div class="product-actions">
+                                    <button class="small-action js-fav-toggle" type="button"
+                                        data-id="{{ $product->id }}"
+                                        data-name="{{ $product->name }}"
+                                        data-img="{{ $product->image_url }}"
+                                        data-price="{{ $product->final_price }}">
+                                        ♡
+                                    </button>
 
-                                <a class="small-action" href="{{ route('products.show', $product->slug) }}">
-                                    ↗
+                                    <a class="small-action" href="{{ route('products.show', $product->slug) }}">
+                                        ↗
+                                    </a>
+                                </div>
+
+                                <a href="{{ route('products.show', $product->slug) }}">
+                                    <div class="product-image">
+                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                                    </div>
                                 </a>
-                            </div>
 
-                            <a href="{{ route('products.show', $product->slug) }}">
-                                <div class="product-image">
-                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                                </div>
-                            </a>
+                                <div class="product-body">
 
-                            <div class="product-body">
+                                    <div class="product-meta">
+                                        <span>{{ $product->category?->name ?? 'Ürün' }}</span>
+                                        <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
+                                    </div>
 
-                                <div class="product-meta">
-                                    <span>{{ $product->category?->name ?? 'Ürün' }}</span>
-                                    <span>{{ $product->brand?->name ?? 'Eymen' }}</span>
-                                </div>
-                                <h3>{{ $product->name }} @if($product->lens_degree)({{ $product->lens_degree }})@endif</h3>
+                                    <h3>
+                                        {{ $product->name }}
+                                        @if($product->lens_degree)
+                                            ({{ $product->lens_degree }})
+                                        @endif
+                                    </h3>
 
-                                <p>
-                                    Renk: {{ ucfirst($product->glass_color) ?? '' }} · {{ $product->short_description ?: 'Eymen Optik koleksiyonundan seçili ürün.' }}
-                                </p>
+                                    <p>
+                                        Renk: {{ ucfirst($product->glass_color) ?? '' }} ·
+                                        {{ $product->short_description ?: 'Eymen Optik koleksiyonundan seçili ürün.' }}
+                                    </p>
 
-                                <div class="specs">
-                                    <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
-                                    <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
-
-                                    @if($product->discount_price)
-                                    <span>İndirimli</span>
-                                    @endif
-                                </div>
-
-                                <div class="price-row">
-                                    <div>
-                                        <strong>₺{{ number_format($product->final_price, 0, ',', '.') }}</strong>
+                                    <div class="specs">
+                                        <span>{{ $product->gender === 'unisex' ? 'Unisex' : ucfirst($product->gender) }}</span>
+                                        <span>{{ $product->stock > 0 ? 'Stokta' : 'Tükendi' }}</span>
 
                                         @if($product->discount_price)
-                                        <small>₺{{ number_format($product->price, 0, ',', '.') }}</small>
+                                            <span>İndirimli</span>
                                         @endif
                                     </div>
 
-                                    <button class="add-cart js-add-cart" type="button" data-id="{{ $product->id }}"
-                                        data-name="{{ $product->name }}" data-price="{{ $product->final_price }}"
-                                        data-img="{{ $product->image_url }}"
-                                        {{ $product->stock <= 0 ? 'disabled' : '' }}>
-                                        +
-                                    </button>
+                                    <div class="price-row">
+                                        <div>
+                                            <strong>₺{{ number_format($product->final_price, 0, ',', '.') }}</strong>
+
+                                            @if($product->discount_price)
+                                                <small>₺{{ number_format($product->price, 0, ',', '.') }}</small>
+                                            @endif
+                                        </div>
+
+                                        <button class="add-cart js-add-cart" type="button"
+                                            data-id="{{ $product->id }}"
+                                            data-name="{{ $product->name }}"
+                                            data-price="{{ $product->final_price }}"
+                                            data-img="{{ $product->image_url }}"
+                                            {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                                            +
+                                        </button>
+                                    </div>
+
                                 </div>
 
-                            </div>
-
-                        </article>
+                            </article>
 
                         @empty
 
-                        <div class="empty-products">
-                            Aktif ürün bulunamadı.
-                        </div>
+                            <div class="empty-products">
+                                Aktif ürün bulunamadı.
+                            </div>
 
                         @endforelse
 
                     </div>
-
-                    @section('page_js')
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const productGrid = document.getElementById('productGrid');
-                            const productCards = Array.from(document.querySelectorAll(
-                                '#productGrid .product-card'));
-                            const productResult = document.getElementById('productResult');
-                            const activeFilterText = document.getElementById('activeFilterText');
-                            const resetFiltersBtn = document.getElementById('resetFiltersBtn');
-                            const sortSelect = document.getElementById('sortSelect');
-                            const searchForm = document.getElementById('productSearchForm');
-                            const searchInput = document.getElementById('productSearchInput');
-                            const productsIndexUrl = "{{ route('products.index') }}";
-                            const filterButtons = Array.from(document.querySelectorAll(
-                                '.shop-sidebar .filter-btn[data-filter-group]'));
-
-                            const filterGroups = ['category', 'brand', 'frame_color', 'glass_color', 'gender'];
-                            const activeFilters = Object.fromEntries(filterGroups.map(group => [group, []]));
-                            let activeSearch = normalize(searchInput?.value || '');
-
-                            const noResult = document.createElement('div');
-                            noResult.className = 'no-result';
-                            noResult.textContent = 'Filtreye uygun ürün bulunamadı.';
-                            productGrid?.appendChild(noResult);
-
-                            function normalize(value) {
-                                return (value || '').toString().trim().toLocaleLowerCase('tr-TR');
-                            }
-
-                            function getButtonLabel(button) {
-                                return button.dataset.label || button.textContent.trim().replace(/\s+/g, ' ');
-                            }
-
-                            function setGroupState(group) {
-                                const groupButtons = document.querySelectorAll(
-                                    `.filter-btn[data-filter-group="${group}"]`);
-                                const selectedValues = activeFilters[group];
-                                const hasSelection = selectedValues.length > 0;
-
-                                groupButtons.forEach(button => {
-                                    const value = button.dataset.filter;
-                                    const isAll = value === 'all';
-                                    const isActive = isAll ? !hasSelection : selectedValues.includes(value);
-
-                                    button.classList.toggle('active', isActive);
-                                });
-                            }
-
-                            function updateAllButton(group) {
-                                const selectedValues = activeFilters[group];
-                                const groupButtons = document.querySelectorAll(
-                                    `.filter-btn[data-filter-group="${group}"]`);
-                                const allButton = Array.from(groupButtons).find(button => button.dataset.filter ===
-                                    'all');
-
-                                if (allButton) {
-                                    allButton.classList.toggle('active', selectedValues.length === 0);
-                                }
-                            }
-
-                            function updateFilterSummary() {
-                                const parts = [];
-
-                                filterGroups.forEach(group => {
-                                    const selectedValues = activeFilters[group];
-
-                                    if (selectedValues.length === 0) {
-                                        return;
-                                    }
-
-                                    const labels = selectedValues.map(value => {
-                                        const button = document.querySelector(
-                                            `.filter-btn[data-filter-group="${group}"][data-filter="${CSS.escape(value)}"]`
-                                        );
-
-                                        return button ? getButtonLabel(button) : value;
-                                    });
-
-                                    const groupLabel = {
-                                        category: 'Kategori',
-                                        brand: 'Marka',
-                                        frame_color: 'Çerçeve',
-                                        glass_color: 'Cam',
-                                        gender: 'Cinsiyet'
-                                    } [group] || group;
-
-                                    parts.push(`${groupLabel}: ${labels.join(', ')}`);
-                                });
-
-                                if (activeSearch) {
-                                    parts.push(`Arama: ${searchInput?.value?.trim() || ''}`.trim());
-                                }
-
-                                if (activeFilterText) {
-                                    activeFilterText.textContent = parts.length ? parts.join(' • ') : 'Tüm ürünler';
-                                }
-                            }
-
-                            function matchesGroupFilter(card, group) {
-                                const selectedValues = activeFilters[group];
-
-                                if (!selectedValues || selectedValues.length === 0) {
-                                    return true;
-                                }
-
-                                const datasetKey = group.replace(/_([a-z])/g, (m, p1) => p1.toUpperCase());
-                                const cardValue = normalize(card.dataset[datasetKey]);
-                                return selectedValues.some(value => normalize(value) === cardValue);
-                            }
-
-                            function applyFilters() {
-                                const sort = sortSelect?.value || 'default';
-
-                                let visibleCards = productCards.filter(card => {
-                                    const searchText = normalize(
-                                        `${card.dataset.name || ''} ${card.dataset.category || ''} ${card.dataset.brand || ''} ${card.dataset.frameColor || ''} ${card.dataset.glassColor || ''} ${card.dataset.gender || ''}`
-                                    );
-                                    const searchMatch = !activeSearch || searchText.includes(activeSearch);
-                                    const filterMatch = filterGroups.every(group => matchesGroupFilter(card,
-                                        group));
-
-                                    return searchMatch && filterMatch;
-                                });
-
-                                visibleCards.sort((a, b) => {
-                                    const priceA = Number(a.dataset.price || 0);
-                                    const priceB = Number(b.dataset.price || 0);
-                                    const nameA = a.dataset.name || '';
-                                    const nameB = b.dataset.name || '';
-
-                                    if (sort === 'priceAsc') return priceA - priceB;
-                                    if (sort === 'priceDesc') return priceB - priceA;
-                                    if (sort === 'nameAsc') return nameA.localeCompare(nameB, 'tr');
-
-                                    return 0;
-                                });
-
-                                productCards.forEach(card => {
-                                    card.style.display = 'none';
-                                });
-
-                                visibleCards.forEach(card => {
-                                    card.style.display = 'flex';
-                                    productGrid.appendChild(card);
-                                });
-
-                                if (noResult) {
-                                    noResult.style.display = visibleCards.length === 0 ? 'block' : 'none';
-                                    productGrid.appendChild(noResult);
-                                }
-
-                                if (productResult) {
-                                    productResult.textContent = `${visibleCards.length} ürün listeleniyor`;
-                                }
-
-                                updateFilterSummary();
-                            }
-
-                            function hasUrlFilters() {
-                                const params = new URLSearchParams(window.location.search);
-
-                                return ['q', 'category', 'brand', 'gender'].some(key => params.has(key) &&
-                                    params.get(key).trim() !== '');
-                            }
-
-                            filterButtons.forEach(button => {
-                                button.addEventListener('click', function() {
-                                    const group = this.dataset.filterGroup;
-                                    const value = this.dataset.filter || 'all';
-                                    const selectedValues = activeFilters[group] || [];
-
-                                    if (value === 'all') {
-                                        activeFilters[group] = [];
-                                        setGroupState(group);
-                                        applyFilters();
-                                        return;
-                                    }
-
-                                    if (selectedValues.includes(value)) {
-                                        activeFilters[group] = selectedValues.filter(item =>
-                                            item !== value);
-                                    } else {
-                                        activeFilters[group] = [...selectedValues, value];
-                                    }
-
-                                    setGroupState(group);
-                                    updateAllButton(group);
-                                    applyFilters();
-                                });
-                            });
-
-                            searchForm?.addEventListener('submit', function(e) {
-                                e.preventDefault();
-                                activeSearch = normalize(searchInput?.value || '');
-                                applyFilters();
-                            });
-
-                            searchInput?.addEventListener('input', function() {
-                                activeSearch = normalize(this.value || '');
-                                applyFilters();
-                            });
-
-                            sortSelect?.addEventListener('change', applyFilters);
-
-                            resetFiltersBtn?.addEventListener('click', function() {
-                                if (hasUrlFilters()) {
-                                    window.location.href = productsIndexUrl;
-                                    return;
-                                }
-
-                                filterGroups.forEach(group => {
-                                    activeFilters[group] = [];
-                                    setGroupState(group);
-                                });
-
-                                activeSearch = '';
-
-                                if (searchInput) {
-                                    searchInput.value = '';
-                                }
-
-                                if (sortSelect) {
-                                    sortSelect.value = 'default';
-                                }
-
-                                applyFilters();
-                            });
-
-                            document.addEventListener('click', function(e) {
-                                const favoriteButton = e.target.closest('.small-action');
-
-                                if (!favoriteButton) return;
-
-                                if (favoriteButton.tagName.toLowerCase() === 'a') return;
-
-                                favoriteButton.classList.toggle('active');
-                            });
-
-                            // Initialize from sessionStorage (pending filter from header click)
-                            try {
-                                const pending = sessionStorage.getItem('productFilters');
-                                if (pending) {
-                                    const data = JSON.parse(pending);
-                                    if (data.category) activeFilters.category = [data.category];
-                                    if (data.brand) activeFilters.brand = [data.brand];
-                                    if (data.gender) activeFilters.gender = [data.gender];
-                                    sessionStorage.removeItem('productFilters');
-                                }
-                            } catch (err) {
-                                // ignore
-                            }
-
-                            const activeGenderSlug = "{{ $activeGenderSlug }}";
-                            if (activeGenderSlug) {
-                                activeFilters.gender = [activeGenderSlug];
-                            }
-
-                            filterGroups.forEach(group => setGroupState(group));
-                            applyFilters();
-                        });
-                    </script>
-                    @endsection
 
                 </div>
 
@@ -529,6 +363,7 @@
         align-items: center;
         padding: 48px;
         overflow: hidden;
+        border-radius: 30px;
     }
 
     .shop-hero-box span {
@@ -574,9 +409,10 @@
         border: 1px solid #eee;
         padding: 18px;
         box-shadow: 0 18px 45px rgba(0, 0, 0, .05);
+        border-radius: 24px;
     }
 
-    .sidebar-block+.sidebar-block {
+    .sidebar-block + .sidebar-block {
         margin-top: 24px;
         padding-top: 22px;
         border-top: 1px solid #eee;
@@ -644,6 +480,7 @@
         align-items: center;
         gap: 16px;
         box-shadow: 0 18px 45px rgba(0, 0, 0, .04);
+        border-radius: 22px;
     }
 
     .shop-toolbar b {
@@ -668,6 +505,7 @@
         align-items: center;
         gap: 16px;
         box-shadow: 0 18px 45px rgba(0, 0, 0, .03);
+        border-radius: 22px;
     }
 
     .filter-summary-bar span {
@@ -738,6 +576,11 @@
         font-size: 12px;
     }
 
+    .mobile-shop-actions,
+    .mobile-filter-title {
+        display: none;
+    }
+
     .product-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -753,6 +596,7 @@
         flex-direction: column;
         min-height: 420px;
         transition: .28s ease;
+        border-radius: 24px;
     }
 
     .product-card:hover {
@@ -793,6 +637,9 @@
         font-weight: 900;
         font-size: 13px;
         transition: .22s ease;
+        border-radius: 50%;
+        text-decoration: none;
+        color: #000;
     }
 
     .small-action:hover,
@@ -801,29 +648,25 @@
         color: #fff;
     }
 
-    .product-media {
-        height: 210px;
-        background: #fafafa;
-        padding: 22px;
-        display: grid;
-        place-items: center;
+    .product-image {
+        height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background: #fff;
         overflow: hidden;
     }
 
-    .product-media img {
-        display: block;
-        margin: 0 auto;
-        max-width: auto;
-        max-height: 90%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        object-position: center;
-        transition: .3s ease;
+    .product-image img {
+        height: 100%;
+        max-width: 100%;
+        object-fit: scale-down;
+        transition: .32s ease;
     }
 
-    .product-card:hover .product-media img {
-        transform: scale(1.07);
+    .product-card:hover .product-image img {
+        transform: scale(1.06);
     }
 
     .product-body {
@@ -855,26 +698,6 @@
         font-size: 12px;
         line-height: 1.6;
         margin-bottom: 12px;
-    }
-
-    .product-image {
-        height: 260px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        background: #fff;
-        overflow: hidden;
-    }
-
-    .product-image img {
-        height: 100%;
-        object-fit: scale-down;
-        transition: .32s ease;
-    }
-
-    .product-card:hover .product-image img {
-        transform: scale(1.06);
     }
 
     .specs {
@@ -924,6 +747,7 @@
         font-weight: 900;
         cursor: pointer;
         transition: .25s ease;
+        border-radius: 50%;
     }
 
     .add-cart:hover {
@@ -936,15 +760,7 @@
         cursor: not-allowed;
     }
 
-    .empty-products {
-        grid-column: 1 / -1;
-        background: #fff;
-        padding: 28px;
-        text-align: center;
-        color: #777;
-        font-weight: 700;
-    }
-
+    .empty-products,
     .no-result {
         grid-column: 1 / -1;
         background: #fff;
@@ -952,6 +768,10 @@
         text-align: center;
         color: #777;
         font-weight: 700;
+        border-radius: 22px;
+    }
+
+    .no-result {
         display: none;
     }
 
@@ -1024,9 +844,18 @@
     }
 
     @media(max-width: 768px) {
+        .shop-page {
+            padding-bottom: 56px;
+        }
+
+        .shop-hero {
+            padding: 24px 0 12px;
+        }
+
         .shop-hero-box {
             padding: 24px;
-            min-height: 210px;
+            min-height: 190px;
+            border-radius: 24px;
         }
 
         .shop-hero-box h1 {
@@ -1034,8 +863,133 @@
             letter-spacing: -1.8px;
         }
 
+        .shop-hero-box p {
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .shop-layout {
+            display: block;
+        }
+
+        .mobile-shop-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            position: sticky;
+            top: 72px;
+            z-index: 40;
+            margin-bottom: 14px;
+            background: #f6f6f6;
+            padding: 8px 0;
+        }
+
+        .mobile-shop-actions button,
+        .mobile-shop-actions a {
+            height: 46px;
+            border: 0;
+            border-radius: 999px;
+            background: #000;
+            color: #fff;
+            font-weight: 900;
+            display: grid;
+            place-items: center;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .mobile-shop-actions a {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+
+        .shop-sidebar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: auto;
+            z-index: 999;
+            max-height: 82vh;
+            overflow-y: auto;
+            border-radius: 26px 26px 0 0;
+            transform: translateY(110%);
+            transition: .3s ease;
+            padding: 18px;
+            box-shadow: 0 -20px 60px rgba(0,0,0,.25);
+        }
+
+        .shop-sidebar.active {
+            transform: translateY(0);
+        }
+
+        .mobile-filter-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mobile-filter-title strong {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .mobile-filter-title button {
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 50%;
+            background: #000;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .sidebar-block {
+            background: #fafafa;
+            padding: 14px;
+            border-radius: 18px;
+        }
+
+        .sidebar-block + .sidebar-block {
+            margin-top: 12px;
+            padding-top: 14px;
+            border-top: 0;
+        }
+
+        .sidebar-block h3 {
+            font-size: 14px;
+        }
+
+        .filter-list {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .filter-scroll {
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        .filter-btn {
+            flex: 0 0 auto;
+            min-width: max-content;
+            padding: 10px 13px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #fff;
+        }
+
         .shop-toolbar {
             padding: 12px;
+            border-radius: 18px;
+            margin-bottom: 12px;
         }
 
         .shop-toolbar b {
@@ -1046,22 +1000,8 @@
             font-size: 11px;
         }
 
-        .filter-list,
-        .product-grid {
-            grid-template-columns: 1fr;
-        }
-
         .toolbar-actions {
             flex-direction: column;
-        }
-
-        .filter-scroll {
-            max-height: 155px;
-        }
-
-        .filter-btn {
-            padding: 8px 9px;
-            font-size: 10px;
         }
 
         .shop-search,
@@ -1071,29 +1011,65 @@
             width: 100%;
         }
 
+        .filter-summary-bar {
+            padding: 12px;
+            border-radius: 18px;
+            margin-bottom: 14px;
+        }
+
         .product-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
         }
 
         .product-card {
-            min-height: 390px;
+            min-height: auto;
+            border-radius: 18px;
         }
 
-        .product-media {
-            height: 190px;
-            padding: 18px;
+        .product-label {
+            left: 9px;
+            top: 9px;
+            font-size: 9px;
+            padding: 5px 8px;
+        }
+
+        .product-actions {
+            right: 9px;
+            top: 9px;
+            gap: 6px;
+        }
+
+        .small-action {
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .product-image {
+            height: 210px;
+            padding: 8px;
         }
 
         .product-body {
-            padding: 14px;
+            padding: 12px;
+        }
+
+        .product-meta {
+            font-size: 10px;
+            margin-bottom: 6px;
         }
 
         .product-body h3 {
-            font-size: 15px;
+            font-size: 13px;
+            line-height: 1.35;
+            min-height: 36px;
+            margin-bottom: 8px;
         }
 
-        .product-body p {
-            font-size: 11px;
+        .product-body p,
+        .specs {
+            display: none;
         }
 
         .price-row strong {
@@ -1101,94 +1077,23 @@
         }
 
         .add-cart {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             font-size: 17px;
         }
-
-        .filter-summary-bar {
-            padding: 12px;
-        }
     }
 
-    @media(max-width: 480px) {
-        .shop-page {
-            padding-bottom: 56px;
-        }
-
-        .shop-hero {
-            padding: 26px 0 18px;
-        }
-
-        .shop-hero-box span {
-            padding: 8px 12px;
-            font-size: 11px;
-            margin-bottom: 12px;
-        }
-
-        .shop-hero-box p {
-            line-height: 1.65;
-            font-size: 13px;
-        }
-
-        .sidebar-block h3 {
-            font-size: 14px;
-        }
-
-        .filter-btn {
-            padding: 7px 9px;
-            border-radius: 9px;
-            font-size: 10px;
-        }
-
-        .shop-toolbar,
-        .filter-summary-bar {
-            gap: 12px;
-        }
-
-        .shop-search button {
-            width: 62px;
-            font-size: 12px;
-        }
-
-        .toolbar-actions select {
-            font-size: 11px;
-        }
-
-        .product-card {
-            min-height: 372px;
-        }
-
-        .product-label {
-            left: 10px;
-            top: 10px;
-        }
-
-        .product-actions {
-            right: 10px;
-            top: 10px;
-        }
-
-        .specs {
-            gap: 6px;
-        }
-
-        .specs span {
-            font-size: 9px;
-        }
-    }
-
-    @media(max-width: 560px) {
-        .product-grid {
-            grid-template-columns: 1fr;
-        }
-
+    @media(max-width: 420px) {
         .product-image {
-            height: 300px;
+            height: 185px;
         }
 
-        .marquee {
-            font-size: 17px;
+        .price-row strong {
+            font-size: 15px;
+        }
+
+        .product-body h3 {
+            font-size: 12px;
         }
     }
 </style>
@@ -1198,78 +1103,117 @@
 @section('page_js')
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const productGrid = document.getElementById('productGrid');
-        const productCards = Array.from(document.querySelectorAll('.product-card'));
-        const filterButtons = Array.from(document.querySelectorAll('.shop-sidebar .filter-btn[data-filter-group]'));
+        const productCards = Array.from(document.querySelectorAll('#productGrid .product-card'));
         const productResult = document.getElementById('productResult');
         const activeFilterText = document.getElementById('activeFilterText');
         const resetFiltersBtn = document.getElementById('resetFiltersBtn');
         const sortSelect = document.getElementById('sortSelect');
         const searchForm = document.getElementById('productSearchForm');
         const searchInput = document.getElementById('productSearchInput');
+        const productsIndexUrl = "{{ route('products.index') }}";
+        const filterButtons = Array.from(document.querySelectorAll('.shop-sidebar .filter-btn[data-filter-group]'));
+
+        const shopSidebar = document.getElementById('shopSidebar');
+        const openMobileFilters = document.getElementById('openMobileFilters');
+        const closeMobileFilters = document.getElementById('closeMobileFilters');
 
         const filterGroups = ['category', 'brand', 'frame_color', 'glass_color', 'gender'];
-        const activeFilters = Object.fromEntries(filterGroups.map(group => [group, 'all']));
-        let activeSearch = '';
+        const activeFilters = Object.fromEntries(filterGroups.map(group => [group, []]));
+
+        let activeSearch = normalize(searchInput?.value || '');
 
         const noResult = document.createElement('div');
         noResult.className = 'no-result';
         noResult.textContent = 'Filtreye uygun ürün bulunamadı.';
         productGrid?.appendChild(noResult);
 
-        function getActiveButtonLabel(group) {
-            const activeButton = document.querySelector(`.filter-btn[data-filter-group="${group}"].active`);
-            if (!activeButton) return null;
+        function normalize(value) {
+            return (value || '').toString().trim().toLocaleLowerCase('tr-TR');
+        }
 
-            if (activeButton.dataset.filter === 'all') {
-                return null;
-            }
+        function getButtonLabel(button) {
+            return button.dataset.label || button.textContent.trim().replace(/\s+/g, ' ');
+        }
 
-            return activeButton.dataset.label || activeButton.textContent.trim();
+        function setGroupState(group) {
+            const groupButtons = document.querySelectorAll(`.filter-btn[data-filter-group="${group}"]`);
+            const selectedValues = activeFilters[group];
+            const hasSelection = selectedValues.length > 0;
+
+            groupButtons.forEach(button => {
+                const value = button.dataset.filter;
+                const isAll = value === 'all';
+                const isActive = isAll ? !hasSelection : selectedValues.includes(value);
+
+                button.classList.toggle('active', isActive);
+            });
         }
 
         function updateFilterSummary() {
-            const labels = [];
+            const parts = [];
 
             filterGroups.forEach(group => {
-                const label = getActiveButtonLabel(group);
-                if (label) labels.push(label);
+                const selectedValues = activeFilters[group];
+
+                if (selectedValues.length === 0) {
+                    return;
+                }
+
+                const labels = selectedValues.map(value => {
+                    const button = document.querySelector(
+                        `.filter-btn[data-filter-group="${group}"][data-filter="${CSS.escape(value)}"]`
+                    );
+
+                    return button ? getButtonLabel(button) : value;
+                });
+
+                const groupLabel = {
+                    category: 'Kategori',
+                    brand: 'Marka',
+                    frame_color: 'Çerçeve',
+                    glass_color: 'Cam',
+                    gender: 'Cinsiyet'
+                }[group] || group;
+
+                parts.push(`${groupLabel}: ${labels.join(', ')}`);
             });
 
             if (activeSearch) {
-                labels.push(`Arama: ${searchInput?.value?.trim() || ''}`.trim());
+                parts.push(`Arama: ${searchInput?.value?.trim() || ''}`.trim());
             }
 
-            activeFilterText.textContent = labels.length ? labels.join(' • ') : 'Tüm ürünler';
+            if (activeFilterText) {
+                activeFilterText.textContent = parts.length ? parts.join(' • ') : 'Tüm ürünler';
+            }
         }
 
-        function setActiveButton(group, value) {
-            document.querySelectorAll(`.filter-btn[data-filter-group="${group}"]`).forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.filter === value);
-            });
+        function matchesGroupFilter(card, group) {
+            const selectedValues = activeFilters[group];
+
+            if (!selectedValues || selectedValues.length === 0) {
+                return true;
+            }
+
+            const datasetKey = group.replace(/_([a-z])/g, (m, p1) => p1.toUpperCase());
+            const cardValue = normalize(card.dataset[datasetKey]);
+
+            return selectedValues.some(value => normalize(value) === cardValue);
         }
 
-        function matchesFilter(card, group, value) {
-            if (!value || value === 'all') return true;
-
-            const cardValue = (card.dataset[group] || '').toString().trim().toLowerCase('tr-TR');
-            return cardValue === value.toString().trim().toLowerCase('tr-TR');
-        }
-
-        function applyProducts() {
+        function applyFilters() {
             const sort = sortSelect?.value || 'default';
 
             let visibleCards = productCards.filter(card => {
-                const matchesAllFilters = filterGroups.every(group => matchesFilter(card, group,
-                    activeFilters[group]));
+                const searchText = normalize(
+                    `${card.dataset.name || ''} ${card.dataset.category || ''} ${card.dataset.brand || ''} ${card.dataset.frameColor || ''} ${card.dataset.glassColor || ''} ${card.dataset.gender || ''}`
+                );
 
-                const searchText =
-                    `${card.dataset.name || ''} ${card.dataset.category || ''} ${card.dataset.brand || ''}`
-                    .toLocaleLowerCase('tr-TR');
                 const searchMatch = !activeSearch || searchText.includes(activeSearch);
+                const filterMatch = filterGroups.every(group => matchesGroupFilter(card, group));
 
-                return matchesAllFilters && searchMatch;
+                return searchMatch && filterMatch;
             });
 
             visibleCards.sort((a, b) => {
@@ -1306,34 +1250,81 @@
             updateFilterSummary();
         }
 
+        function hasUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+
+            return ['q', 'category', 'brand', 'gender'].some(key => {
+                return params.has(key) && params.get(key).trim() !== '';
+            });
+        }
+
+        openMobileFilters?.addEventListener('click', function () {
+            shopSidebar?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMobileFilters?.addEventListener('click', function () {
+            shopSidebar?.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
         filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const group = this.dataset.filterGroup;
                 const value = this.dataset.filter || 'all';
+                const selectedValues = activeFilters[group] || [];
 
-                activeFilters[group] = value;
-                setActiveButton(group, value);
-                applyProducts();
+                if (value === 'all') {
+                    activeFilters[group] = [];
+                    setGroupState(group);
+                    applyFilters();
+
+                    if (window.innerWidth <= 768) {
+                        shopSidebar?.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+
+                    return;
+                }
+
+                if (selectedValues.includes(value)) {
+                    activeFilters[group] = selectedValues.filter(item => item !== value);
+                } else {
+                    activeFilters[group] = [...selectedValues, value];
+                }
+
+                setGroupState(group);
+                applyFilters();
+
+                if (window.innerWidth <= 768) {
+                    shopSidebar?.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             });
         });
 
-        searchForm?.addEventListener('submit', function(e) {
+        searchForm?.addEventListener('submit', function (e) {
             e.preventDefault();
-            activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
-            applyProducts();
+            activeSearch = normalize(searchInput?.value || '');
+            applyFilters();
         });
 
-        searchInput?.addEventListener('input', function() {
-            activeSearch = searchInput.value.trim().toLocaleLowerCase('tr-TR');
-            applyProducts();
+        searchInput?.addEventListener('input', function () {
+            activeSearch = normalize(this.value || '');
+            applyFilters();
         });
 
-        sortSelect?.addEventListener('change', applyProducts);
+        sortSelect?.addEventListener('change', applyFilters);
 
-        resetFiltersBtn?.addEventListener('click', function() {
+        resetFiltersBtn?.addEventListener('click', function () {
+            if (hasUrlFilters()) {
+                window.location.href = productsIndexUrl;
+                return;
+            }
+
             filterGroups.forEach(group => {
-                activeFilters[group] = 'all';
-                setActiveButton(group, 'all');
+                activeFilters[group] = [];
+                setGroupState(group);
             });
 
             activeSearch = '';
@@ -1346,10 +1337,13 @@
                 sortSelect.value = 'default';
             }
 
-            applyProducts();
+            shopSidebar?.classList.remove('active');
+            document.body.style.overflow = '';
+
+            applyFilters();
         });
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const favoriteButton = e.target.closest('.small-action');
 
             if (!favoriteButton) return;
@@ -1359,38 +1353,46 @@
             favoriteButton.classList.toggle('active');
         });
 
-        function syncFiltersFromActiveButtons() {
-            filterGroups.forEach(group => {
-                const activeButton = document.querySelector(`.filter-btn[data-filter-group="${group}"].active`);
-                activeFilters[group] = activeButton?.dataset.filter || 'all';
-            });
-        }
-
-        // Initialize filters from sessionStorage (header click) if present
         try {
             const pending = sessionStorage.getItem('productFilters');
+
             if (pending) {
                 const data = JSON.parse(pending);
+
                 if (data.category) {
-                    activeFilters.category = data.category;
-                    setActiveButton('category', data.category);
+                    activeFilters.category = [data.category];
                 }
+
                 if (data.brand) {
-                    activeFilters.brand = data.brand;
-                    setActiveButton('brand', data.brand);
+                    activeFilters.brand = [data.brand];
                 }
+
+                if (data.gender) {
+                    activeFilters.gender = [data.gender];
+                }
+
                 sessionStorage.removeItem('productFilters');
-            } else {
-                // If no pending filters, fall back to server-rendered active buttons
-                syncFiltersFromActiveButtons();
-                filterGroups.forEach(group => setActiveButton(group, activeFilters[group]));
             }
-        } catch (err) {
-            syncFiltersFromActiveButtons();
-            filterGroups.forEach(group => setActiveButton(group, activeFilters[group]));
+        } catch (err) {}
+
+        const activeCategorySlug = "{{ $activeCategorySlug }}";
+        const activeBrandSlug = "{{ $activeBrandSlug }}";
+        const activeGenderSlug = "{{ $activeGenderSlug }}";
+
+        if (activeCategorySlug) {
+            activeFilters.category = [activeCategorySlug];
         }
 
-        applyProducts();
+        if (activeBrandSlug) {
+            activeFilters.brand = [activeBrandSlug];
+        }
+
+        if (activeGenderSlug) {
+            activeFilters.gender = [activeGenderSlug];
+        }
+
+        filterGroups.forEach(group => setGroupState(group));
+        applyFilters();
     });
 </script>
 
