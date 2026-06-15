@@ -6,5 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slider extends Model
 {
-    //
+    protected $fillable = [
+        'badge',
+        'title',
+        'text',
+        'button_text',
+        'button_url',
+        'image',
+        'sort_order',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
 }

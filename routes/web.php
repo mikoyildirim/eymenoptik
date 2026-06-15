@@ -21,12 +21,23 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\SliderController;
 
 /*
 |--------------------------------------------------------------------------
 | FRONTEND
 |--------------------------------------------------------------------------
 */
+
+
+Route::prefix('admin')
+    ->middleware(['auth', 'admin'])
+    ->name('admin.')
+    ->group(function () {
+
+        Route::resource('sliders', SliderController::class);
+
+    });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

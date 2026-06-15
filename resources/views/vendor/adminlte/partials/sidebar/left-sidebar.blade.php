@@ -61,6 +61,12 @@
                 <p>Markalar</p>
             </a>
 
+            <a href="{{ route('admin.sliders.index') }}"
+                class="eo-menu-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
+                <span><i class="fas fa-images"></i></span>
+                <p>Sliderlar</p>
+            </a>
+
             <div class="eo-menu-title">SATIŞ</div>
 
             <a href="{{ route('admin.orders.index') }}"
@@ -101,7 +107,6 @@
 
     </div>
 </aside>
-
 <style>
     .eo-sidebar {
         background:

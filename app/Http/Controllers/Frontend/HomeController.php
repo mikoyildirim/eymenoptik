@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\Slider;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -24,6 +25,12 @@ class HomeController extends Controller
             ->whereNotNull('discount_price')
             ->latest()
             ->take(5)
+            ->get();
+
+        $sliders = Slider::query()
+            ->where('is_active', 1)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
             ->get();
 
         // Prefer products ranked by sold quantity (order_items). If no sales exist, fall back to `is_featured`.
@@ -69,6 +76,8 @@ class HomeController extends Controller
             'bestSellerProducts' => $bestSellerProducts->isNotEmpty()
                 ? $bestSellerProducts
                 : $products,
+
+            'sliders' => $sliders,
         ]);
     }
 }
