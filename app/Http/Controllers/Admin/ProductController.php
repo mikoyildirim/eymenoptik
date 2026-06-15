@@ -248,10 +248,10 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'frame_color' => $isLensCategory ? 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik' : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+            'frame_color' => $isLensCategory ? 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,metalik,havana,pudra,rose_gold,bordo,enjeksiyon,titanyum,gri,pembe,leopar_deseni,kaplumbaga_kabugu,seffaf_bej,siyah_sari_mermer,col_kaplumbaga_kabugu,acik_pembe,opak_kum,karisik' : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,metalik,havana,pudra,rose_gold,bordo,enjeksiyon,titanyum,gri,pembe,leopar_deseni,kaplumbaga_kabugu,seffaf_bej,siyah_sari_mermer,col_kaplumbaga_kabugu,acik_pembe,opak_kum,karisik',
             'glass_color' => $isLensCategory
                 ? 'nullable|in:seffaf,gumus gri,parlak mavi,zumrut yesil,mavi,yesil,gri,bal rengi,ela,kahverengi'
-                : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,karisik',
+                : 'nullable|in:siyah,beyaz,kahverengi,fume,saydam,altin,gumus,kirmizi,mavi,yesil,pembe,sari,kahverengi_degrade,bordo,turuncu,mavi_degrade,mavi_aynali,karisik',
             'frame_material' => $isLensCategory ? 'nullable' : 'required',
             'glass_type' => 'nullable',
             'lens_degree' => $isLensCategory ? 'required|string|max:50' : 'nullable|string|max:50',
