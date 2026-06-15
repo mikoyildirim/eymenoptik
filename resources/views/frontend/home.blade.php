@@ -47,12 +47,19 @@
 
                 <div class="hero-overlay"></div>
 
-                <div class="hero-content">
-                    <span>Ücretsiz Kargo</span>
-                    <h1>{{ number_format($freeShippingThreshold, 0, ',', '.') }} TL Üzeri Kargo Bizden</h1>
-                    <p>Seçili ürünlerde güvenli alışveriş ve hızlı teslimat avantajı.</p>
-                    <a href="{{ route('products.index') }}">Alışverişe Başla</a>
-                </div>
+            <div class="hero-content">
+    <span>Ücretsiz Kargo</span>
+
+    @if($freeShippingThreshold == 0)
+        <h1>Ücretsiz Kargo</h1>
+        <p>Tüm siparişlerinizde ücretsiz kargo fırsatını kaçırmayın.</p>
+    @else
+        <h1>₺{{ number_format($freeShippingThreshold, 0, ',', '.') }} ve Üzeri</h1>
+        <p>{{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ve üzeri alışverişlerinizde ücretsiz kargo fırsatını kaçırmayın.</p>
+    @endif
+
+    <a href="{{ route('products.index') }}">Alışverişe Başla</a>
+</div>
             </div>
 
             <button class="slider-btn prev" type="button" id="sliderPrev">‹</button>
@@ -66,14 +73,14 @@
 
         </div>
 
-        <div class="marquee">
-            <span>
-                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
-                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ÜZERİ ÜCRETSİZ KARGO • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
-            </span>
-        </div>
-
-    </div>
+  <div class="marquee">
+    <span>
+        {{ $freeShippingThreshold == 0 
+            ? 'ÜCRETSİZ KARGO' 
+            : number_format($freeShippingThreshold, 0, ',', '.') . ' TL ÜZERİ ÜCRETSİZ KARGO' }}
+        • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+    </span>
+</div>
 </section>
 
 <section class="mini-feature-section">

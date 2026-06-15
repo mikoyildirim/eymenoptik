@@ -109,10 +109,10 @@
 
                         <div class="faq-answer">
                             <p>
-                                {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL ve üzeri alışverişlerde ücretsiz kargo
-                                avantajı sunulmaktadır.
+                                {{ $freeShippingThreshold == 0 
+                                    ? 'Tüm siparişlerinizde ücretsiz kargo fırsatından yararlanabilirsiniz.' 
+                                    : number_format($freeShippingThreshold, 0, ',', '.') . ' TL ve üzeri siparişlerinizde ücretsiz kargo fırsatından yararlanabilirsiniz.' }}
                             </p>
-                        </div>
                     </div>
 
                     <div class="faq-item">
