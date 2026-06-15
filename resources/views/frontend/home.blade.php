@@ -308,7 +308,7 @@ $hasSliders = isset($sliders) && $sliders->isNotEmpty();
     <div class="container">
         <div class="double-banner-grid">
 
-            <a href="{{ route('products.index', ['gender' => 'erkek']) }}" class="image-banner reveal">
+            <a href="{{ route('products.index', ['gender' => 'erkek']) }}" class="image-banner reveal js-top-gender-link" data-gender="erkek">
                 <img src="{{ asset('images/erkekgns.jpg') }}" alt="Erkek Güneş Gözlükleri">
 
                 <div>
@@ -317,7 +317,7 @@ $hasSliders = isset($sliders) && $sliders->isNotEmpty();
                 </div>
             </a>
 
-            <a href="{{ route('products.index', ['gender' => 'kadin']) }}" class="image-banner reveal">
+            <a href="{{ route('products.index', ['gender' => 'kadin']) }}" class="image-banner reveal js-top-gender-link" data-gender="kadin">
                 <img src="{{ asset('images/kadinngns.jpg') }}" alt="Kadın Güneş Gözlükleri">
 
                 <div>
@@ -1002,6 +1002,26 @@ $hasSliders = isset($sliders) && $sliders->isNotEmpty();
             if (!wishBtn) return;
 
             wishBtn.classList.toggle('active');
+        });
+    });
+</script>
+
+<script>
+    document.querySelectorAll('.js-top-gender-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const gender = this.dataset.gender;
+            if (!gender) return;
+
+            e.preventDefault();
+            try {
+                sessionStorage.setItem('productFilters', JSON.stringify({
+                    gender
+                }));
+            } catch (err) {
+                console.error('Linke gidilirken hata oluştu:', err);
+            }
+
+            window.location.href = "<?php echo e(route('products.index')); ?>";
         });
     });
 </script>
