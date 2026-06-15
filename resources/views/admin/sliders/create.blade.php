@@ -29,17 +29,6 @@
             @csrf
 
             <div class="form-group">
-                <label>Küçük Başlık</label>
-                <input
-                    type="text"
-                    name="badge"
-                    class="form-control"
-                    value="{{ old('badge') }}"
-                    placeholder="Premium Seçimler"
-                >
-            </div>
-
-            <div class="form-group">
                 <label>Ana Başlık</label>
                 <input
                     type="text"
@@ -47,18 +36,16 @@
                     class="form-control"
                     value="{{ old('title') }}"
                     placeholder="Modern ve Şık Gözlükler"
-                    required
-                >
+                    required />
             </div>
 
             <div class="form-group">
                 <label>Açıklama Metni</label>
                 <textarea
-                    name="text"
+                    name="subtitle"
                     class="form-control"
                     rows="4"
-                    placeholder="Yeni sezonun en özel gözlük modellerini keşfedin."
-                >{{ old('text') }}</textarea>
+                    placeholder="Yeni sezonun en özel gözlük modellerini keşfedin.">{{ old('subtitle') }}</textarea>
             </div>
 
             <div class="form-group">
@@ -68,8 +55,7 @@
                     name="button_text"
                     class="form-control"
                     value="{{ old('button_text') }}"
-                    placeholder="Koleksiyonu Gör"
-                >
+                    placeholder="Koleksiyonu Gör" />
             </div>
 
             <div class="form-group">
@@ -79,8 +65,7 @@
                     name="button_url"
                     class="form-control"
                     value="{{ old('button_url', route('products.index')) }}"
-                    placeholder="{{ route('products.index') }}"
-                >
+                    placeholder="{{ route('products.index') }}" />
             </div>
 
             <div class="form-group">
@@ -90,8 +75,7 @@
                     name="image"
                     class="form-control"
                     accept="image/*"
-                    required
-                >
+                    required />
             </div>
 
             <div class="form-group">
@@ -101,8 +85,7 @@
                     name="sort_order"
                     class="form-control"
                     value="{{ old('sort_order', 0) }}"
-                    min="0"
-                >
+                    min="0" />
             </div>
 
             <div class="form-group">
@@ -113,8 +96,7 @@
                         value="1"
                         class="custom-control-input"
                         id="is_active"
-                        checked
-                    >
+                        checked />
                     <label class="custom-control-label" for="is_active">
                         Slider aktif olsun
                     </label>

@@ -27,9 +27,8 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'badge' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
-            'text' => 'nullable|string',
+            'subtitle' => 'nullable|string',
             'button_text' => 'nullable|string|max:255',
             'button_url' => 'nullable|string|max:500',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:4096',
@@ -64,12 +63,11 @@ class SliderController extends Controller
     public function update(Request $request, Slider $slider)
     {
         $validated = $request->validate([
-            'badge' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
-            'text' => 'nullable|string',
+            'subtitle' => 'nullable|string',
             'button_text' => 'nullable|string|max:255',
             'button_url' => 'nullable|string|max:500',
-           'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
         ]);

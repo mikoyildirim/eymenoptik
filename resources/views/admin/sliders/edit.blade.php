@@ -30,17 +30,6 @@
             @method('PUT')
 
             <div class="form-group">
-                <label>Küçük Başlık</label>
-                <input
-                    type="text"
-                    name="badge"
-                    class="form-control"
-                    value="{{ old('badge', $slider->badge) }}"
-                    placeholder="Premium Seçimler"
-                >
-            </div>
-
-            <div class="form-group">
                 <label>Ana Başlık</label>
                 <input
                     type="text"
@@ -48,18 +37,16 @@
                     class="form-control"
                     value="{{ old('title', $slider->title) }}"
                     placeholder="Modern ve Şık Gözlükler"
-                    required
-                >
+                    required />
             </div>
 
             <div class="form-group">
                 <label>Açıklama Metni</label>
                 <textarea
-                    name="text"
+                    name="subtitle"
                     class="form-control"
                     rows="4"
-                    placeholder="Yeni sezonun en özel gözlük modellerini keşfedin."
-                >{{ old('text', $slider->text) }}</textarea>
+                    placeholder="Yeni sezonun en özel gözlük modellerini keşfedin.">{{ old('subtitle', $slider->subtitle) }}</textarea>
             </div>
 
             <div class="form-group">
@@ -69,8 +56,7 @@
                     name="button_text"
                     class="form-control"
                     value="{{ old('button_text', $slider->button_text) }}"
-                    placeholder="Koleksiyonu Gör"
-                >
+                    placeholder="Koleksiyonu Gör" />
             </div>
 
             <div class="form-group">
@@ -80,22 +66,20 @@
                     name="button_url"
                     class="form-control"
                     value="{{ old('button_url', $slider->button_url) }}"
-                    placeholder="{{ route('products.index') }}"
-                >
+                    placeholder="{{ route('products.index') }}" />
             </div>
 
             <div class="form-group">
                 <label>Mevcut Görsel</label>
 
                 @if($slider->image)
-                    <div class="mb-3">
-                        <img
-                            src="{{ asset($slider->image) }}"
-                            style="max-width:320px;height:180px;object-fit:cover;border-radius:14px;border:1px solid #eee;"
-                        >
-                    </div>
+                <div class="mb-3">
+                    <img
+                        src="{{ asset($slider->image) }}"
+                        style="max-width:320px;height:180px;object-fit:cover;border-radius:14px;border:1px solid #eee;" />
+                </div>
                 @else
-                    <p class="text-muted">Görsel bulunamadı.</p>
+                <p class="text-muted">Görsel bulunamadı.</p>
                 @endif
             </div>
 
@@ -105,8 +89,7 @@
                     type="file"
                     name="image"
                     class="form-control"
-                    accept="image/*"
-                >
+                    accept="image/*" />
                 <small class="text-muted">
                     Yeni görsel seçmezseniz eski görsel korunur.
                 </small>
@@ -119,8 +102,7 @@
                     name="sort_order"
                     class="form-control"
                     value="{{ old('sort_order', $slider->sort_order) }}"
-                    min="0"
-                >
+                    min="0" />
             </div>
 
             <div class="form-group">
@@ -131,8 +113,7 @@
                         value="1"
                         class="custom-control-input"
                         id="is_active"
-                        {{ old('is_active', $slider->is_active) ? 'checked' : '' }}
-                    >
+                        {{ old('is_active', $slider->is_active) ? 'checked' : '' }} />
                     <label class="custom-control-label" for="is_active">
                         Slider aktif olsun
                     </label>

@@ -30,11 +30,6 @@
                 <p>Dashboard</p>
             </a>
 
-            <a href="https://mt-arnor-da.guzelhosting.com/roundcube/" target="_blank" class="eo-menu-link">
-                <span><i class="fas fa-envelope"></i></span>
-                <p>Maillere Git</p>
-            </a>
-
             <div class="eo-menu-title">KATALOG</div>
 
             <a href="{{ route('admin.products.index') }}"
@@ -61,12 +56,6 @@
                 <p>Markalar</p>
             </a>
 
-            <a href="{{ route('admin.sliders.index') }}"
-                class="eo-menu-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
-                <span><i class="fas fa-images"></i></span>
-                <p>Sliderlar</p>
-            </a>
-
             <div class="eo-menu-title">SATIŞ</div>
 
             <a href="{{ route('admin.orders.index') }}"
@@ -76,12 +65,28 @@
             </a>
 
             <div class="eo-menu-title">SİSTEM</div>
-
+            <a href="{{ route('admin.sliders.index') }}"
+                class="eo-menu-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
+                <span><i class="fas fa-images"></i></span>
+                <p>Sliderlar</p>
+            </a>
             <a href="/" class="eo-menu-link">
                 <span><i class="fas fa-store"></i></span>
                 <p>Mağazaya Git</p>
             </a>
+            <a href="https://mt-arnor-da.guzelhosting.com/roundcube/" target="_blank" class="eo-menu-link">
+                <span><i class="fas fa-envelope"></i></span>
+                <p>Maillere Git</p>
+            </a>
+
+            <a href="{{ route('admin.settings.edit') }}"
+                class="eo-settings-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                <span><i class="fas fa-cog"></i></span>
+                <p>Ayarlar</p>
+            </a>
         </nav>
+
+
 
         <div class="eo-sidebar-footer">
             <div>
@@ -90,12 +95,6 @@
             </div>
             <i class="fas fa-circle"></i>
         </div>
-
-        <a href="{{ route('admin.settings.edit') }}"
-            class="eo-settings-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-            <span><i class="fas fa-cog"></i></span>
-            <p>Ayarlar</p>
-        </a>
 
         <form action="{{ route('logout') }}" method="POST">
             @csrf

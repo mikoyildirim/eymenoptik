@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Slider extends Model
 {
     protected $fillable = [
-        'badge',
         'title',
-        'text',
+        'subtitle',
         'button_text',
         'button_url',
         'image',
-        'sort_order',
         'is_active',
+        'sort_order',
     ];
 
     protected $casts = [

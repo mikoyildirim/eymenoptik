@@ -34,7 +34,6 @@
                 <tr>
                     <th width="100">Görsel</th>
                     <th>Başlık</th>
-                    <th>Badge</th>
                     <th>Sıra</th>
                     <th>Durum</th>
                     <th width="180">İşlem</th>
@@ -58,10 +57,6 @@
 
                     <td>
                         <strong>{{ $slider->title }}</strong>
-                    </td>
-
-                    <td>
-                        {{ $slider->badge }}
                     </td>
 
                     <td>

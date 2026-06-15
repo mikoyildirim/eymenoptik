@@ -5,7 +5,11 @@
 @section('content')
 
 @php
-    $freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
+$freeShippingThreshold = (float) $siteSettings->shipping_free_threshold;
+@endphp
+
+@php
+$hasSliders = isset($sliders) && $sliders->isNotEmpty();
 @endphp
 
 <section class="hero-slider-section reveal">
@@ -13,69 +17,78 @@
 
         <div class="hero-slider" id="heroSlider">
 
-            @forelse($sliders as $index => $slider)
+            @if($hasSliders)
 
-                <div class="hero-slide {{ $index === 0 ? 'active' : '' }}">
-                    <img src="{{ asset($slider->image) }}" alt="{{ $slider->title }}">
+            @foreach($sliders as $index => $slider)
+            <div class="hero-slide {{ $index === 0 ? 'active' : '' }}">
+                <img src="{{ asset($slider->image) }}" alt="{{ $slider->title ?? 'Slider' }}">
 
-                    <div class="hero-overlay"></div>
+                <div class="hero-overlay"></div>
 
-                    <div class="hero-content">
-                        @if($slider->badge)
-                            <span>{{ $slider->badge }}</span>
-                        @endif
+                <div class="hero-content">
+                    <span>Eymen Optik</span>
 
-                        <h1>{{ $slider->title }}</h1>
+                    <h1>{{ $slider->title }}</h1>
 
-                        @if($slider->text)
-                            <p>{{ $slider->text }}</p>
-                        @endif
+                    @if(!empty($slider->subtitle))
+                    <p>{{ $slider->subtitle }}</p>
+                    @endif
 
-                        @if($slider->button_text)
-                            <a href="{{ $slider->button_url ?: route('products.index') }}">
-                                {{ $slider->button_text }}
-                            </a>
-                        @endif
-                    </div>
+                    @if(!empty($slider->button_text))
+                    <a href="{{ $slider->button_url ?: route('products.index') }}">
+                        {{ $slider->button_text }}
+                    </a>
+                    @endif
                 </div>
+            </div>
+            @endforeach
 
-            @empty
+            @else
 
-                <div class="hero-slide active">
-                    <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90"
-                        alt="Eymen Optik">
+            <div class="hero-slide active">
+                <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1800&q=90"
+                    alt="Eymen Optik">
 
-                    <div class="hero-overlay"></div>
+                <div class="hero-overlay"></div>
 
-                    <div class="hero-content">
-                        <span>Yeni Sezon Koleksiyonu</span>
-                        <h1>Tarzın Gözlerinden Okunsun</h1>
-                        <p>Güneş gözlükleri, optik çerçeveler ve premium modelleri keşfet.</p>
-                        <a href="{{ route('products.index') }}">Ürünleri İncele</a>
-                    </div>
+                <div class="hero-content">
+                    <span>Yeni Sezon Koleksiyonu</span>
+                    <h1>Tarzın Gözlerinden Okunsun</h1>
+                    <p>Güneş gözlükleri, optik çerçeveler ve premium modelleri keşfet.</p>
+
+                    <a href="{{ route('products.index') }}">
+                        Ürünleri İncele
+                    </a>
                 </div>
+            </div>
 
-            @endforelse
+            @endif
 
-            @if($sliders->count() > 1)
-                <button class="slider-btn prev" type="button" id="sliderPrev">‹</button>
-                <button class="slider-btn next" type="button" id="sliderNext">›</button>
+            @if($hasSliders && $sliders->count() > 1)
+            <button class="slider-btn prev" type="button" id="sliderPrev">‹</button>
+            <button class="slider-btn next" type="button" id="sliderNext">›</button>
 
-                <div class="slider-dots" id="sliderDots">
-                    @foreach($sliders as $index => $slider)
-                        <button class="{{ $index === 0 ? 'active' : '' }}" type="button"></button>
-                    @endforeach
-                </div>
+            <div class="slider-dots" id="sliderDots">
+                @foreach($sliders as $index => $slider)
+                <button class="{{ $index === 0 ? 'active' : '' }}" type="button"></button>
+                @endforeach
+            </div>
             @endif
 
         </div>
 
         <div class="marquee">
+            @php
+            $marqueeText = $freeShippingThreshold == 0
+            ? 'ÜCRETSİZ KARGO'
+            : number_format($freeShippingThreshold, 0, ',', '.') . ' TL ÜZERİ ÜCRETSİZ KARGO';
+            @endphp
+
             <span>
-                {{ $freeShippingThreshold == 0
-                    ? 'ÜCRETSİZ KARGO'
-                    : number_format($freeShippingThreshold, 0, ',', '.') . ' TL ÜZERİ ÜCRETSİZ KARGO' }}
-                • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+                {{ $marqueeText }} • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
+            </span>
+            <span>
+                {{ $marqueeText }} • ORİJİNAL ÜRÜN GARANTİSİ • GÜVENLİ ALIŞVERİŞ •
             </span>
         </div>
 
@@ -91,9 +104,9 @@
                 <strong>🚚 Ücretsiz Kargo</strong>
                 <span>
                     @if($freeShippingThreshold == 0)
-                        Tüm siparişlerde ücretsiz kargo.
+                    Tüm siparişlerde ücretsiz kargo.
                     @else
-                        {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL üzeri siparişlerde.
+                    {{ number_format($freeShippingThreshold, 0, ',', '.') }} TL üzeri siparişlerde.
                     @endif
                 </span>
             </div>
@@ -137,61 +150,61 @@
 
             @forelse($bestSellerProducts as $product)
 
-                <div class="product-card reveal">
+            <div class="product-card reveal">
 
-                    <button class="wishlist-btn js-fav-toggle" type="button"
-                        data-id="{{ $product->id }}"
-                        data-name="{{ $product->name }}"
-                        data-img="{{ $product->image_url }}"
-                        data-price="{{ $product->final_price }}">♡</button>
+                <button class="wishlist-btn js-fav-toggle" type="button"
+                    data-id="{{ $product->id }}"
+                    data-name="{{ $product->name }}"
+                    data-img="{{ $product->image_url }}"
+                    data-price="{{ $product->final_price }}">♡</button>
 
-                    <a href="{{ route('products.show', $product->slug) }}">
-                        <div class="product-image">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                        </div>
-                    </a>
+                <a href="{{ route('products.show', $product->slug) }}">
+                    <div class="product-image">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                    </div>
+                </a>
 
-                    <div class="product-content">
-                        <span class="product-category">
-                            {{ $product->category?->name ?? 'Ürün' }}
+                <div class="product-content">
+                    <span class="product-category">
+                        {{ $product->category?->name ?? 'Ürün' }}
+                    </span>
+
+                    <h3>
+                        {{ $product->name }}
+                        @if($product->lens_degree)
+                        ({{ $product->lens_degree }})
+                        @endif
+                    </h3>
+
+                    <div class="product-prices">
+                        <strong>
+                            ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                        </strong>
+
+                        @if($product->discount_price)
+                        <span>
+                            ₺{{ number_format($product->price, 0, ',', '.') }}
                         </span>
-
-                        <h3>
-                            {{ $product->name }}
-                            @if($product->lens_degree)
-                                ({{ $product->lens_degree }})
-                            @endif
-                        </h3>
-
-                        <div class="product-prices">
-                            <strong>
-                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
-                            </strong>
-
-                            @if($product->discount_price)
-                                <span>
-                                    ₺{{ number_format($product->price, 0, ',', '.') }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <button class="cart-btn js-add-cart" type="button"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}"
-                            data-img="{{ $product->image_url }}"
-                            {{ $product->stock <= 0 ? 'disabled' : '' }}>
-                            {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
-                        </button>
+                        @endif
                     </div>
 
+                    <button class="cart-btn js-add-cart" type="button"
+                        data-id="{{ $product->id }}"
+                        data-name="{{ $product->name }}"
+                        data-price="{{ $product->final_price }}"
+                        data-img="{{ $product->image_url }}"
+                        {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                        {{ $product->stock > 0 ? 'Sepete Ekle' : 'Stokta Yok' }}
+                    </button>
                 </div>
+
+            </div>
 
             @empty
 
-                <div class="empty-products">
-                    Henüz ürün bulunmuyor.
-                </div>
+            <div class="empty-products">
+                Henüz ürün bulunmuyor.
+            </div>
 
             @endforelse
 
@@ -219,70 +232,70 @@
 
             @forelse($discountProducts as $product)
 
-                <div class="product-card reveal">
+            <div class="product-card reveal">
 
-                    @if($product->discount_price && $product->price > 0)
-                        <div class="product-badge">
-                            %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
-                        </div>
-                    @else
-                        <div class="product-badge">
-                            Yeni
-                        </div>
-                    @endif
+                @if($product->discount_price && $product->price > 0)
+                <div class="product-badge">
+                    %{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}
+                </div>
+                @else
+                <div class="product-badge">
+                    Yeni
+                </div>
+                @endif
 
-                    <button class="wishlist-btn js-fav-toggle" type="button"
-                        data-id="{{ $product->id }}"
-                        data-name="{{ $product->name }}"
-                        data-img="{{ $product->image_url }}"
-                        data-price="{{ $product->final_price }}">♡</button>
+                <button class="wishlist-btn js-fav-toggle" type="button"
+                    data-id="{{ $product->id }}"
+                    data-name="{{ $product->name }}"
+                    data-img="{{ $product->image_url }}"
+                    data-price="{{ $product->final_price }}">♡</button>
 
-                    <a href="{{ route('products.show', $product->slug) }}">
-                        <div class="product-image">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
-                        </div>
-                    </a>
+                <a href="{{ route('products.show', $product->slug) }}">
+                    <div class="product-image">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                    </div>
+                </a>
 
-                    <div class="product-content">
-                        <span class="product-category">
-                            {{ $product->category?->name ?? 'Ürün' }}
+                <div class="product-content">
+                    <span class="product-category">
+                        {{ $product->category?->name ?? 'Ürün' }}
+                    </span>
+
+                    <h3>
+                        {{ $product->name }}
+                        @if($product->lens_degree)
+                        ({{ $product->lens_degree }})
+                        @endif
+                    </h3>
+
+                    <div class="product-prices">
+                        <strong>
+                            ₺{{ number_format($product->final_price, 0, ',', '.') }}
+                        </strong>
+
+                        @if($product->discount_price)
+                        <span>
+                            ₺{{ number_format($product->price, 0, ',', '.') }}
                         </span>
-
-                        <h3>
-                            {{ $product->name }}
-                            @if($product->lens_degree)
-                                ({{ $product->lens_degree }})
-                            @endif
-                        </h3>
-
-                        <div class="product-prices">
-                            <strong>
-                                ₺{{ number_format($product->final_price, 0, ',', '.') }}
-                            </strong>
-
-                            @if($product->discount_price)
-                                <span>
-                                    ₺{{ number_format($product->price, 0, ',', '.') }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <button class="cart-btn js-add-cart" type="button"
-                            data-id="{{ $product->id }}"
-                            data-name="{{ $product->name }}"
-                            data-price="{{ $product->final_price }}"
-                            data-img="{{ $product->image_url }}">
-                            Sepete Ekle
-                        </button>
+                        @endif
                     </div>
 
+                    <button class="cart-btn js-add-cart" type="button"
+                        data-id="{{ $product->id }}"
+                        data-name="{{ $product->name }}"
+                        data-price="{{ $product->final_price }}"
+                        data-img="{{ $product->image_url }}">
+                        Sepete Ekle
+                    </button>
                 </div>
+
+            </div>
 
             @empty
 
-                <div class="empty-products">
-                    Henüz ürün bulunmuyor.
-                </div>
+            <div class="empty-products">
+                Henüz ürün bulunmuyor.
+            </div>
 
             @endforelse
 
@@ -505,7 +518,7 @@
         }
 
         to {
-            transform: translateX(-50%);
+            transform: translateX(-100%);
         }
     }
 
