@@ -635,13 +635,17 @@
         $siteInstagram = $siteSettings->instagram;
     @endphp
 
-    <div class="top-sale">
-        <div class="container top-sale-inner">
-            <div class="top-sale-text">
+ <div class="top-sale">
+    <div class="container top-sale-inner">
+        <div class="top-sale-text">
+            @if((float) $siteSettings->shipping_free_threshold == 0)
+                ÜCRETSİZ KARGO FIRSATI
+            @else
                 {{ number_format((float) $siteSettings->shipping_free_threshold, 0, ',', '.') }} TL VE ÜZERİ ÜCRETSİZ KARGO
-            </div>
+            @endif
         </div>
     </div>
+</div>
 
     <div class="info-bar">
         <div class="container info-inner">
