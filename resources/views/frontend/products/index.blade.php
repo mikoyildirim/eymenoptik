@@ -143,6 +143,7 @@
                                 'beyaz'=>'Beyaz',
                                 'kahverengi'=>'Kahverengi',
                                 'fume'=>'Füme',
+                                'fume_degrade'=>'Füme Degrade',
                                 'saydam'=>'Şeffaf',
                                 'altin'=>'Altın',
                                 'gumus'=>'Gümüş',
@@ -150,12 +151,14 @@
                                 'mavi'=>'Mavi',
                                 'yesil'=>'Yeşil',
                                 'pembe'=>'Pembe',
+                                'mor'=>'Mor',
                                 'sari'=>'Sarı',
                                 'kahverengi_degrade'=>'Kahverengi Degrade',
                                 'bordo'=>'Bordo',
                                 'turuncu'=>'Turuncu',
                                 'mavi_degrade'=>'Mavi Degrade',
                                 'mavi_aynali'=>'Mavi Aynalı',
+                                'silver_mirror'=>'Silver Mirror',
                                 'karisik'=>'Karışık Renkler'
                             ] as $key => $label)
                                 <button class="filter-btn" type="button"
