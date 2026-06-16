@@ -179,6 +179,9 @@ $isLensCategory = $selectedCategory && str_contains(mb_strtolower((string) ($sel
                                         <option value="">Cam rengi seçiniz</option>
                                         @foreach([
                                         'siyah' => 'Siyah',
+                                        'mor' => 'Mor',
+                                        'fume_degrade' => 'Füme Degrade',
+                                        'silver_mirror' => 'Silver Mirror',
                                         'beyaz' => 'Beyaz',
                                         'kahverengi' => 'Kahverengi',
                                         'fume' => 'Füme',
