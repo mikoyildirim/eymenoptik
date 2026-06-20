@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Eymen Optik')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('images/eymen.svg') }}" type="image/svg+xml">
+    <link rel="shortcut icon" href="{{ asset('images/eymen.svg') }}" type="image/svg+xml">
+    <meta name="theme-color" content="#111111">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
@@ -626,26 +629,26 @@
 <body>
 
     @php
-        $siteSettings = $siteSettings ?? null;
-        $siteName = $siteSettings->site_name;
-        $sitePhone = $siteSettings->phone;
-        $siteEmail = $siteSettings->email;
-        $siteAddress = $siteSettings->address;
-        $siteFacebook = $siteSettings->facebook;
-        $siteInstagram = $siteSettings->instagram;
+    $siteSettings = $siteSettings ?? null;
+    $siteName = $siteSettings->site_name;
+    $sitePhone = $siteSettings->phone;
+    $siteEmail = $siteSettings->email;
+    $siteAddress = $siteSettings->address;
+    $siteFacebook = $siteSettings->facebook;
+    $siteInstagram = $siteSettings->instagram;
     @endphp
 
- <div class="top-sale">
-    <div class="container top-sale-inner">
-        <div class="top-sale-text">
-            @if((float) $siteSettings->shipping_free_threshold == 0)
+    <div class="top-sale">
+        <div class="container top-sale-inner">
+            <div class="top-sale-text">
+                @if((float) $siteSettings->shipping_free_threshold == 0)
                 ÜCRETSİZ KARGO FIRSATI
-            @else
+                @else
                 {{ number_format((float) $siteSettings->shipping_free_threshold, 0, ',', '.') }} TL VE ÜZERİ ÜCRETSİZ KARGO
-            @endif
+                @endif
+            </div>
         </div>
     </div>
-</div>
 
     <div class="info-bar">
         <div class="container info-inner">
@@ -726,13 +729,15 @@
         <i class="fas fa-check-circle" style="margin-right:8px"></i>{{ session('success') }}
     </div>
     <script>
-        setTimeout(function(){
+        setTimeout(function() {
             var el = document.getElementById('flashMessage');
-            if(!el) return;
+            if (!el) return;
             el.style.transition = 'opacity .25s ease, transform .25s ease';
             el.style.opacity = '0';
             el.style.transform = 'translateY(12px)';
-            setTimeout(function(){ el.remove(); }, 300);
+            setTimeout(function() {
+                el.remove();
+            }, 300);
         }, 1800);
     </script>
     @endif
@@ -997,7 +1002,7 @@
         // Favorites (localStorage)
         let favorites = JSON.parse(localStorage.getItem('eymen_favs')) || [];
 
-        const isAuthenticated = @json(auth()->check());
+        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const favoritesIndexUrl = "{{ route('favorites.index') }}";
         const favoritesToggleUrl = "{{ route('favorites.toggle') }}";
